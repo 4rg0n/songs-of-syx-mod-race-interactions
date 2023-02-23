@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 import util.info.INFO;
 
 import java.util.Arrays;
-import java.util.logging.Level;
 
 /**
  * Entry point
@@ -45,7 +44,6 @@ public final class RaceInteractionsModScript implements SCRIPT {
 
 	@Override
 	public void initGameLoaded() {
-		Loggers.setLevels(Level.FINE);
 		RaceInteractionsConfig raceInteractionsConfig = RaceInteractionsConfig.load();
 
 		RaceInteractions raceInteractions = new RaceInteractions(raceInteractionsConfig);
