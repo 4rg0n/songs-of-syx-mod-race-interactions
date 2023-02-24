@@ -10,6 +10,9 @@ import snake2d.util.sets.LIST;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * For accessing and manipulating vanilla and custom races
+ */
 public class RaceService {
     private final static Logger log = Loggers.getLogger(RaceService.class);
     private final Map<String, Integer> raceIndexMap = new HashMap<>();

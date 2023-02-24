@@ -9,6 +9,9 @@ import init.race.Race;
 
 import java.util.List;
 
+/**
+ * Manipulates likings between each races by calculating preference similarity
+ */
 public class RaceInteractions {
     private final RaceService raceService;
     private final RaceComparator raceComparator;
@@ -27,6 +30,7 @@ public class RaceInteractions {
     public RaceInteractions(RaceInteractionsConfig config) {
         this.customOnly = config.isCustomOnly();
         this.honorCustom = config.isHonorCustom();
+
         raceService = new RaceService(config.getGameRaces());
         raceComparator = new RaceComparator();
         racePrefCalculator = new RacePrefCalculator();
@@ -43,20 +47,24 @@ public class RaceInteractions {
             RacePrefCalculator.Result calcResult = racePrefCalculator.calculate(compareResult);
             double liking = raceLikingsCalculator.calculate(calcResult);
 
-            if (customOnly && honorCustom) {
-                if (!raceService.isCustom(race) && raceService.isCustom(otherRace)) {
-                    raceService.setLiking(race, otherRace, liking);
-                }
-            } else if (customOnly) {
-                if ((raceService.isCustom(race) && raceService.isCustom(otherRace))
-                || (raceService.isCustom(race) && !raceService.isCustom(otherRace))
-                || (!raceService.isCustom(race) && raceService.isCustom(otherRace))
-                ) {
-                    raceService.setLiking(race, otherRace, liking);
-                }
-            } else {
+            manipulateRaceLikings(race, otherRace, liking);
+        }
+    }
+
+    public void manipulateRaceLikings(String race, String otherRace, double liking) {
+        if (customOnly && honorCustom) {
+            if (!raceService.isCustom(race) && raceService.isCustom(otherRace)) {
                 raceService.setLiking(race, otherRace, liking);
             }
+        } else if (customOnly) {
+            if ((raceService.isCustom(race) && raceService.isCustom(otherRace))
+                || (raceService.isCustom(race) && !raceService.isCustom(otherRace))
+                || (!raceService.isCustom(race) && raceService.isCustom(otherRace))
+            ) {
+                raceService.setLiking(race, otherRace, liking);
+            }
+        } else {
+            raceService.setLiking(race, otherRace, liking);
         }
     }
 }

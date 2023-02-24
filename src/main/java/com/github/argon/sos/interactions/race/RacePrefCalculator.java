@@ -7,10 +7,16 @@ import settlement.stats.STATS;
 
 import java.util.Collection;
 
+/**
+ * For calculating similarity based on race preferences
+ */
 public class RacePrefCalculator {
 
     private final int allFoodCount = STATS.FOOD().all.size();
 
+    /**
+     * Calculates how similiar two races preferences are in percentages
+     */
     public Result calculate(RaceComparator.Result compareResult) {
         double foodPercent =  (double) compareResult.getFoodMatches() / (double) allFoodCount;
         double climatePercent = 1 - sum(compareResult.getClimatePrefDiff().values());

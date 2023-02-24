@@ -21,6 +21,9 @@ import java.util.function.Function;
 
 import static settlement.main.SETT.ROOMS;
 
+/**
+ * For comparing two races and finding differences in preferences
+ */
 public class RaceComparator {
     public List<Result> compare(List<Race> races) {
         List<Result> comparisonResults = new ArrayList<>();
