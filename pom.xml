@@ -6,7 +6,7 @@
 
     <groupId>com.github.4rg0n</groupId>
     <artifactId>songs-of-syx-mod-race-interactions</artifactId>
-    <version>0.0.1</version>
+    <version>1.0.1</version>
 
     <profiles>
         <profile>
