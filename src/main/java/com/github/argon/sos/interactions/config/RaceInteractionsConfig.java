@@ -27,6 +27,9 @@ public class RaceInteractionsConfig {
 
     public final static String NAME = "RaceInteractions";
 
+    public final static double MIN_WEIGHT = -2d;
+    public final static double MAX_WEIGHT = 2d;
+
     private final static Logger log = Loggers.getLogger(RaceInteractionsConfig.class);
 
     private final boolean customOnly;
@@ -68,10 +71,10 @@ public class RaceInteractionsConfig {
 
             for (RacePrefCategory prefCategory : RacePrefCategory.values()) {
                 double weight;
-                if (preferenceWeights.keys().contains(prefCategory.name())) {
+                if (!preferenceWeights.keys().contains(prefCategory.name())) {
                     weight = DEFAULT_WEIGHT;
                 } else {
-                    weight = preferenceWeights.d(prefCategory.name(), 0d, 2d);
+                    weight = preferenceWeights.d(prefCategory.name(), MIN_WEIGHT, MAX_WEIGHT);
                 }
 
                 weightMap.put(prefCategory, weight);
