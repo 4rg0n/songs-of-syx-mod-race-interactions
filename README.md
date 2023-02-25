@@ -18,7 +18,7 @@ There's a [configuration file](src/main/resources/mod-files/assets/init/config/R
 CUSTOM_RACE_ONLY: true,
 ** Will not manipulate custom mod races likings to vanilla races
 HONOR_CUSTOM_RACE_LIKINGS: true,
-** How much each category should influence the likings. From 0.00 to 2.00
+** How much each category should influence the likings. From -2.00 to 2.00
 PREFERENCE_WEIGHTS: {
     FOOD: 1.0,
     CLIMATE: 1.0,

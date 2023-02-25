@@ -39,6 +39,10 @@ public class Logger {
         this.level = DEFAULT_LEVEL;
     }
 
+    public boolean isLevel(Level level) {
+        return (this.level.intValue() > level.intValue());
+    }
+
     public void info(String formatMsg, Object... args) {
         log("[INFO] ", Level.INFO, formatMsg, args);
     }
@@ -61,7 +65,7 @@ public class Logger {
 
 
     private void log(String msgPrefix, Level level, String formatMsg, Object... args) {
-        if (this.level.intValue() > level.intValue()) {
+        if (isLevel(level)) {
             return;
         }
 
@@ -86,7 +90,7 @@ public class Logger {
     }
 
     private void logErr(String msgPrefix, Level level, String formatMsg, Object... args) {
-        if (this.level.intValue() > level.intValue()) {
+        if (isLevel(level)) {
             return;
         }
 

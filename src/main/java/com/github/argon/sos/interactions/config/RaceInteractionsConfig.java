@@ -40,7 +40,18 @@ public class RaceInteractionsConfig {
 
     private final List<String> gameRaces;
 
+    private static RaceInteractionsConfig LOADED_CONFIG;
+
+    /**
+     * Loads mod configuration once.
+     *
+     * @return already loaded config
+     */
     public static RaceInteractionsConfig load() {
+        if (LOADED_CONFIG != null) {
+            return LOADED_CONFIG;
+        }
+
         PATH configPath = PATHS.INIT().getFolder("config");
 
         if (!configPath.exists(NAME)) {
@@ -98,7 +109,8 @@ public class RaceInteractionsConfig {
         log.debug("Loaded configuration %s from file system", NAME);
         log.trace("Configuration %s", raceInteractionsConfig.toString());
 
-        return raceInteractionsConfig;
+        LOADED_CONFIG = raceInteractionsConfig;
+        return LOADED_CONFIG;
     }
 
     public static RaceInteractionsConfig getDefault() {

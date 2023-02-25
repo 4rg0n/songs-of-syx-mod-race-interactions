@@ -43,6 +43,18 @@ public class RaceService {
         }
     }
 
+    public List<RaceInfo> getAllRaceInfo() {
+        return getAll().stream().map(race ->
+            getRaceInfo(race.key).orElse(null)
+        ).collect(Collectors.toList());
+    }
+
+    public Optional<RaceInfo> getRaceInfo(String name) {
+        return getRace(name).map(race ->
+            RaceInfo.builder().race(race).build()
+        );
+    }
+
     public boolean isCustom(String name) {
         return !gameRaces.contains(name);
     }

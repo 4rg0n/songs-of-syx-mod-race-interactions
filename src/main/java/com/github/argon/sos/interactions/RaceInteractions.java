@@ -10,32 +10,25 @@ import init.race.Race;
 import java.util.List;
 
 public class RaceInteractions {
-    private final RaceService raceService;
     private final RaceComparator raceComparator;
     private final RacePrefCalculator racePrefCalculator;
-    private final RaceLikingsCalculator raceLikingsCalculator;
 
-    /**
-     * Will only manipulate modded custom race likings
-     */
-    private final boolean customOnly;
-    /**
-     * Will not manipulate custom race likings to vanilla game races
-     */
-    private final boolean honorCustom;
-
-    public RaceInteractions(RaceInteractionsConfig config) {
-        this.customOnly = config.isCustomOnly();
-        this.honorCustom = config.isHonorCustom();
-        raceService = new RaceService(config.getGameRaces());
-        raceComparator = new RaceComparator();
-        racePrefCalculator = new RacePrefCalculator();
-        raceLikingsCalculator = new RaceLikingsCalculator(config.getRacePreferenceWeightMap());
+    public RaceInteractions(
+        RaceComparator raceComparator,
+        RacePrefCalculator racePrefCalculator
+    ) {
+        this.raceComparator = raceComparator;
+        this.racePrefCalculator = racePrefCalculator;
     }
 
-    public void manipulateRaceLikings() {
+
+    public void manipulateRaceLikings(RaceInteractionsConfig config) {
+        boolean customOnly = config.isCustomOnly();
+        boolean honorCustom = config.isHonorCustom();
+        RaceService raceService = new RaceService(config.getGameRaces());
         List<Race> races = raceService.getAll();
         List<RaceComparator.Result> compareResults = raceComparator.compare(races);
+        RaceLikingsCalculator raceLikingsCalculator = new RaceLikingsCalculator(config.getRacePreferenceWeightMap());
 
         for (RaceComparator.Result compareResult : compareResults) {
             String race = compareResult.getRace();

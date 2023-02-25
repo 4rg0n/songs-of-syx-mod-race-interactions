@@ -2,20 +2,23 @@ package com.github.argon.sos.interactions.race;
 
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Setter;
 
 import java.util.Map;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class RaceLikingsCalculator {
 
     private final static Logger log = Loggers.getLogger(RaceService.class);
 
-    private final Map<RacePrefCategory, Double> categoryWeightMap;
+    @Setter
+    private Map<RacePrefCategory, Double> categoryWeightMap;
 
     public final static double DEFAULT_WEIGHT = 1d;
 
     public double calculate(RacePrefCalculator.Result prefCalcResult) {
+
         double buildingPercent = prefCalcResult.getBuildingPercent() * getCategoryWeight(RacePrefCategory.BUILDING);
         double climatePercent = prefCalcResult.getClimatePercent() * getCategoryWeight(RacePrefCategory.CLIMATE);
         double foodPercent = prefCalcResult.getFoodPercent() * getCategoryWeight(RacePrefCategory.FOOD);
