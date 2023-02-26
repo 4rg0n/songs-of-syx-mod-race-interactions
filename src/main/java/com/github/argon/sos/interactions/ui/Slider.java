@@ -34,7 +34,7 @@ public class Slider extends GuiSection {
     private static final CharSequence setAmountD = "Set amount {0}-{1}";
 
     static {
-        D.ts(Slider.class);
+        D.ts(GSliderInt.class);
     }
 
     public Slider(INT.INTE in, int width, boolean input, boolean showValue){
