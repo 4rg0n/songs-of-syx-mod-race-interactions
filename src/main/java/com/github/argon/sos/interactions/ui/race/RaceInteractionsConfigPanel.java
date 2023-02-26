@@ -2,6 +2,7 @@ package com.github.argon.sos.interactions.ui.race;
 
 import com.github.argon.sos.interactions.Mapper;
 import com.github.argon.sos.interactions.RaceInteractions;
+import com.github.argon.sos.interactions.config.ConfigUtil;
 import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
 import com.github.argon.sos.interactions.race.RacePrefCategory;
 import com.github.argon.sos.interactions.race.RaceService;
@@ -45,12 +46,16 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         this.buttonSection = buttonSection;
 
         // Apply button
-        buttonSection.getApplyButton().clickActionSet(this::applyConfig);
-        buttonSection.getResetModButton().clickActionSet(() ->
-            raceInteractions.manipulateRaceLikings(RaceInteractionsConfig.load())
-        );
+        buttonSection.getApplyButton().clickActionSet(() -> {
+            RaceInteractionsConfig appliedConfig = applyConfig();
+            ConfigUtil.saveProfileConfig(appliedConfig);
+        });
+        buttonSection.getResetModButton().clickActionSet(() -> {
+            raceInteractions.manipulateRaceLikings(ConfigUtil.loadModConfig());
+            ConfigUtil.saveProfileConfig(ConfigUtil.loadModConfig());
+        });
         buttonSection.getResetVanillaButton().clickActionSet(() ->
-                raceInteractions.applyRaceLikings(RaceService.getVanillaLikings())
+            raceInteractions.applyRaceLikings(RaceService.getVanillaLikings())
         );
 
         section().addDownC(10, configSection);
@@ -58,7 +63,7 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         section().addDownC(30, overviewSection);
     }
 
-    private void applyConfig() {
+    private RaceInteractionsConfig applyConfig() {
         boolean onlyCustom = configSection.getOnlyCustomRaces().selectedIs();
         boolean honorCustom = configSection.getHonorCustomRaces().selectedIs();
 
@@ -73,8 +78,11 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
                 .customOnly(onlyCustom)
                 .honorCustom(honorCustom)
                 .racePreferenceWeightMap(prefWeightMap)
+                .gameRaces(ConfigUtil.getDefaultGameRaces())
                 .build();
 
         raceInteractions.manipulateRaceLikings(config);
+
+        return config;
     }
 }

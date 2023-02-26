@@ -11,11 +11,12 @@ import util.data.INT;
 import util.gui.misc.GText;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.github.argon.sos.interactions.Mapper.*;
-import static com.github.argon.sos.interactions.config.RaceInteractionsConfig.MAX_WEIGHT;
-import static com.github.argon.sos.interactions.config.RaceInteractionsConfig.MIN_WEIGHT;
+import static com.github.argon.sos.interactions.config.ConfigUtil.MAX_WEIGHT;
+import static com.github.argon.sos.interactions.config.ConfigUtil.MIN_WEIGHT;
 
 @Getter
 public class WeightSliderSection extends GuiSection {
@@ -45,13 +46,14 @@ public class WeightSliderSection extends GuiSection {
 
         Map<RacePrefCategory, Slider> sliders = new HashMap<>(RacePrefCategory.values().length);
         Map<RacePrefCategory, INT.INTE> sliderValues = new HashMap<>(RacePrefCategory.values().length);
+        LinkedHashMap<RacePrefCategory, Double> orderedPrefMap = toOrderedMap(config.getRacePreferenceWeightMap());
 
-        config.getRacePreferenceWeightMap().forEach((racePrefCategory, weight) -> {
-            INT.INTE in = new SimpleINTE(fromWeightToSlider(weight), toSliderRange(MIN_WEIGHT), toSliderRange(MAX_WEIGHT));
-            Slider weightSlider = new Slider(in, toSliderWidth(MIN_WEIGHT, MAX_WEIGHT), true, true);
+        orderedPrefMap.forEach((racePrefCategory, weight) -> {
+            INT.INTE value = new SimpleINTE(fromWeightToSlider(weight), toSliderRange(MIN_WEIGHT), toSliderRange(MAX_WEIGHT));
+            Slider weightSlider = new Slider(value, toSliderWidth(MIN_WEIGHT, MAX_WEIGHT), true, true);
 
             sliders.put(racePrefCategory, weightSlider);
-            sliderValues.put(racePrefCategory, in);
+            sliderValues.put(racePrefCategory, value);
         });
 
         return new WeightSliderSection(sliders, sliderValues);

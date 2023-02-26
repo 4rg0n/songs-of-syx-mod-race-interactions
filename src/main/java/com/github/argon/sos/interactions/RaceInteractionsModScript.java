@@ -1,6 +1,7 @@
 package com.github.argon.sos.interactions;
 
 
+import com.github.argon.sos.interactions.config.ConfigUtil;
 import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
@@ -52,8 +53,10 @@ public final class RaceInteractionsModScript implements SCRIPT {
 	@Override
 	public void initGameLoaded() {
 		Loggers.setLevels(Level.FINE);
-		RaceInteractionsConfig config = RaceInteractionsConfig.load();
 		RaceService.initVanillaLikings();
+
+		RaceInteractionsConfig config = ConfigUtil.loadProfileConfig()
+				.orElseGet(ConfigUtil::loadModConfig);
 
 		RaceService raceService = new RaceService(config.getGameRaces());
 		RaceComparator raceComparator = new RaceComparator();
@@ -79,8 +82,6 @@ public final class RaceInteractionsModScript implements SCRIPT {
 		);
 
 		new GameConfig(configPanel).init();
-
-		// TODO: 25.02.2023 add save to json. Can I save into the save game?
 	}
 
 	@Override

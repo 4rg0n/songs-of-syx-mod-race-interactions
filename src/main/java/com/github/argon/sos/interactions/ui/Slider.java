@@ -23,8 +23,9 @@ import util.gui.slider.GSliderInt;
 import util.info.GFORMAT;
 import view.main.VIEW;
 
-import static com.github.argon.sos.interactions.config.RaceInteractionsConfig.MAX_WEIGHT;
-import static com.github.argon.sos.interactions.config.RaceInteractionsConfig.MIN_WEIGHT;
+import static com.github.argon.sos.interactions.config.ConfigUtil.MAX_WEIGHT;
+import static com.github.argon.sos.interactions.config.ConfigUtil.MIN_WEIGHT;
+
 
 public class Slider extends GuiSection {
     private final INT.INTE in;
