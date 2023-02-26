@@ -29,11 +29,12 @@ final class Instance implements SCRIPT.SCRIPT_INSTANCE {
 
 	@Override
 	public void save(FilePutter file) {
-
+		// TODO: 25.02.2023 add mod data to save file
 	}
 
 	@Override
 	public void load(FileGetter file) throws IOException {
+		// TODO: 25.02.2023 load mod data from save file
 	}
 
 	

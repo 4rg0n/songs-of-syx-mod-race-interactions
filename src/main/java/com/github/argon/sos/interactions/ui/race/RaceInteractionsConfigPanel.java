@@ -4,9 +4,10 @@ import com.github.argon.sos.interactions.Mapper;
 import com.github.argon.sos.interactions.RaceInteractions;
 import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
 import com.github.argon.sos.interactions.race.RacePrefCategory;
+import com.github.argon.sos.interactions.race.RaceService;
 import com.github.argon.sos.interactions.ui.race.section.ButtonSection;
 import com.github.argon.sos.interactions.ui.race.section.ConfigSection;
-import com.github.argon.sos.interactions.ui.race.section.RaceOverviewSection;
+import com.github.argon.sos.interactions.ui.race.section.RaceTableSection;
 import lombok.Getter;
 import snake2d.util.gui.GuiSection;
 import view.interrupter.ISidePanel;
@@ -18,20 +19,19 @@ import java.util.Map;
 public class RaceInteractionsConfigPanel extends ISidePanel {
     public final static String TITLE = "Race Interactions Config";
 
-    private final RaceInteractionsConfig originalConfig;
     private final ConfigSection configSection;
 
-    private final RaceOverviewSection overviewSection;
+    private final RaceTableSection overviewSection;
 
     private final ButtonSection buttonSection;
 
     private final RaceInteractions raceInteractions;
 
+
     public RaceInteractionsConfigPanel(
-        RaceInteractionsConfig originalConfig,
         RaceInteractions raceInteractions,
         ConfigSection configSection,
-        RaceOverviewSection overviewSection,
+        RaceTableSection overviewSection,
         ButtonSection buttonSection,
         int width
     ) {
@@ -39,7 +39,6 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         titleSet(TITLE);
         section().body().setWidth(width);
 
-        this.originalConfig = originalConfig;
         this.raceInteractions = raceInteractions;
         this.configSection = configSection;
         this.overviewSection = overviewSection;
@@ -48,7 +47,10 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         // Apply button
         buttonSection.getApplyButton().clickActionSet(this::applyConfig);
         buttonSection.getResetModButton().clickActionSet(() ->
-            raceInteractions.manipulateRaceLikings(originalConfig)
+            raceInteractions.manipulateRaceLikings(RaceInteractionsConfig.load())
+        );
+        buttonSection.getResetVanillaButton().clickActionSet(() ->
+                raceInteractions.applyRaceLikings(RaceService.getVanillaLikings())
         );
 
         section().addDownC(10, configSection);
@@ -71,7 +73,6 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
                 .customOnly(onlyCustom)
                 .honorCustom(honorCustom)
                 .racePreferenceWeightMap(prefWeightMap)
-                .gameRaces(originalConfig.getGameRaces())
                 .build();
 
         raceInteractions.manipulateRaceLikings(config);

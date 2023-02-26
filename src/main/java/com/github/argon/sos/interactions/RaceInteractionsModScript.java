@@ -8,7 +8,7 @@ import com.github.argon.sos.interactions.race.*;
 import com.github.argon.sos.interactions.ui.race.section.ButtonSection;
 import com.github.argon.sos.interactions.ui.race.section.ConfigSection;
 import com.github.argon.sos.interactions.ui.race.RaceInteractionsConfigPanel;
-import com.github.argon.sos.interactions.ui.race.section.RaceOverviewSection;
+import com.github.argon.sos.interactions.ui.race.section.RaceTableSection;
 import com.github.argon.sos.interactions.ui.GameConfig;
 import com.github.argon.sos.interactions.util.SCRIPT;
 import lombok.NoArgsConstructor;
@@ -52,27 +52,25 @@ public final class RaceInteractionsModScript implements SCRIPT {
 	@Override
 	public void initGameLoaded() {
 		Loggers.setLevels(Level.FINE);
-		// TODO: 25.02.2023 store vanilla game likings for resetting
 		RaceInteractionsConfig config = RaceInteractionsConfig.load();
+		RaceService.initVanillaLikings();
 
 		RaceService raceService = new RaceService(config.getGameRaces());
 		RaceComparator raceComparator = new RaceComparator();
 		RacePrefCalculator racePrefCalculator = new RacePrefCalculator();
 		RaceInteractions raceInteractions = new RaceInteractions(
 			raceComparator,
-			racePrefCalculator
+			racePrefCalculator,
+			raceService
 		);
-		raceInteractions.manipulateRaceLikings(config);
-
 
 		List<RaceInfo> allRaceInfo = raceService.getAllRaceInfo();
 		int width = allRaceInfo.size() * 110;
 
 		ConfigSection configSection = new ConfigSection(config);
-		RaceOverviewSection overviewSection = new RaceOverviewSection(allRaceInfo, width);
+		RaceTableSection overviewSection = new RaceTableSection(allRaceInfo, width);
 		ButtonSection buttonSection = new ButtonSection();
 		RaceInteractionsConfigPanel configPanel = new RaceInteractionsConfigPanel(
-				config,
 				raceInteractions,
 				configSection,
 				overviewSection,
@@ -81,6 +79,8 @@ public final class RaceInteractionsModScript implements SCRIPT {
 		);
 
 		new GameConfig(configPanel).init();
+
+		// TODO: 25.02.2023 add save to json. Can I save into the save game?
 	}
 
 	@Override

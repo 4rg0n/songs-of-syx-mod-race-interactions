@@ -13,20 +13,23 @@ public class RaceInteractions {
     private final RaceComparator raceComparator;
     private final RacePrefCalculator racePrefCalculator;
 
+    private final RaceService raceService;
+
     public RaceInteractions(
         RaceComparator raceComparator,
-        RacePrefCalculator racePrefCalculator
+        RacePrefCalculator racePrefCalculator,
+        RaceService raceService
     ) {
         this.raceComparator = raceComparator;
         this.racePrefCalculator = racePrefCalculator;
+        this.raceService = raceService;
     }
 
 
     public void manipulateRaceLikings(RaceInteractionsConfig config) {
         boolean customOnly = config.isCustomOnly();
         boolean honorCustom = config.isHonorCustom();
-        RaceService raceService = new RaceService(config.getGameRaces());
-        List<Race> races = raceService.getAll();
+        List<Race> races = RaceService.getAll();
         List<RaceComparator.Result> compareResults = raceComparator.compare(races);
         RaceLikingsCalculator raceLikingsCalculator = new RaceLikingsCalculator(config.getRacePreferenceWeightMap());
 
@@ -50,6 +53,12 @@ public class RaceInteractions {
             } else {
                 raceService.setLiking(race, otherRace, liking);
             }
+        }
+    }
+
+    public void applyRaceLikings(List<RaceService.RaceLiking> likings) {
+        for (RaceService.RaceLiking liking : likings) {
+            raceService.setLiking(liking.getRace(), liking.getOtherRace(), liking.getLiking());
         }
     }
 }

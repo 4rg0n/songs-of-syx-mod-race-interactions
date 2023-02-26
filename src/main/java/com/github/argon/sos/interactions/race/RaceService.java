@@ -5,6 +5,9 @@ import com.github.argon.sos.interactions.log.Loggers;
 import com.github.argon.sos.interactions.util.ReflectionUtil;
 import init.race.RACES;
 import init.race.Race;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import snake2d.util.sets.LIST;
 
 import java.util.*;
@@ -16,11 +19,48 @@ public class RaceService {
 
     private final List<String> gameRaces;
 
+    private static List<RaceLiking> vanillaLikings;
+
     public RaceService(List<String> gameRaces) {
         this.gameRaces = gameRaces;
         for (Race race : getAll()) {
             raceIndexMap.put(race.key, race.index);
         }
+    }
+
+    public static void initVanillaLikings() {
+        if (vanillaLikings == null) {
+            vanillaLikings = getAllLikings();
+        }
+    }
+
+    public static List<RaceLiking> getVanillaLikings() {
+        return vanillaLikings;
+    }
+
+    public static List<RaceLiking> getAllLikings() {
+        List<RaceLiking> likings = new ArrayList<>();
+
+        for (Race race : getAll()) {
+            for (Race otherRace : getAll()) {
+                if (race.key.equals(otherRace.key)) {
+                    continue;
+                }
+
+                double liking = getLiking(race, otherRace);
+                likings.add(RaceLiking.builder()
+                    .race(race.key)
+                    .otherRace(otherRace.key)
+                    .liking(liking)
+                    .build());
+            }
+        }
+
+        return likings;
+    }
+
+    public static double getLiking(Race race, Race otherRace) {
+        return race.pref().other(otherRace);
     }
 
     public void setLiking(Race race, Race otherRace, double liking) {
@@ -29,6 +69,7 @@ public class RaceService {
 
     public void setLiking(String name, String otherName, double liking) {
         try {
+            // set likings in "others"
             getRace(name).flatMap(race ->
                 getRace(otherName).flatMap(otherRace ->
                     ReflectionUtil.getField("others", race.pref())
@@ -68,7 +109,7 @@ public class RaceService {
         return Optional.of(getAll().get(raceIdx));
     }
 
-    public List<Race> getAll() {
+    public static List<Race> getAll() {
         return toJavaList(RACES.all());
     }
 
@@ -84,7 +125,7 @@ public class RaceService {
                 .collect(Collectors.toList());
     }
 
-    private List<Race> toJavaList(LIST<Race> raceLIST) {
+    private static List<Race> toJavaList(LIST<Race> raceLIST) {
         List<Race> races = new ArrayList<>();
 
         for (Race race : raceLIST) {
@@ -92,5 +133,15 @@ public class RaceService {
         }
 
         return races;
+    }
+
+    @Getter
+    @Builder
+    @RequiredArgsConstructor
+    public static class RaceLiking {
+        private final String race;
+        private final String otherRace;
+
+        private final double liking;
     }
 }

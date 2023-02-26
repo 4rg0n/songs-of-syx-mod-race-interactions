@@ -10,11 +10,11 @@ import snake2d.util.gui.GuiSection;
 import java.util.List;
 
 @Getter
-public class RaceOverviewSection extends GuiSection {
+public class RaceTableSection extends GuiSection {
 
     private final TableSection<RaceInfo> tableSection;
 
-    public RaceOverviewSection(List<RaceInfo> raceInfo, int width) {
+    public RaceTableSection(List<RaceInfo> raceInfo, int width) {
         this.tableSection = TableBuilder.build(raceInfo, RaceTableRow::new, width, 8);
         body().setWidth(width);
 

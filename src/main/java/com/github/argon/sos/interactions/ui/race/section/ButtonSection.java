@@ -15,16 +15,14 @@ public class ButtonSection extends GuiSection {
         this.applyButton = new GButt.ButtPanel("Apply");
         applyButton.hoverInfoSet("Manipulates race likings according to settings");
 
-        this.resetVanillaButton = new GButt.ButtPanel("Reset to Vanilla");
-        resetVanillaButton.hoverInfoSet("Restores likings back to original game settings.");
+        this.resetVanillaButton = new GButt.ButtPanel("Reset Vanilla");
+        resetVanillaButton.hoverInfoSet("Restores likings back to original game settings");
 
-        this.resetModButton = new GButt.ButtPanel("Reset to Mod");
+        this.resetModButton = new GButt.ButtPanel("Reset Mod");
         resetModButton.hoverInfoSet("Restores likings to the default mod settings");
-
 
         addRight(0, resetVanillaButton);
         addRight(5, resetModButton);
         addRight(50, applyButton);
-
     }
 }

@@ -18,15 +18,13 @@ public class RaceLikingsCalculator {
     public final static double DEFAULT_WEIGHT = 1d;
 
     public double calculate(RacePrefCalculator.Result prefCalcResult) {
-
-        double buildingPercent = prefCalcResult.getBuildingPercent() * getCategoryWeight(RacePrefCategory.BUILDING);
-        double climatePercent = prefCalcResult.getClimatePercent() * getCategoryWeight(RacePrefCategory.CLIMATE);
-        double foodPercent = prefCalcResult.getFoodPercent() * getCategoryWeight(RacePrefCategory.FOOD);
-        double religionPercent = prefCalcResult.getReligionPercent() * getCategoryWeight(RacePrefCategory.RELIGION);
-        double workPercent = prefCalcResult.getWorkPercent() * getCategoryWeight(RacePrefCategory.WORK);
+        double buildingPercent = calculateLiking(prefCalcResult.getBuildingPercent(), RacePrefCategory.BUILDING);
+        double climatePercent = calculateLiking(prefCalcResult.getClimatePercent(), RacePrefCategory.CLIMATE);
+        double foodPercent = calculateLiking(prefCalcResult.getFoodPercent(), RacePrefCategory.FOOD);
+        double religionPercent = calculateLiking(prefCalcResult.getReligionPercent(), RacePrefCategory.RELIGION);
+        double workPercent = calculateLiking(prefCalcResult.getWorkPercent(), RacePrefCategory.WORK);
 
         double liking = (buildingPercent + climatePercent + foodPercent + religionPercent + workPercent) / RacePrefCategory.values().length;
-
         return liking;
     }
 
@@ -38,5 +36,14 @@ public class RaceLikingsCalculator {
         }
 
         return categoryWeightMap.get(category);
+    }
+
+    private double calculateLiking(double similarityPercent, RacePrefCategory category) {
+        // everything below 50% is considered negative
+        if (similarityPercent < 0.5) {
+            similarityPercent = -similarityPercent;
+        }
+
+        return similarityPercent * getCategoryWeight(category);
     }
 }
