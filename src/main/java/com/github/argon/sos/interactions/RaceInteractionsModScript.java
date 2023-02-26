@@ -6,18 +6,17 @@ import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
 import com.github.argon.sos.interactions.race.*;
+import com.github.argon.sos.interactions.ui.GameConfig;
+import com.github.argon.sos.interactions.ui.race.RaceInteractionsConfigPanel;
 import com.github.argon.sos.interactions.ui.race.section.ButtonSection;
 import com.github.argon.sos.interactions.ui.race.section.ConfigSection;
-import com.github.argon.sos.interactions.ui.race.RaceInteractionsConfigPanel;
 import com.github.argon.sos.interactions.ui.race.section.RaceTableSection;
-import com.github.argon.sos.interactions.ui.GameConfig;
 import com.github.argon.sos.interactions.util.SCRIPT;
 import lombok.NoArgsConstructor;
 import util.info.INFO;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
 
 /**
  * Entry point
@@ -52,9 +51,7 @@ public final class RaceInteractionsModScript implements SCRIPT {
 
 	@Override
 	public void initGameLoaded() {
-		Loggers.setLevels(Level.FINE);
 		RaceService.initVanillaLikings();
-
 		RaceInteractionsConfig config = ConfigUtil.loadProfileConfig()
 				.orElseGet(ConfigUtil::loadModConfig);
 
