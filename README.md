@@ -11,26 +11,16 @@ When a player has multiple race mods installed, there are usually no interaction
 
 ## Config
 
-There's a [configuration file](src/main/resources/mod-files/assets/init/config/RaceInteractions.txt) for tweaking which likings should be manipulated and how much does each category influence the likings.
+You can find a config button in the bottom menu of the game:
 
-```
-** Will not manipulate any vanilla game races when true
-CUSTOM_RACE_ONLY: true,
-** Will not manipulate custom mod races likings to vanilla races
-HONOR_CUSTOM_RACE_LIKINGS: true,
-** How much each category should influence the likings. From -2.00 to 2.00
-PREFERENCE_WEIGHTS: {
-    FOOD: 1.0,
-    CLIMATE: 1.0,
-    BUILDING: 1.0,
-    RELIGION: 1.0,
-    WORK: 1.0,
-},
-** The mod needs this to know what are the vanilla races and what are modded races
-VANILLA_RACES: [
-    ARGONOSH, CANTOR, CRETONIAN, DONDORIAN, GARTHIMI, HUMAN, TILAPI,
-],
-```
+![Config Button](doc/img/config_button.png)
+
+There you can set the different weights and see the results:
+
+![Config Panel](doc/img/config_panel.png)
+
+Configuration is saved into the games profile folder. Usually next to your save games.
+This means each save game will use the same configuration.
 
 # Getting started
 
