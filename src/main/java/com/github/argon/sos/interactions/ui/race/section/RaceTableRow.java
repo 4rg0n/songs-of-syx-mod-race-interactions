@@ -43,37 +43,32 @@ public class RaceTableRow extends TableRow<RaceInfo> {
         // row with other race icons and likings
         LinkedList<RENDEROBJ> ee = new LinkedList<>();
         for (int ri = 0; ri < RACES.all().size(); ri ++) {
-            Race rr = RACES.all().get(ri);
-
-            // do not show own liking
-            if (getEntry().getRace().key.equals(rr.key)) {
-                continue;
-            }
+            Race otherRace = RACES.all().get(ri);
 
             // liking of a single other race
-            ee.add(new ArrowsGauge(rr.appearance().icon) {
+            ee.add(new ArrowsGauge(otherRace.appearance().icon) {
                 @Override
                 double getValue() {
-                    return Math.abs(getEntry().getRace().pref().other(rr));
+                    return Math.abs(getEntry().getRace().pref().other(otherRace));
                 }
 
                 @Override
                 SPRITE get(double value) {
-                    return getEntry().getRace().pref().other(rr) < 0 ? SPRITES.icons().s.arrowDown : SPRITES.icons().s.arrowUp;
+                    return getEntry().getRace().pref().other(otherRace) < 0 ? SPRITES.icons().s.arrowDown : SPRITES.icons().s.arrowUp;
                 }
 
                 @Override
                 COLOR color(double value) {
-                    return getEntry().getRace().pref().other(rr) < 0 ? GCOLOR.UI().BAD.normal : GCOLOR.UI().GOOD.normal;
+                    return getEntry().getRace().pref().other(otherRace) < 0 ? GCOLOR.UI().BAD.normal : GCOLOR.UI().GOOD.normal;
                 }
 
                 @Override
                 public void hoverInfoGet(GUI_BOX text) {
                     GBox b = (GBox) text;
-                    b.title(rr.info.names);
+                    b.title(otherRace.info.names);
                     b.text("Liking to " + getEntry().getRace().info.names);
                     b.NL(8);
-                    b.add(GFORMAT.f1(b.text(), getEntry().getRace().pref().other(rr)));
+                    b.add(GFORMAT.f1(b.text(), getEntry().getRace().pref().other(otherRace)));
                 };
             });
         }

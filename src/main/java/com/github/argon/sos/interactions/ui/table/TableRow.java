@@ -6,15 +6,25 @@ import util.data.GETTER;
 
 @Getter
 public class TableRow<T> extends GuiSection {
-    private final GETTER<Integer> ier;
+    private final GETTER<Integer> index;
 
     private final TableStore<T> store;
 
-    public TableRow(GETTER<Integer> ier, TableStore<T> store) {
-        this.ier = ier;
+    public TableRow(GETTER<Integer> index, TableStore<T> store) {
+        this.index = index;
         this.store = store;
     }
+
+    /**
+     * @return null when there's no index
+     */
     public T getEntry() {
-        return store.getEntries().get(ier.get());
+        if (index.get() == null) {
+            return null;
+        }
+
+        return store
+            .getEntries()
+            .get(index.get());
     }
 }
