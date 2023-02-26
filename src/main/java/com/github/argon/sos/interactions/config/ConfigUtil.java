@@ -13,18 +13,18 @@ import snake2d.util.file.JsonE;
 import java.nio.file.Path;
 import java.util.*;
 
-import static com.github.argon.sos.interactions.race.RaceLikingsCalculator.DEFAULT_WEIGHT;
-
 /**
  * For saving, loading and building {@link RaceInteractionsConfig}.
  */
 public class ConfigUtil {
     private final static Logger log = Loggers.getLogger(ConfigUtil.class);
-
+    /**
+     * Name of the config file
+     */
     public final static String NAME = "RaceInteractions";
-
     public final static double MIN_WEIGHT = -2d;
     public final static double MAX_WEIGHT = 2d;
+    public final static double DEFAULT_WEIGHT = 1d;
 
     private static RaceInteractionsConfig MOD_CONFIG;
 
@@ -36,7 +36,7 @@ public class ConfigUtil {
     public static RaceInteractionsConfig loadModConfig() {
         if (MOD_CONFIG == null) {
             PATH configPath = PATHS.INIT().getFolder("config");
-            MOD_CONFIG = load(configPath).orElseGet(ConfigUtil::getDefault);
+            MOD_CONFIG = load(configPath).orElseGet(Default::getConfig);
         }
 
         return MOD_CONFIG;
@@ -79,30 +79,6 @@ public class ConfigUtil {
         }
     }
 
-    public static RaceInteractionsConfig getDefault() {
-        return RaceInteractionsConfig.builder()
-                .racePreferenceWeightMap(getDefaultWeights())
-                .gameRaces(getDefaultGameRaces())
-                .honorCustom(true)
-                .customOnly(true)
-                .build();
-    }
-
-    public static Map<RacePrefCategory, Double> getDefaultWeights() {
-        Map<RacePrefCategory, Double> categoryWeightMap = new HashMap<>();
-        categoryWeightMap.put(RacePrefCategory.BUILDING, DEFAULT_WEIGHT);
-        categoryWeightMap.put(RacePrefCategory.CLIMATE, DEFAULT_WEIGHT);
-        categoryWeightMap.put(RacePrefCategory.FOOD, DEFAULT_WEIGHT);
-        categoryWeightMap.put(RacePrefCategory.RELIGION, DEFAULT_WEIGHT);
-        categoryWeightMap.put(RacePrefCategory.WORK, DEFAULT_WEIGHT);
-
-        return categoryWeightMap;
-    }
-
-    public static List<String> getDefaultGameRaces() {
-        return Arrays.asList("ARGONOSH", "CANTOR", "CRETONIAN", "DONDORIAN", "GARTHIMI", "HUMAN", "TILAPI");
-    }
-
     private static Optional<RaceInteractionsConfig> load(PATH path) {
         if (!path.exists(NAME)) {
             // do not load what's not there
@@ -126,7 +102,7 @@ public class ConfigUtil {
 
         Map<RacePrefCategory, Double> weightMap = new HashMap<>(RacePrefCategory.values().length);
         if (!json.keys().contains("PREFERENCE_WEIGHTS")) {
-            weightMap = getDefaultWeights();
+            weightMap = Default.getWeights();
         } else {
             Json preferenceWeights = json.json("PREFERENCE_WEIGHTS");
 
@@ -135,7 +111,17 @@ public class ConfigUtil {
                 if (!preferenceWeights.keys().contains(prefCategory.name())) {
                     weight = DEFAULT_WEIGHT;
                 } else {
-                    weight = preferenceWeights.d(prefCategory.name(), MIN_WEIGHT, MAX_WEIGHT);
+                    try {
+                        weight = preferenceWeights.d(prefCategory.name(), MIN_WEIGHT, MAX_WEIGHT);
+                    } catch (Errors.DataError e) {
+                        // validation error
+                        log.warn("Could not read weight for %s using default value %s. Error: %s",
+                            prefCategory.name(),
+                            Double.toString(DEFAULT_WEIGHT),
+                            e.getMessage()
+                        );
+                        weight = DEFAULT_WEIGHT;
+                    }
                 }
 
                 weightMap.put(prefCategory, weight);
@@ -144,7 +130,7 @@ public class ConfigUtil {
 
         List<String> gameRaces;
         if (!json.keys().contains("VANILLA_RACES")) {
-            gameRaces = getDefaultGameRaces();
+            gameRaces = Default.getGameRaces();
         } else {
             gameRaces = Arrays.asList(json.texts("VANILLA_RACES"));
         }
@@ -160,5 +146,31 @@ public class ConfigUtil {
         log.trace("Configuration %s", raceInteractionsConfig.toString());
 
         return Optional.of(raceInteractionsConfig);
+    }
+
+    public static class Default {
+        public static RaceInteractionsConfig getConfig() {
+            return RaceInteractionsConfig.builder()
+                    .racePreferenceWeightMap(getWeights())
+                    .gameRaces(getGameRaces())
+                    .honorCustom(true)
+                    .customOnly(true)
+                    .build();
+        }
+
+        public static Map<RacePrefCategory, Double> getWeights() {
+            Map<RacePrefCategory, Double> categoryWeightMap = new HashMap<>();
+            categoryWeightMap.put(RacePrefCategory.BUILDING, DEFAULT_WEIGHT);
+            categoryWeightMap.put(RacePrefCategory.CLIMATE, DEFAULT_WEIGHT);
+            categoryWeightMap.put(RacePrefCategory.FOOD, DEFAULT_WEIGHT);
+            categoryWeightMap.put(RacePrefCategory.RELIGION, DEFAULT_WEIGHT);
+            categoryWeightMap.put(RacePrefCategory.WORK, DEFAULT_WEIGHT);
+
+            return categoryWeightMap;
+        }
+
+        public static List<String> getGameRaces() {
+            return Arrays.asList("ARGONOSH", "CANTOR", "CRETONIAN", "DONDORIAN", "GARTHIMI", "HUMAN", "TILAPI");
+        }
     }
 }

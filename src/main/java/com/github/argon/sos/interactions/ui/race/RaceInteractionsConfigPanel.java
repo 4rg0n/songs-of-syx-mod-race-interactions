@@ -82,7 +82,7 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
                 .customOnly(onlyCustom)
                 .honorCustom(honorCustom)
                 .racePreferenceWeightMap(prefWeightMap)
-                .gameRaces(ConfigUtil.getDefaultGameRaces())
+                .gameRaces(ConfigUtil.Default.getGameRaces())
                 .build();
         raceInteractions.manipulateRaceLikings(config);
 
