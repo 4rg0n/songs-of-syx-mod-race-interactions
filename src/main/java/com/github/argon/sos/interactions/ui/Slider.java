@@ -33,21 +33,16 @@ public class Slider extends GuiSection {
     private static final CharSequence setAmount = "Set amount";
     private static final CharSequence setAmountD = "Set amount {0}-{1}";
 
-    private final double min;
-    private final double max;
-
     static {
         D.ts(GSliderInt.class);
     }
 
-    public Slider(INT.INTE in, int width, double min, double max, boolean input, boolean showValue){
-        this(in, width, 24, min, max, input, showValue);
+    public Slider(INT.INTE in, int width, boolean input, boolean showValue){
+        this(in, width, 24, input, showValue);
     }
 
-    public Slider(INT.INTE in, int width, int height, double min, double max, boolean input, boolean showValue){
+    public Slider(INT.INTE in, int width, int height, boolean input, boolean showValue){
         this.in = in;
-        this.min = min;
-        this.max = max;
 
         if (input) {
             width -= (ICON.SMALL.SIZE+2)*3;
@@ -189,7 +184,13 @@ public class Slider extends GuiSection {
 
         private void setFromClickPos() {
             double clickPos = getClickPos();
-            double value = CLAMP.d(clickPos, min, max);
+            double value;
+
+            if (in.min() < 0) {
+                value = CLAMP.d(clickPos, -1, 1);
+            } else {
+                value = CLAMP.d(clickPos, 0, 1);
+            }
 
             in.setD(value);
         }
