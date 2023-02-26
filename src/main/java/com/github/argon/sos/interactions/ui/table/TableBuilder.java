@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
+/**
+ * For building a table with a single column.
+ */
 public class TableBuilder {
 
     private final static Logger log = Loggers.getLogger(TableBuilder.class);

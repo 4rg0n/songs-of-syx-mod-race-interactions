@@ -13,6 +13,9 @@ import snake2d.util.sets.LIST;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * For accessing and manipulating the games {@link Race}s.
+ */
 public class RaceService {
     private final static Logger log = Loggers.getLogger(RaceService.class);
     private final Map<String, Integer> raceIndexMap = new HashMap<>();
@@ -38,6 +41,9 @@ public class RaceService {
         return vanillaLikings;
     }
 
+    /**
+     * @return flat list of likings of each race to another race
+     */
     public static List<RaceLiking> getAllLikings() {
         List<RaceLiking> likings = new ArrayList<>();
 
@@ -67,6 +73,9 @@ public class RaceService {
         setLiking(race.key, otherRace.key, liking);
     }
 
+    /**
+     * Injects liking into the games races
+     */
     public void setLiking(String name, String otherName, double liking) {
         try {
             // set likings in "others"

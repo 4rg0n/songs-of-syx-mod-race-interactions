@@ -9,6 +9,9 @@ import view.interrupter.IDebugPanel;
 
 import static com.github.argon.sos.interactions.RaceInteractionsModScript.MOD_INFO;
 
+/**
+ * Adds mod ui elements into the game
+ */
 public class GameConfig {
     private final RaceInteractionsConfigPanel panel;
 

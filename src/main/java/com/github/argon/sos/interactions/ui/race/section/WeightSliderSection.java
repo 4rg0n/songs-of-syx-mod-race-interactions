@@ -18,6 +18,10 @@ import static com.github.argon.sos.interactions.Mapper.*;
 import static com.github.argon.sos.interactions.config.ConfigUtil.MAX_WEIGHT;
 import static com.github.argon.sos.interactions.config.ConfigUtil.MIN_WEIGHT;
 
+/**
+ * Contains the sliders for setting up the weights.
+ * Each {@link RacePrefCategory} gets a slider.
+ */
 @Getter
 public class WeightSliderSection extends GuiSection {
 

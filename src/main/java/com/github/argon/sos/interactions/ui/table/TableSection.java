@@ -9,7 +9,6 @@ import java.util.List;
 public class TableSection<T> {
     private final TableStore<T> store;
     private final GuiSection section;
-
     private final List<TableRow<T>> rows;
 
     public TableSection(GuiSection section, TableStore<T> store, List<TableRow<T>> rows) {

@@ -4,9 +4,11 @@ import lombok.Getter;
 import snake2d.util.gui.GuiSection;
 import util.gui.misc.GButt;
 
+/**
+ * Contains the buttons for applying and resetting the config
+ */
 @Getter
 public class ButtonSection extends GuiSection {
-
     private final GButt.ButtPanel applyButton;
     private final GButt.ButtPanel resetVanillaButton;
     private final GButt.ButtPanel resetModButton;

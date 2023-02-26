@@ -17,18 +17,18 @@ import view.interrupter.ISidePanel;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Contains all the ui elements for the configuration.
+ * Is displayed on the left side of the game.
+ */
 @Getter
 public class RaceInteractionsConfigPanel extends ISidePanel {
     public final static String TITLE = RaceInteractionsModScript.MOD_INFO.name.toString();
 
     private final ConfigSection configSection;
-
     private final RaceTableSection overviewSection;
-
     private final ButtonSection buttonSection;
-
     private final RaceInteractions raceInteractions;
-
 
     public RaceInteractionsConfigPanel(
         RaceInteractions raceInteractions,

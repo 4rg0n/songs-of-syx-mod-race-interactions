@@ -15,6 +15,9 @@ import java.util.*;
 
 import static com.github.argon.sos.interactions.race.RaceLikingsCalculator.DEFAULT_WEIGHT;
 
+/**
+ * For saving, loading and building {@link RaceInteractionsConfig}.
+ */
 public class ConfigUtil {
     private final static Logger log = Loggers.getLogger(ConfigUtil.class);
 

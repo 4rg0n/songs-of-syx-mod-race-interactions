@@ -9,8 +9,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import settlement.room.infra.elderly.ROOM_RESTHOME;
+import settlement.room.main.ROOMS;
 import settlement.room.main.RoomEmploymentSimple;
 import settlement.stats.STATS;
+import settlement.stats.StatsReligion;
 import snake2d.util.sets.LIST;
 
 import java.util.ArrayList;
@@ -21,6 +23,9 @@ import java.util.function.Function;
 
 import static settlement.main.SETT.ROOMS;
 
+/**
+ * Compares two races and spits out a {@link Result}
+ */
 public class RaceComparator {
     public List<Result> compare(List<Race> races) {
         List<Result> comparisonResults = new ArrayList<>();
@@ -178,12 +183,35 @@ public class RaceComparator {
 
         private final String race;
         private final String otherRace;
+        /**
+         * Not used right now
+         */
         private final int homeMatches;
+        /**
+         * How much equal food they prefer
+         */
         private final int foodMatches;
 
+        /**
+         * List of the games building structures like wood and stone from {@link BUILDING_PREFS#ALL()} with
+         * the difference in liking between the compared races
+         */
         private final Map<String, Double> buildingPrefDiff;
+        /**
+         * List of the games workplaces like mines and fields from {@link ROOMS#all()} with
+         * the difference in liking between the compared races
+         */
         private final Map<String, Double> workPrefDiff;
+        /**
+         * List of the games religions from {@link StatsReligion#ALL} with
+         * the difference in liking between the compared races
+         */
         private final Map<String, Double> religionPrefDiff;
+
+        /**
+         * List of the games climates from {@link CLIMATES#ALL()} with
+         * the difference in liking between the compared races
+         */
         private final Map<String, Double> climatePrefDiff;
     }
 }

@@ -25,7 +25,7 @@ import view.main.VIEW;
 
 
 /**
- * Uses mo
+ * Uses mostly code from {@link GSliderInt} and adds handling for negative values.
  */
 public class Slider extends GuiSection {
     private final INT.INTE in;
@@ -34,7 +34,7 @@ public class Slider extends GuiSection {
     private static final CharSequence setAmountD = "Set amount {0}-{1}";
 
     static {
-        D.ts(GSliderInt.class);
+        D.ts(Slider.class);
     }
 
     public Slider(INT.INTE in, int width, boolean input, boolean showValue){
@@ -280,10 +280,10 @@ public class Slider extends GuiSection {
             int barColoredWidth = barColoredEndPos - barColoredStartPos;
 
             if (in.get() < 0) {
-                // renders the white bar
+                // renders negative bar part
                 renderNegativeMidColor(r, barColoredStartPos, barColoredWidth, body().y1(), body().y2());
             } else {
-                // renders the white bar
+                // renders positive bar part
                 renderPositiveMidColor(r, barColoredStartPos, barColoredWidth, body().y1(), body().y2());
             }
         }

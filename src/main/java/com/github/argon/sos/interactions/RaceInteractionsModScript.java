@@ -60,7 +60,7 @@ public final class RaceInteractionsModScript implements SCRIPT {
 
 		RaceService raceService = new RaceService(config.getGameRaces());
 		RaceComparator raceComparator = new RaceComparator();
-		RacePrefCalculator racePrefCalculator = new RacePrefCalculator();
+		RacePreferenceSimilarityCalculator racePrefCalculator = new RacePreferenceSimilarityCalculator();
 		RaceInteractions raceInteractions = new RaceInteractions(
 			raceComparator,
 			racePrefCalculator,

@@ -7,6 +7,9 @@ import lombok.Setter;
 
 import java.util.Map;
 
+/**
+ * Calculates the liking between two races based on a {@link RacePreferenceSimilarityCalculator.SimilarityResult}
+ */
 @AllArgsConstructor
 public class RaceLikingsCalculator {
 
@@ -17,7 +20,7 @@ public class RaceLikingsCalculator {
 
     public final static double DEFAULT_WEIGHT = 1d;
 
-    public double calculate(RacePrefCalculator.Result prefCalcResult) {
+    public double calculate(RacePreferenceSimilarityCalculator.SimilarityResult prefCalcResult) {
         double buildingPercent = calculateLiking(prefCalcResult.getBuildingPercent(), RacePrefCategory.BUILDING);
         double climatePercent = calculateLiking(prefCalcResult.getClimatePercent(), RacePrefCategory.CLIMATE);
         double foodPercent = calculateLiking(prefCalcResult.getFoodPercent(), RacePrefCategory.FOOD);

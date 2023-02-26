@@ -7,18 +7,22 @@ import settlement.stats.STATS;
 
 import java.util.Collection;
 
-public class RacePrefCalculator {
+/**
+ * Calculates the similarity between the preferences of two races.
+ * Will produce a {@link SimilarityResult} with percentages.
+ */
+public class RacePreferenceSimilarityCalculator {
 
     private final int allFoodCount = STATS.FOOD().all.size();
 
-    public Result calculate(RaceComparator.Result compareResult) {
+    public SimilarityResult calculate(RaceComparator.Result compareResult) {
         double foodPercent =  (double) compareResult.getFoodMatches() / (double) allFoodCount;
         double climatePercent = 1 - sum(compareResult.getClimatePrefDiff().values());
         double buildingPercent = 1 - sum(compareResult.getBuildingPrefDiff().values());
         double religionPercent = 1 - sum(compareResult.getReligionPrefDiff().values());
         double workPercent = 1 - sum(compareResult.getWorkPrefDiff().values());
 
-        return Result.builder()
+        return SimilarityResult.builder()
                 .race(compareResult.getRace())
                 .otherRace(compareResult.getOtherRace())
                 .foodPercent(foodPercent)
@@ -37,7 +41,7 @@ public class RacePrefCalculator {
     @Getter
     @Builder
     @RequiredArgsConstructor
-    public static class Result {
+    public static class SimilarityResult {
         private final String race;
         private final String otherRace;
         private final double foodPercent;

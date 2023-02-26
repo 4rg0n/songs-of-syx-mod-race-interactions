@@ -9,6 +9,9 @@ import snake2d.util.gui.GuiSection;
 
 import java.util.List;
 
+/**
+ * Contains the overview about the races and their likings to others
+ */
 @Getter
 public class RaceTableSection extends GuiSection {
 

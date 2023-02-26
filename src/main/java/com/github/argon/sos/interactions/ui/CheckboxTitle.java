@@ -4,12 +4,15 @@ import snake2d.SPRITE_RENDERER;
 import snake2d.util.sprite.SPRITE;
 import util.gui.misc.GButt;
 
-public class Checkbox extends GButt.CheckboxTitle {
-    public Checkbox(SPRITE label) {
+/**
+ * Adds some basic toggle functionality to {@link GButt.CheckboxTitle}
+ */
+public class CheckboxTitle extends GButt.CheckboxTitle {
+    public CheckboxTitle(SPRITE label) {
         super(label);
     }
 
-    public Checkbox(CharSequence text) {
+    public CheckboxTitle(CharSequence text) {
         super(text);
     }
 

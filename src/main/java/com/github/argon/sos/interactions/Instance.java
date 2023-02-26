@@ -37,7 +37,6 @@ final class Instance implements SCRIPT.SCRIPT_INSTANCE {
 		// TODO: 25.02.2023 load mod data from save file
 	}
 
-	
 	@Override
 	public void update(double ds) {
 		if (!init) {

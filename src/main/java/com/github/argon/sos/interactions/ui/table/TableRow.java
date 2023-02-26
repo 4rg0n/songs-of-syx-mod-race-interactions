@@ -14,7 +14,6 @@ public class TableRow<T> extends GuiSection {
         this.ier = ier;
         this.store = store;
     }
-
     public T getEntry() {
         return store.getEntries().get(ier.get());
     }
