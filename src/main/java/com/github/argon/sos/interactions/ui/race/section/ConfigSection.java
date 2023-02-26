@@ -19,9 +19,11 @@ public class ConfigSection extends GuiSection {
         this.config = config;
         this.onlyCustomRaces = new GButt.CheckboxTitle("Only custom races");
         onlyCustomRaces.hoverInfoSet("Will not manipulate any vanilla game races when checked");
+        onlyCustomRaces.selectedSet(config.isCustomOnly());
 
         this.honorCustomRaces = new GButt.CheckboxTitle("Honor custom races likings");
         honorCustomRaces.hoverInfoSet("Will not manipulate custom mod races likings to vanilla races when checked");
+        honorCustomRaces.selectedSet(config.isHonorCustom());
 
         this.weightSliderSection = WeightSliderSection.build(config);
 

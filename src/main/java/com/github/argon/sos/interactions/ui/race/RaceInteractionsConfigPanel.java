@@ -2,6 +2,7 @@ package com.github.argon.sos.interactions.ui.race;
 
 import com.github.argon.sos.interactions.Mapper;
 import com.github.argon.sos.interactions.RaceInteractions;
+import com.github.argon.sos.interactions.RaceInteractionsModScript;
 import com.github.argon.sos.interactions.config.ConfigUtil;
 import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
 import com.github.argon.sos.interactions.race.RacePrefCategory;
@@ -18,7 +19,7 @@ import java.util.Map;
 
 @Getter
 public class RaceInteractionsConfigPanel extends ISidePanel {
-    public final static String TITLE = "Race Interactions Config";
+    public final static String TITLE = RaceInteractionsModScript.MOD_INFO.name.toString();
 
     private final ConfigSection configSection;
 
@@ -50,10 +51,12 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
             RaceInteractionsConfig appliedConfig = applyConfig();
             ConfigUtil.saveProfileConfig(appliedConfig);
         });
+        // Reset to mod configuration button
         buttonSection.getResetModButton().clickActionSet(() -> {
             raceInteractions.manipulateRaceLikings(ConfigUtil.loadModConfig());
             ConfigUtil.saveProfileConfig(ConfigUtil.loadModConfig());
         });
+        // Reset to vanilla race likings button
         buttonSection.getResetVanillaButton().clickActionSet(() ->
             raceInteractions.applyRaceLikings(RaceService.getVanillaLikings())
         );
@@ -70,7 +73,6 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         Map<RacePrefCategory, Double> prefWeightMap = new HashMap<>();
         configSection.getWeightSliderSection().getSliderValues().forEach((category, inte) -> {
             double value =  Mapper.fromSliderToWeight(inte.get());
-
             prefWeightMap.put(category, value);
         });
 
@@ -80,7 +82,6 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
                 .racePreferenceWeightMap(prefWeightMap)
                 .gameRaces(ConfigUtil.getDefaultGameRaces())
                 .build();
-
         raceInteractions.manipulateRaceLikings(config);
 
         return config;
