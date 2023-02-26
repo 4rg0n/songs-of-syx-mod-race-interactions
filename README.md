@@ -4,7 +4,8 @@ Will adjust the likings of each other race according to their similarities in pr
 For example when two races like to live only in WOOD building structures and both hate every other structure, their "liking" to each other will increase.
 This will make the assignment of who likes who more dynamic.
 
-**Steam:** https://steamcommunity.com/sharedfiles/filedetails/?id=2937853965
+* **Steam** https://steamcommunity.com/sharedfiles/filedetails/?id=2937853965
+* **Mod.io** https://mod.io/g/songsofsyx/m/race-interactions
 
 ## But why?!
 
