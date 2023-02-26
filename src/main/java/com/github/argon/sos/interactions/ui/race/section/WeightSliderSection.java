@@ -50,7 +50,7 @@ public class WeightSliderSection extends GuiSection {
 
         orderedPrefMap.forEach((racePrefCategory, weight) -> {
             INT.INTE value = new SimpleINTE(fromWeightToSlider(weight), toSliderRange(MIN_WEIGHT), toSliderRange(MAX_WEIGHT));
-            Slider weightSlider = new Slider(value, toSliderWidth(MIN_WEIGHT, MAX_WEIGHT), true, true);
+            Slider weightSlider = new Slider(value, toSliderWidth(MIN_WEIGHT, MAX_WEIGHT), MIN_WEIGHT, MAX_WEIGHT, true, true);
 
             sliders.put(racePrefCategory, weightSlider);
             sliderValues.put(racePrefCategory, value);

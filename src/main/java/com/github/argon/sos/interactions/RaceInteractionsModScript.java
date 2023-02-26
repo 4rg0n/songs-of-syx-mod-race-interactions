@@ -81,6 +81,7 @@ public final class RaceInteractionsModScript implements SCRIPT {
 				width
 		);
 
+		raceInteractions.manipulateRaceLikings(config);
 		new GameConfig(configPanel).init();
 	}
 

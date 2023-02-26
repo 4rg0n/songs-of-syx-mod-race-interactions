@@ -53,8 +53,10 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         });
         // Reset to mod configuration button
         buttonSection.getResetModButton().clickActionSet(() -> {
-            raceInteractions.manipulateRaceLikings(ConfigUtil.loadModConfig());
-            ConfigUtil.saveProfileConfig(ConfigUtil.loadModConfig());
+            RaceInteractionsConfig modConfig = ConfigUtil.loadModConfig();
+            raceInteractions.manipulateRaceLikings(modConfig);
+            ConfigUtil.saveProfileConfig(modConfig);
+            configSection.apply(modConfig);
         });
         // Reset to vanilla race likings button
         buttonSection.getResetVanillaButton().clickActionSet(() ->

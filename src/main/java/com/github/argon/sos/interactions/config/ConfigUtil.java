@@ -156,7 +156,6 @@ public class ConfigUtil {
         log.debug("Loaded configuration %s from file system", NAME);
         log.trace("Configuration %s", raceInteractionsConfig.toString());
 
-        MOD_CONFIG = raceInteractionsConfig;
-        return Optional.of(MOD_CONFIG);
+        return Optional.of(raceInteractionsConfig);
     }
 }

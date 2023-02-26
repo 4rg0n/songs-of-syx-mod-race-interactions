@@ -23,26 +23,31 @@ import util.gui.slider.GSliderInt;
 import util.info.GFORMAT;
 import view.main.VIEW;
 
-import static com.github.argon.sos.interactions.config.ConfigUtil.MAX_WEIGHT;
-import static com.github.argon.sos.interactions.config.ConfigUtil.MIN_WEIGHT;
 
-
+/**
+ * Uses mo
+ */
 public class Slider extends GuiSection {
     private final INT.INTE in;
     private static final int midWidth = 8;
     private static final CharSequence setAmount = "Set amount";
     private static final CharSequence setAmountD = "Set amount {0}-{1}";
 
+    private final double min;
+    private final double max;
+
     static {
         D.ts(GSliderInt.class);
     }
 
-    public Slider(INT.INTE in, int width, boolean input, boolean showValue){
-        this(in, width, 24, input, showValue);
+    public Slider(INT.INTE in, int width, double min, double max, boolean input, boolean showValue){
+        this(in, width, 24, min, max, input, showValue);
     }
 
-    public Slider(INT.INTE in, int width, int height, boolean input, boolean showValue){
+    public Slider(INT.INTE in, int width, int height, double min, double max, boolean input, boolean showValue){
         this.in = in;
+        this.min = min;
+        this.max = max;
 
         if (input) {
             width -= (ICON.SMALL.SIZE+2)*3;
@@ -184,7 +189,7 @@ public class Slider extends GuiSection {
 
         private void setFromClickPos() {
             double clickPos = getClickPos();
-            double value = CLAMP.d(clickPos, MIN_WEIGHT, MAX_WEIGHT);
+            double value = CLAMP.d(clickPos, min, max);
 
             in.setD(value);
         }
