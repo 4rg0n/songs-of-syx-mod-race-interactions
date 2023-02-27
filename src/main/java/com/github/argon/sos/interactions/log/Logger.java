@@ -23,7 +23,11 @@ public class Logger {
     private final static String LOG_MSG_FORMAT = "%s %s %s%s";
     private final static int NAME_DISPLAY_MAX_LENGTH = 32;
 
+    @Getter
     private final String name;
+
+    @Getter
+    private final String shortName;
 
     @Getter
     @Setter
@@ -31,12 +35,12 @@ public class Logger {
 
     public Logger(String name, Level level) {
         this.name = name;
+        this.shortName = shortenName(name);
         this.level = level;
     }
 
     public Logger(String name) {
-        this.name = name;
-        this.level = DEFAULT_LEVEL;
+        this(name, DEFAULT_LEVEL);
     }
 
     public boolean isLevel(Level level) {
@@ -84,7 +88,7 @@ public class Logger {
     private void doLog(String msgPrefix, String formatMsg, Object[] args) {
         LOG.ln(String.format(LOG_MSG_FORMAT,
                 PREFIX_MOD,
-                formatName(name),
+                (name.length() > NAME_DISPLAY_MAX_LENGTH) ? shortName : name,
                 msgPrefix,
                 String.format(formatMsg, args)));
     }
@@ -109,19 +113,16 @@ public class Logger {
     private void doLogErr(String msgPrefix, String formatMsg, Object[] args) {
         LOG.err((String.format(LOG_MSG_FORMAT,
                 PREFIX_MOD,
-                formatName(name),
+                (name.length() > NAME_DISPLAY_MAX_LENGTH) ? shortName : name,
                 msgPrefix,
                 String.format(formatMsg, args))));
     }
 
-    private String formatName(String name) {
-        if (name.length() > NAME_DISPLAY_MAX_LENGTH) {
-            String simpleClassName = name.substring(name.lastIndexOf(".") + 1);
-            String packageName = name.substring(0, name.lastIndexOf(".") + 1);
+    private String shortenName(String name) {
+        String simpleClassName = name.substring(name.lastIndexOf(".") + 1);
+        String packageName = name.substring(0, name.lastIndexOf(".") + 1);
 
-            name = shortenPackageName(packageName) + '.' + simpleClassName;
-        }
-
+        name = shortenPackageName(packageName) + '.' + simpleClassName;
         return name;
     }
 

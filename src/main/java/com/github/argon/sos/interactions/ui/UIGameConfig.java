@@ -1,5 +1,7 @@
 package com.github.argon.sos.interactions.ui;
 
+import com.github.argon.sos.interactions.log.Logger;
+import com.github.argon.sos.interactions.log.Loggers;
 import com.github.argon.sos.interactions.ui.race.RaceInteractionsConfigPanel;
 import com.github.argon.sos.interactions.util.UIUtil;
 import init.sprite.SPRITES;
@@ -12,14 +14,16 @@ import static com.github.argon.sos.interactions.RaceInteractionsModScript.MOD_IN
 /**
  * Adds mod ui elements into the game
  */
-public class GameConfig {
+public class UIGameConfig {
+    private final static Logger log = Loggers.getLogger(UIGameConfig.class);
     private final RaceInteractionsConfigPanel panel;
 
-    public GameConfig(RaceInteractionsConfigPanel panel) {
+    public UIGameConfig(RaceInteractionsConfigPanel panel) {
         this.panel = panel;
     }
 
     public void init() {
+        log.debug("Injecting UI elements into game");
         IDebugPanel.add(MOD_INFO.name + ":config", () -> {
             UIUtil.showPanel(panel, false);
         });

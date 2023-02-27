@@ -86,7 +86,7 @@ public class RaceService {
                         .ifPresent(racePrefs -> {
                             Integer otherRaceIdx = raceIndexMap.get(otherName);
                             racePrefs[otherRaceIdx] = liking;
-                            log.debug("Set %s liking %s to %s", name, otherName, Double.toString(liking));
+                            log.trace("Set %s liking %s to %s", name, otherName, Double.toString(liking));
                         });
         } catch (Exception e) {
             log.error("Could not set %s liking %s to %s", name, otherName, Double.toString(liking), e);

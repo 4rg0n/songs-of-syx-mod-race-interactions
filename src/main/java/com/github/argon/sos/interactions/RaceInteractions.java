@@ -1,6 +1,8 @@
 package com.github.argon.sos.interactions;
 
 import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
+import com.github.argon.sos.interactions.log.Logger;
+import com.github.argon.sos.interactions.log.Loggers;
 import com.github.argon.sos.interactions.race.RaceComparator;
 import com.github.argon.sos.interactions.race.RaceLikingsCalculator;
 import com.github.argon.sos.interactions.race.RacePreferenceSimilarityCalculator;
@@ -10,6 +12,7 @@ import init.race.Race;
 import java.util.List;
 
 public class RaceInteractions {
+    private final static Logger log = Loggers.getLogger(RaceInteractions.class);
     private final RaceComparator raceComparator;
     private final RacePreferenceSimilarityCalculator racePrefCalculator;
 
@@ -33,6 +36,7 @@ public class RaceInteractions {
         List<RaceComparator.Result> compareResults = raceComparator.compare(races);
         RaceLikingsCalculator raceLikingsCalculator = new RaceLikingsCalculator(config.getRacePreferenceWeightMap());
 
+        log.debug("Manipulating race likings for %d races", races.size());
         for (RaceComparator.Result compareResult : compareResults) {
             String race = compareResult.getRace();
             String otherRace = compareResult.getOtherRace();

@@ -10,7 +10,7 @@ import com.github.argon.sos.interactions.ui.race.section.ButtonSection;
 import com.github.argon.sos.interactions.ui.race.section.ConfigSection;
 import com.github.argon.sos.interactions.ui.race.RaceInteractionsConfigPanel;
 import com.github.argon.sos.interactions.ui.race.section.RaceTableSection;
-import com.github.argon.sos.interactions.ui.GameConfig;
+import com.github.argon.sos.interactions.ui.UIGameConfig;
 import com.github.argon.sos.interactions.util.SCRIPT;
 import lombok.NoArgsConstructor;
 import util.info.INFO;
@@ -53,11 +53,15 @@ public final class RaceInteractionsModScript implements SCRIPT {
 	@Override
 	public void initGameLoaded() {
 		Loggers.setLevels(Level.FINE);
+		log.debug("Initializing game resources and mod config");
+		// store vanilla likings for reset
 		RaceService.initVanillaLikings();
-
+		// load config from user profile or use mod config
 		RaceInteractionsConfig config = ConfigUtil.loadProfileConfig()
 				.orElseGet(ConfigUtil::loadModConfig);
 
+
+		log.debug("Setting up service elements");
 		RaceService raceService = new RaceService(config.getGameRaces());
 		RaceComparator raceComparator = new RaceComparator();
 		RacePreferenceSimilarityCalculator racePrefCalculator = new RacePreferenceSimilarityCalculator();
@@ -67,9 +71,9 @@ public final class RaceInteractionsModScript implements SCRIPT {
 			raceService
 		);
 
+		log.debug("Setting up ui elements");
 		List<RaceInfo> allRaceInfo = raceService.getAllRaceInfo();
 		int width = allRaceInfo.size() * 110;
-
 		ConfigSection configSection = new ConfigSection(config);
 		RaceTableSection overviewSection = new RaceTableSection(allRaceInfo, width);
 		ButtonSection buttonSection = new ButtonSection();
@@ -81,8 +85,11 @@ public final class RaceInteractionsModScript implements SCRIPT {
 				width
 		);
 
+		// adjust likings when game loaded
 		raceInteractions.manipulateRaceLikings(config);
-		new GameConfig(configPanel).init();
+		UIGameConfig uiGameConfig = new UIGameConfig(configPanel);
+		// inject ui elements into game ui
+		uiGameConfig.init();
 	}
 
 	@Override

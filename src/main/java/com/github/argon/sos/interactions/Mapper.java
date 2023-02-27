@@ -1,6 +1,5 @@
 package com.github.argon.sos.interactions;
 
-import com.github.argon.sos.interactions.config.ConfigUtil;
 import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
@@ -36,7 +35,7 @@ public class Mapper {
         log.trace("Config: %s", config.toString());
 
         config.getRacePreferenceWeightMap().forEach((category, weight) -> {
-            if (weight < MIN_WEIGHT || weight > ConfigUtil.MAX_WEIGHT) {
+            if (weight < MIN_WEIGHT || weight > MAX_WEIGHT) {
                 log.warn("Weight %s for %s is out of range from %s to %s. Using default %s",
                     Double.toString(weight),
                     category.name(),
