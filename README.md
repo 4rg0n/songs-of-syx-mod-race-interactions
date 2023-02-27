@@ -22,6 +22,9 @@ There you can set the different weights and see the results:
 
 ![Config Panel](doc/img/config_panel.png)
 
+The configuration is saved into the games save file. 
+It can also be saved and loaded from the games user profile for reusing it in another save.
+
 # Getting started
 
 [Maven](https://maven.apache.org/) is required to compile, package and install the mod.
