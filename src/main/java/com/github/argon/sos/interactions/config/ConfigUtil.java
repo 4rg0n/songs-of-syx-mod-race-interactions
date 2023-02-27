@@ -6,12 +6,15 @@ import com.github.argon.sos.interactions.log.Loggers;
 import com.github.argon.sos.interactions.race.RacePrefCategory;
 import init.paths.PATH;
 import init.paths.PATHS;
+import lombok.Setter;
 import snake2d.Errors;
 import snake2d.util.file.Json;
 import snake2d.util.file.JsonE;
 
 import java.nio.file.Path;
 import java.util.*;
+
+import static com.github.argon.sos.interactions.config.ConfigUtil.Default.*;
 
 /**
  * For saving, loading and building {@link RaceInteractionsConfig}.
@@ -22,11 +25,11 @@ public class ConfigUtil {
      * Name of the config file
      */
     public final static String NAME = "RaceInteractions";
-    public final static double MIN_WEIGHT = -2d;
-    public final static double MAX_WEIGHT = 2d;
-    public final static double DEFAULT_WEIGHT = 1d;
 
     private static RaceInteractionsConfig MOD_CONFIG;
+
+    @Setter
+    private static RaceInteractionsConfig currentConfig;
 
     /**
      * Loads mod configuration once.
@@ -50,6 +53,13 @@ public class ConfigUtil {
     public static Optional<RaceInteractionsConfig> loadProfileConfig() {
         PATH profiePath = PATHS.local().PROFILE;
         return load(profiePath);
+    }
+
+    /**
+     * @return currently set up configuration
+     */
+    public static Optional<RaceInteractionsConfig> getCurrentConfig() {
+        return Optional.ofNullable(currentConfig);
     }
 
     public static void saveProfileConfig(RaceInteractionsConfig config) {
@@ -149,6 +159,10 @@ public class ConfigUtil {
     }
 
     public static class Default {
+        public final static double MIN_WEIGHT = -2d;
+        public final static double MAX_WEIGHT = 2d;
+        public final static double DEFAULT_WEIGHT = 1d;
+
         public static RaceInteractionsConfig getConfig() {
             return RaceInteractionsConfig.builder()
                     .racePreferenceWeightMap(getWeights())

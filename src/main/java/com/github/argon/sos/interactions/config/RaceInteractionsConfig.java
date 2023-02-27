@@ -41,4 +41,6 @@ public class RaceInteractionsConfig {
      * {@link RaceInteractionsConfig#customOnly} and {@link RaceInteractionsConfig#honorCustom}
      */
     private final List<String> gameRaces;
+
+
 }

@@ -8,7 +8,7 @@ import snake2d.util.file.JsonE;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static com.github.argon.sos.interactions.config.ConfigUtil.*;
+import static com.github.argon.sos.interactions.config.ConfigUtil.Default.*;
 
 public class Mapper {
     private final static Logger log = Loggers.getLogger(Mapper.class);

@@ -1,16 +1,17 @@
 package com.github.argon.sos.interactions;
 
 
+import com.github.argon.sos.interactions.config.ConfigSaver;
 import com.github.argon.sos.interactions.config.ConfigUtil;
 import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
 import com.github.argon.sos.interactions.race.*;
+import com.github.argon.sos.interactions.ui.UIGameConfig;
+import com.github.argon.sos.interactions.ui.race.RaceInteractionsConfigPanel;
 import com.github.argon.sos.interactions.ui.race.section.ButtonSection;
 import com.github.argon.sos.interactions.ui.race.section.ConfigSection;
-import com.github.argon.sos.interactions.ui.race.RaceInteractionsConfigPanel;
 import com.github.argon.sos.interactions.ui.race.section.RaceTableSection;
-import com.github.argon.sos.interactions.ui.UIGameConfig;
 import com.github.argon.sos.interactions.util.SCRIPT;
 import lombok.NoArgsConstructor;
 import util.info.INFO;
@@ -43,7 +44,7 @@ public final class RaceInteractionsModScript implements SCRIPT {
 
 	@Override
 	public void initBeforeGameCreated() {
-
+		Loggers.setLevels(Level.FINE);
 	}
 
 	@Override
@@ -52,14 +53,12 @@ public final class RaceInteractionsModScript implements SCRIPT {
 
 	@Override
 	public void initGameLoaded() {
-		Loggers.setLevels(Level.FINE);
 		log.debug("Initializing game resources and mod config");
 		// store vanilla likings for reset
 		RaceService.initVanillaLikings();
-		// load config from user profile or use mod config
-		RaceInteractionsConfig config = ConfigUtil.loadProfileConfig()
-				.orElseGet(ConfigUtil::loadModConfig);
-
+		// load current config from save game or from user profile or use mod config
+		RaceInteractionsConfig config = ConfigUtil.getCurrentConfig().orElseGet(() ->
+				ConfigUtil.loadProfileConfig().orElseGet(ConfigUtil::loadModConfig));
 
 		log.debug("Setting up service elements");
 		RaceService raceService = new RaceService(config.getGameRaces());
@@ -85,6 +84,8 @@ public final class RaceInteractionsModScript implements SCRIPT {
 				width
 		);
 
+		// todo hold current config
+
 		// adjust likings when game loaded
 		raceInteractions.manipulateRaceLikings(config);
 		UIGameConfig uiGameConfig = new UIGameConfig(configPanel);
@@ -94,7 +95,8 @@ public final class RaceInteractionsModScript implements SCRIPT {
 
 	@Override
 	public SCRIPT_INSTANCE initAfterGameCreated() {
-		return new Instance(this);
+		ConfigSaver configSaver = new ConfigSaver();
+		return new Instance(this, configSaver);
 	}
 
 }

@@ -1,5 +1,8 @@
 package com.github.argon.sos.interactions;
 
+import com.github.argon.sos.interactions.config.ConfigSaver;
+import com.github.argon.sos.interactions.config.ConfigUtil;
+import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
 import com.github.argon.sos.interactions.util.SCRIPT;
@@ -26,15 +29,25 @@ final class Instance implements SCRIPT.SCRIPT_INSTANCE {
 
 	private final SCRIPT script;
 
+	private final ConfigSaver saver;
+
 
 	@Override
 	public void save(FilePutter file) {
-		// TODO: 25.02.2023 add mod data to save file
+		ConfigUtil.getCurrentConfig().ifPresent(config -> saver.save(file, config));
 	}
 
 	@Override
 	public void load(FileGetter file) throws IOException {
-		// TODO: 25.02.2023 load mod data from save file
+		RaceInteractionsConfig config = saver.load(file);
+		ConfigUtil.setCurrentConfig(config);
+		// todo manage different configs and how they are accessed
+	}
+
+	@Override
+	public boolean handleBrokenSavedState() {
+		ConfigUtil.setCurrentConfig(ConfigUtil.loadProfileConfig().orElseGet(ConfigUtil::loadModConfig));
+		return true;
 	}
 
 	@Override

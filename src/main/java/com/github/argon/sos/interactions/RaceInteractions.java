@@ -11,6 +11,9 @@ import init.race.Race;
 
 import java.util.List;
 
+/**
+ * Provides an API to manipulate race likings via a {@link RaceInteractionsConfig}
+ */
 public class RaceInteractions {
     private final static Logger log = Loggers.getLogger(RaceInteractions.class);
     private final RaceComparator raceComparator;
@@ -27,7 +30,6 @@ public class RaceInteractions {
         this.racePrefCalculator = racePrefCalculator;
         this.raceService = raceService;
     }
-
 
     public void manipulateRaceLikings(RaceInteractionsConfig config) {
         boolean customOnly = config.isCustomOnly();
@@ -60,6 +62,9 @@ public class RaceInteractions {
         }
     }
 
+    /**
+     * For restoring or directly setting likings between two races in bulk
+     */
     public void applyRaceLikings(List<RaceService.RaceLiking> likings) {
         for (RaceService.RaceLiking liking : likings) {
             raceService.setLiking(liking.getRace(), liking.getOtherRace(), liking.getLiking());

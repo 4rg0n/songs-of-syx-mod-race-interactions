@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import java.util.Map;
 
-import static com.github.argon.sos.interactions.config.ConfigUtil.DEFAULT_WEIGHT;
+import static com.github.argon.sos.interactions.config.ConfigUtil.Default.DEFAULT_WEIGHT;
 
 /**
  * Calculates the liking between two races based on a {@link RacePreferenceSimilarityCalculator.SimilarityResult}

@@ -15,8 +15,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.github.argon.sos.interactions.Mapper.*;
-import static com.github.argon.sos.interactions.config.ConfigUtil.MAX_WEIGHT;
-import static com.github.argon.sos.interactions.config.ConfigUtil.MIN_WEIGHT;
+import static com.github.argon.sos.interactions.config.ConfigUtil.Default.MAX_WEIGHT;
+import static com.github.argon.sos.interactions.config.ConfigUtil.Default.MIN_WEIGHT;
 
 /**
  * Contains the sliders for setting up the weights.

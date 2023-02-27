@@ -1,6 +1,7 @@
 package com.github.argon.sos.interactions.ui.race.section;
 
 import lombok.Getter;
+import snake2d.util.color.COLOR;
 import snake2d.util.gui.GuiSection;
 import util.gui.misc.GButt;
 
@@ -12,19 +13,48 @@ public class ButtonSection extends GuiSection {
     private final GButt.ButtPanel applyButton;
     private final GButt.ButtPanel resetVanillaButton;
     private final GButt.ButtPanel resetModButton;
+    private final GButt.ButtPanel saveProfileButton;
+    private final GButt.ButtPanel loadProfileButton;
 
     public ButtonSection() {
         this.applyButton = new GButt.ButtPanel("Apply");
-        applyButton.hoverInfoSet("Manipulates race likings according to settings");
+        applyButton.hoverInfoSet("Manipulates race likings according to settings.");
+        applyButton.bg(COLOR.WHITE15);
 
-        this.resetVanillaButton = new GButt.ButtPanel("Reset Vanilla");
-        resetVanillaButton.hoverInfoSet("Restores likings back to original game settings");
+        this.resetVanillaButton = new GButt.ButtPanel("Reset to Vanilla");
+        resetVanillaButton.hoverInfoSet("Restores likings back to original game settings.");
 
         this.resetModButton = new GButt.ButtPanel("Reset Mod");
-        resetModButton.hoverInfoSet("Restores likings to the default mod settings");
+        resetModButton.hoverInfoSet("Restores likings to the default mod settings.");
 
-        addRight(0, resetVanillaButton);
-        addRight(5, resetModButton);
-        addRight(50, applyButton);
+        this.saveProfileButton = new GButt.ButtPanel("Save to profile");
+        saveProfileButton.hoverInfoSet("Saves settings to user profile. So it can be used in another save.");
+
+        this.loadProfileButton = new GButt.ButtPanel("Load from profile");
+        loadProfileButton.hoverInfoSet("Loads settings from user profile.");
+
+        setButtonsWidth(loadProfileButton.body.width() + 8);
+
+        addDownC(0, resetVanillaButton);
+        addDownC(5, resetModButton);
+        addDownC(20, loadProfileButton);
+        addDownC(5, saveProfileButton);
+        addDownC(20, applyButton);
+    }
+
+    public void setButtonsWidth(int width) {
+        resetVanillaButton.body.setWidth(width);
+        resetModButton.body.setWidth(width);
+        loadProfileButton.body.setWidth(width);
+        saveProfileButton.body.setWidth(width);
+        applyButton.body.setWidth(width);
+    }
+
+    public void markUnApplied() {
+        applyButton.bg(COLOR.WHITE15WHITE50);
+    }
+
+    public void markApplied() {
+        applyButton.bg(COLOR.WHITE15);
     }
 }

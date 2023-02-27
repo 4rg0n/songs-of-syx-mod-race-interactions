@@ -3,6 +3,7 @@ package com.github.argon.sos.interactions.ui;
 import init.D;
 import init.sprite.ICON;
 import init.sprite.SPRITES;
+import init.sprite.UI.UI;
 import snake2d.MButt;
 import snake2d.SPRITE_RENDERER;
 import snake2d.util.color.COLOR;
@@ -128,7 +129,20 @@ public class Slider extends GuiSection {
                 }
             };
 
-            addRightC(5, value);
+            GuiSection section = new GuiSection();
+            int max = Math.max(Math.abs(in.min()), Math.abs(in.max()));
+            String maxString = Integer.toString(max);
+            if (in.min() < 0) {
+                maxString = "-" + maxString;
+            }
+
+            int valueWidth = UI.FONT().S.width(maxString, 0, maxString.length() - 1, 1.4);
+
+            section.body().setWidth(valueWidth);
+            section.body().setHeight(body().height());
+
+            section.addCentredX(value, 0);
+            addRight(5, section);
         }
     }
 
