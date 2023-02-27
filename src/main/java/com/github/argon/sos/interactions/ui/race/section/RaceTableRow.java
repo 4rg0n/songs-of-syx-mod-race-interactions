@@ -1,6 +1,8 @@
 package com.github.argon.sos.interactions.ui.race.section;
 
 import com.github.argon.sos.interactions.race.RaceInfo;
+import com.github.argon.sos.interactions.ui.HorizontalLine;
+import com.github.argon.sos.interactions.ui.Spacer;
 import com.github.argon.sos.interactions.ui.table.TableRow;
 import com.github.argon.sos.interactions.ui.table.TableStore;
 import init.race.RACES;
@@ -10,6 +12,7 @@ import init.sprite.SPRITES;
 import snake2d.SPRITE_RENDERER;
 import snake2d.util.color.COLOR;
 import snake2d.util.gui.GUI_BOX;
+import snake2d.util.gui.GuiSection;
 import snake2d.util.gui.renderable.RENDEROBJ;
 import snake2d.util.misc.CLAMP;
 import snake2d.util.sets.LinkedList;
@@ -24,11 +27,16 @@ import util.info.GFORMAT;
  * Contains information about the likings of a race to all other races.
  */
 public class RaceTableRow extends TableRow<RaceInfo> {
+
     public RaceTableRow(GETTER<Integer> ier, TableStore<RaceInfo> store) {
         super(ier, store);
 
+        GuiSection container = new GuiSection();
+
+
         // race icon
-        add(new RENDEROBJ.Sprite(ICON.MEDIUM.SIZE) {
+        container.addRightC(0, new Spacer(8, 0));
+        container.addRightC(0 ,new RENDEROBJ.Sprite(ICON.MEDIUM.SIZE) {
             @Override
             public void render(SPRITE_RENDERER r, float ds) {
                 hoverInfoSet(getEntry().getRace().info.names);
@@ -38,7 +46,8 @@ public class RaceTableRow extends TableRow<RaceInfo> {
         });
 
         // arrow icon
-        addRightC(3, SPRITES.icons().m.arrow_right);
+        container.addRightC(8, SPRITES.icons().m.arrow_right);
+        container.addRightC(8, Spacer.NOTHING);
 
         // row with other race icons and likings
         LinkedList<RENDEROBJ> ee = new LinkedList<>();
@@ -76,10 +85,20 @@ public class RaceTableRow extends TableRow<RaceInfo> {
         // FIXME: 24.02.2023 when one has too many races the width will be too wide at some point
         //        horizontal scrollbar?
         ee.forEach(renderobj -> {
-            addRightC(3, renderobj);
+            container.addRightC(1, renderobj);
         });
 
-        pad(5);
+        addDownC(0, new Spacer(container.body().width(), 10));
+        addDownC( 0, container);
+        addDownC(10, new HorizontalLine(container.body().width(), 3, 1));
+    }
+
+    @Override
+    public void render(SPRITE_RENDERER r, float ds) {
+        if (getIndex().get() != null && getIndex().get() % 2 != 0) {
+            background(COLOR.WHITE20);
+        }
+        super.render(r, ds);
     }
 
     /**

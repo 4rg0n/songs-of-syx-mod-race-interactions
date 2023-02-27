@@ -81,6 +81,5 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         section().addDownC(10, container);
         section().addDownC(0, new HorizontalLine(width, 21, 1));
         section().addDownC(0, overviewSection);
-        section().addDownC(0, new HorizontalLine(width, 21, 1));
     }
 }
