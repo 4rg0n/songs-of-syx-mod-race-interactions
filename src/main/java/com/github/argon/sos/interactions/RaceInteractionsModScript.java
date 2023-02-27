@@ -18,7 +18,6 @@ import util.info.INFO;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
 
 /**
  * Entry point
@@ -44,7 +43,7 @@ public final class RaceInteractionsModScript implements SCRIPT {
 
 	@Override
 	public void initBeforeGameCreated() {
-		Loggers.setLevels(Level.FINE);
+		//Loggers.setLevels(Level.FINE);
 	}
 
 	@Override
@@ -83,8 +82,6 @@ public final class RaceInteractionsModScript implements SCRIPT {
 				buttonSection,
 				width
 		);
-
-		// todo hold current config
 
 		// adjust likings when game loaded
 		raceInteractions.manipulateRaceLikings(config);
