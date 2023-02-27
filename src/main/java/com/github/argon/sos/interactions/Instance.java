@@ -41,7 +41,6 @@ final class Instance implements SCRIPT.SCRIPT_INSTANCE {
 	public void load(FileGetter file) throws IOException {
 		RaceInteractionsConfig config = saver.load(file);
 		ConfigUtil.setCurrentConfig(config);
-		// todo manage different configs and how they are accessed
 	}
 
 	@Override
