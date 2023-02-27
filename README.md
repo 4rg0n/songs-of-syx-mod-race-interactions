@@ -22,9 +22,6 @@ There you can set the different weights and see the results:
 
 ![Config Panel](doc/img/config_panel.png)
 
-Configuration is saved into the games profile folder. Usually next to your save games.
-This means each save game will use the same configuration.
-
 # Getting started
 
 [Maven](https://maven.apache.org/) is required to compile, package and install the mod.
@@ -117,51 +114,5 @@ You can also edit them there :)
 * Add a new [Run Configuration](https://www.subjectcoach.com/tutorials/detail/contents/beginners-guide-to-eclipse-ide/chapter/working-with-run-configurations).
 * Set the **main class** name to `init.MainLaunchLauncher`.
 * In the tab **Arguments** set the **working directory** to your game installation folder e.g. `C:/Program Files (x86)/Steam/steamapps/common/Songs of Syx`.
-
-## Testing
-
-There's [JUnit 5](https://junit.org/junit5/) with [AssertJ](https://assertj.github.io/doc/) and [Mockito 4](https://site.mockito.org/) for testing your code.
-
-## Developing Tips
-
-See [doc/index.md](doc/index.md).
-
-## Publish your Mod
-
-There's a maven profile `mods-uploader` you can use to automatically copy and clean your files into the mod uploader.
-The directory is configurable via the `<game.mod.uploader.directory>` property in the `<profiles>`. It's default set to:
-
-* **Windows:** `${user.home}/AppData/Roaming/songsofsyx/mods-uploader`
-* **Linux:** `${user.home}/.local/share/songsofsyx/mods-uploader`
-
-Will copy the mod files into the [Steam Workshop Uploader](https://cdn.discordapp.com/attachments/664478122347069441/1023961932476186704/Songs_of_Syx_Workshop_Uploader.zip) directory.
-
-```
-mvn install -P mods-uploader
-```
-
-Will remove the mod files from the mod uploader. For updating the mod files.
-
-```
-mvn clean -P mods-uploader
-```
-
-### Steam
-
-* [Official How to up- and download mods using Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2229540768)
-* [(Discord) Steam Workshop Uploader](https://cdn.discordapp.com/attachments/664478122347069441/1023961932476186704/Songs_of_Syx_Workshop_Uploader.zip)
-
-# Modding Resources
-
-* [Discord](https://discord.com/eacfCuE)
-* [Script Modding](https://docs.google.com/document/d/1FVOtfr3Y-cxH2Gw-i-OqW3Vbp0MPJp0xSyQ80UoCABE/edit)
-* [Modding Guide](https://drive.google.com/file/d/1_OesG68HtJ4CwyHK7M72hQDOaCjeqgqT/view) (OUTDATED)
-* [Basic Introduction](https://songsofsyx.old.mod.io/guides/introduction-adding-a-resource)
-* [Basic Sprites](https://songsofsyx.old.mod.io/guides/basics-sprites)
-
-# DISCLAIMER
-
-The source code of the "roommod" example comes from the game files itself and were written by the game dev Jake de Laval.
-I've just build the maven tooling around it.
 
 
