@@ -28,6 +28,10 @@ public class ConfigUtil {
 
     private static RaceInteractionsConfig MOD_CONFIG;
 
+    /**
+     * Holds the current set configuration.
+     * Used e.g. when the game saves.
+     */
     @Setter
     private static RaceInteractionsConfig currentConfig;
 

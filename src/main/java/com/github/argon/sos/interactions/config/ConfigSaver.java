@@ -10,8 +10,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Takes care of saving and loading {@link RaceInteractionsConfig} into and from the save game
+ */
 public class ConfigSaver {
     private final static Logger log = Loggers.getLogger(ConfigSaver.class);
+
     public void save(FilePutter file, RaceInteractionsConfig config) {
         log.debug("Saving Race Interactions Config into save game.");
         file.bool(config.isCustomOnly());
@@ -45,8 +49,5 @@ public class ConfigSaver {
                 .gameRaces(ConfigUtil.loadModConfig().getGameRaces())
                 .racePreferenceWeightMap(weightsMap)
                 .build();
-    }
-    public void clear() {
-
     }
 }

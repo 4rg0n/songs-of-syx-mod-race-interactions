@@ -60,7 +60,7 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         buttonSection.getResetVanillaButton().clickActionSet(() ->
             raceInteractions.applyRaceLikings(RaceService.getVanillaLikings())
         );
-        // Save settings to user  button
+        // Save settings to user button
         buttonSection.getSaveProfileButton().clickActionSet(() -> {
             RaceInteractionsConfig config = configSection.getConfig();
             ConfigUtil.saveProfileConfig(config);
@@ -73,9 +73,7 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
             });
         });
 
-
         GuiSection container = new GuiSection();
-
         container.addRight(0, configSection);
         container.addRight(5, new VerticalLine( 11, configSection.body().height(), 1));
         container.addRight(5, buttonSection);
