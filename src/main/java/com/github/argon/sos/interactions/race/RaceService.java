@@ -2,15 +2,17 @@ package com.github.argon.sos.interactions.race;
 
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
+import com.github.argon.sos.interactions.util.RaceUtil;
 import com.github.argon.sos.interactions.util.ReflectionUtil;
-import init.race.RACES;
 import init.race.Race;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import snake2d.util.sets.LIST;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -22,51 +24,11 @@ public class RaceService {
 
     private final List<String> gameRaces;
 
-    private static List<RaceLiking> vanillaLikings;
-
     public RaceService(List<String> gameRaces) {
         this.gameRaces = gameRaces;
-        for (Race race : getAll()) {
+        for (Race race : RaceUtil.getAll()) {
             raceIndexMap.put(race.key, race.index);
         }
-    }
-
-    public static void initVanillaLikings() {
-        if (vanillaLikings == null) {
-            vanillaLikings = getAllLikings();
-        }
-    }
-
-    public static List<RaceLiking> getVanillaLikings() {
-        return vanillaLikings;
-    }
-
-    /**
-     * @return flat list of likings of each race to another race
-     */
-    public static List<RaceLiking> getAllLikings() {
-        List<RaceLiking> likings = new ArrayList<>();
-
-        for (Race race : getAll()) {
-            for (Race otherRace : getAll()) {
-                if (race.key.equals(otherRace.key)) {
-                    continue;
-                }
-
-                double liking = getLiking(race, otherRace);
-                likings.add(RaceLiking.builder()
-                    .race(race.key)
-                    .otherRace(otherRace.key)
-                    .liking(liking)
-                    .build());
-            }
-        }
-
-        return likings;
-    }
-
-    public static double getLiking(Race race, Race otherRace) {
-        return race.pref().other(otherRace);
     }
 
     public void setLiking(Race race, Race otherRace, double liking) {
@@ -86,15 +48,15 @@ public class RaceService {
                         .ifPresent(racePrefs -> {
                             Integer otherRaceIdx = raceIndexMap.get(otherName);
                             racePrefs[otherRaceIdx] = liking;
-                            log.trace("Set %s liking %s to %s", name, otherName, Double.toString(liking));
+                            log.trace("Set %s liking %s to %s", name, otherName, liking);
                         });
         } catch (Exception e) {
-            log.error("Could not set %s liking %s to %s", name, otherName, Double.toString(liking), e);
+            log.error("Could not set %s liking %s to %s", name, otherName, liking, e);
         }
     }
 
     public List<RaceInfo> getAllRaceInfo() {
-        return getAll().stream().map(race ->
+        return RaceUtil.getAll().stream().map(race ->
             getRaceInfo(race.key).orElse(null)
         ).collect(Collectors.toList());
     }
@@ -115,33 +77,20 @@ public class RaceService {
             return Optional.empty();
         }
 
-        return Optional.of(getAll().get(raceIdx));
+        return Optional.of(RaceUtil.getAll().get(raceIdx));
     }
 
-    public static List<Race> getAll() {
-        return toJavaList(RACES.all());
-    }
 
     public List<Race> getGameRaces() {
-        return getAll().stream()
+        return RaceUtil.getAll().stream()
                 .filter(race -> gameRaces.contains(race.key))
                 .collect(Collectors.toList());
     }
 
     public List<Race> getCustomRaces() {
-        return getAll().stream()
+        return RaceUtil.getAll().stream()
                 .filter(race -> !gameRaces.contains(race.key))
                 .collect(Collectors.toList());
-    }
-
-    private static List<Race> toJavaList(LIST<Race> raceLIST) {
-        List<Race> races = new ArrayList<>();
-
-        for (Race race : raceLIST) {
-            races.add(race);
-        }
-
-        return races;
     }
 
     @Getter

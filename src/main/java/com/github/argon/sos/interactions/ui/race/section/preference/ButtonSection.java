@@ -1,4 +1,4 @@
-package com.github.argon.sos.interactions.ui.race.section;
+package com.github.argon.sos.interactions.ui.race.section.preference;
 
 import lombok.Getter;
 import snake2d.util.color.COLOR;

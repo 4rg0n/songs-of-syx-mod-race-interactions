@@ -1,6 +1,5 @@
-package com.github.argon.sos.interactions.race;
+package com.github.argon.sos.interactions.config;
 
-import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
 import lombok.Getter;
 
 /**

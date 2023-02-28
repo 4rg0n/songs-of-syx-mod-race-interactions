@@ -4,6 +4,10 @@ import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.UndeclaredThrowableException;
+import java.util.Arrays;
 import java.util.Optional;
 
 /**
@@ -12,6 +16,8 @@ import java.util.Optional;
 public class ReflectionUtil {
 
     private final static Logger log = Loggers.getLogger(ReflectionUtil.class);
+
+    private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
 
     public static void setField(String fieldName, Object instance, Object newValue) throws NoSuchFieldException, IllegalAccessException {
         Field field = instance.getClass().getDeclaredField(fieldName);
@@ -47,5 +53,64 @@ public class ReflectionUtil {
                     field.getName(), instance.getClass().getSimpleName(), e);
             return Optional.empty();
         }
+    }
+
+
+    public static Object invokeMethod(Method method, Object target) {
+        return invokeMethod(method, target, EMPTY_OBJECT_ARRAY);
+    }
+
+    public static Object invokeMethod(String methodName, Class<?> target, Object instance,  Object... args) {
+        Method method = null;
+        Class<?>[] paramTypes = Arrays.stream(args).map(Object::getClass).toArray(Class[]::new);
+
+        try {
+            method = target.getDeclaredMethod(methodName, paramTypes);
+        } catch (NoSuchMethodException e) {
+            handleReflectionException(e);
+        }
+
+        return invokeMethod(method, instance, args);
+    }
+
+    public static Object invokeMethod(Method method, Object instance, Object... args) {
+        try {
+            method.setAccessible(true);
+            return method.invoke(instance, args);
+        }
+        catch (Exception ex) {
+            handleReflectionException(ex);
+        }
+        throw new IllegalStateException("Should never get here");
+    }
+
+    public static void handleReflectionException(Exception ex) {
+        if (ex instanceof NoSuchMethodException) {
+            throw new IllegalStateException("Method not found: " + ex.getMessage());
+        }
+        if (ex instanceof IllegalAccessException) {
+            throw new IllegalStateException("Could not access method or field: " + ex.getMessage());
+        }
+        if (ex instanceof InvocationTargetException) {
+            handleInvocationTargetException((InvocationTargetException) ex);
+        }
+        if (ex instanceof RuntimeException) {
+            throw (RuntimeException) ex;
+        }
+        throw new UndeclaredThrowableException(ex);
+    }
+
+    public static void handleInvocationTargetException(InvocationTargetException ex) {
+        rethrowRuntimeException(ex.getTargetException());
+    }
+
+    public static void rethrowRuntimeException(Throwable ex) {
+        if (ex instanceof RuntimeException) {
+            throw (RuntimeException) ex;
+        }
+        if (ex instanceof Error) {
+            throw (Error) ex;
+        }
+        throw new UndeclaredThrowableException(ex);
     }
 }

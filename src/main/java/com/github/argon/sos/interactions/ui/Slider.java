@@ -4,6 +4,8 @@ import init.D;
 import init.sprite.ICON;
 import init.sprite.SPRITES;
 import init.sprite.UI.UI;
+import lombok.Getter;
+import lombok.Setter;
 import snake2d.MButt;
 import snake2d.SPRITE_RENDERER;
 import snake2d.util.color.COLOR;
@@ -33,6 +35,10 @@ public class Slider extends GuiSection {
     private static final int midWidth = 8;
     private static final CharSequence setAmount = "Set amount";
     private static final CharSequence setAmountD = "Set amount {0}-{1}";
+
+    @Getter
+    @Setter
+    private boolean enabled = true;
 
     static {
         D.ts(GSliderInt.class);
@@ -125,7 +131,7 @@ public class Slider extends GuiSection {
             GStat value = new GStat() {
                 @Override
                 public void update(GText text) {
-                    GFORMAT.iBig(text, in.get());
+                    GFORMAT.perc(text, in.get() / 100d);
                 }
             };
 
@@ -164,8 +170,14 @@ public class Slider extends GuiSection {
 
     @Override
     public void render(SPRITE_RENDERER r, float ds) {
-        activeSet(in.max() > 0);
+        activeSet(enabled && in.max() > 0);
         super.render(r, ds);
+    }
+
+
+    @Override
+    public boolean hover(COORDINATE mCoo) {
+        return super.hover(mCoo);
     }
 
     @Override
@@ -182,6 +194,11 @@ public class Slider extends GuiSection {
         COLOR.WHITE35.render(r, x1, x1+width, y1, y2);
     }
 
+    public void reset() {
+        in.set(0);
+        in.setD(0d);
+    }
+
     private class Mid extends CLICKABLE.ClickableAbs {
 
         private boolean clicked = false;
@@ -192,6 +209,10 @@ public class Slider extends GuiSection {
 
         @Override
         protected void clickA() {
+            if (!enabled) {
+                return;
+            }
+
             clicked = true;
             setFromClickPos();
         }
@@ -313,7 +334,5 @@ public class Slider extends GuiSection {
             }
             return false;
         }
-
-
     }
 }

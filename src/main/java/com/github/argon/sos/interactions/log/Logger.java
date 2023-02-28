@@ -90,7 +90,7 @@ public class Logger {
                 PREFIX_MOD,
                 (name.length() > NAME_DISPLAY_MAX_LENGTH) ? shortName : name,
                 msgPrefix,
-                String.format(formatMsg, args)));
+                String.format(formatMsg, stringifyValues(args))));
     }
 
     private void logErr(String msgPrefix, Level level, String formatMsg, Object... args) {
@@ -102,7 +102,6 @@ public class Logger {
 
         if (ex != null) {
             args = Arrays.copyOf(args, args.length - 1);
-
             doLogErr(msgPrefix, formatMsg, args);
             printException(ex);
         } else {
@@ -115,7 +114,7 @@ public class Logger {
                 PREFIX_MOD,
                 (name.length() > NAME_DISPLAY_MAX_LENGTH) ? shortName : name,
                 msgPrefix,
-                String.format(formatMsg, args))));
+                String.format(formatMsg, stringifyValues(args)))));
     }
 
     private String shortenName(String name) {
@@ -151,5 +150,24 @@ public class Logger {
         }
 
         return null;
+    }
+
+    private Object[] stringifyValues(Object[] args) {
+        Object[] stringArgs = new Object[args.length];
+
+        for (int i = 0; i < args.length; i++) {
+            Object arg = args[i];
+            stringArgs[i] = stringifyValue(arg);
+        }
+
+        return stringArgs;
+    }
+
+    private String stringifyValue(Object arg) {
+        if (arg instanceof Double) {
+            return String.format("%1$,.4f", (Double) arg);
+        } else {
+            return arg.toString();
+        }
     }
 }

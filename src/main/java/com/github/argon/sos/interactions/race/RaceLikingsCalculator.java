@@ -1,5 +1,6 @@
 package com.github.argon.sos.interactions.race;
 
+import com.github.argon.sos.interactions.config.RacePrefCategory;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
 import lombok.AllArgsConstructor;
@@ -7,7 +8,7 @@ import lombok.Setter;
 
 import java.util.Map;
 
-import static com.github.argon.sos.interactions.config.ConfigUtil.Default.DEFAULT_WEIGHT;
+import static com.github.argon.sos.interactions.config.RaceInteractionsConfig.Default.DEFAULT_PREFERENCE_WEIGHT;
 
 /**
  * Calculates the liking between two races based on a {@link RacePreferenceSimilarityCalculator.SimilarityResult}
@@ -34,8 +35,8 @@ public class RaceLikingsCalculator {
     public double getCategoryWeight(RacePrefCategory category) {
         if (!categoryWeightMap.containsKey(category)) {
             log.debug("Weight for category %s not found in categoryWeightMap. Using default: %s",
-                    category.name(), Double.toString(DEFAULT_WEIGHT));
-            return DEFAULT_WEIGHT;
+                    category.name(), DEFAULT_PREFERENCE_WEIGHT);
+            return DEFAULT_PREFERENCE_WEIGHT;
         }
 
         return categoryWeightMap.get(category);

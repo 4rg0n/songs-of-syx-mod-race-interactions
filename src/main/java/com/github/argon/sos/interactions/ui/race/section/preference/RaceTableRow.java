@@ -1,4 +1,4 @@
-package com.github.argon.sos.interactions.ui.race.section;
+package com.github.argon.sos.interactions.ui.race.section.preference;
 
 import com.github.argon.sos.interactions.race.RaceInfo;
 import com.github.argon.sos.interactions.ui.HorizontalLine;

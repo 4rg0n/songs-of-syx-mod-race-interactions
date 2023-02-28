@@ -1,13 +1,12 @@
 package com.github.argon.sos.interactions.race;
 
+import com.github.argon.sos.interactions.log.Logger;
+import com.github.argon.sos.interactions.log.Loggers;
 import init.biomes.BUILDING_PREFS;
 import init.biomes.CLIMATES;
 import init.race.Race;
 import init.resources.Edible;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import settlement.room.infra.elderly.ROOM_RESTHOME;
 import settlement.room.main.ROOMS;
 import settlement.room.main.RoomEmploymentSimple;
@@ -26,8 +25,15 @@ import static settlement.main.SETT.ROOMS;
 /**
  * Compares two races and spits out a {@link Result}
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RaceComparator {
+    private final static Logger log = Loggers.getLogger(RaceComparator.class);
+
+    @Getter(lazy = true)
+    private final static RaceComparator instance = new RaceComparator();
+
     public List<Result> compare(List<Race> races) {
+        log.debug("Comparing %s races", races.size());
         List<Result> comparisonResults = new ArrayList<>();
 
         for (Race race : races) {
@@ -41,6 +47,7 @@ public class RaceComparator {
             }
         }
 
+        log.trace("Result: %s", comparisonResults.toString());
         return comparisonResults;
     }
 
