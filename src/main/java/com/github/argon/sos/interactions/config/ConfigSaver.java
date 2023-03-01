@@ -21,27 +21,16 @@ public class ConfigSaver {
     private final static ConfigSaver instance = new ConfigSaver();
 
     public void save(FilePutter file, RaceInteractionsConfig config) {
-        log.debug("Saving Race Interactions Config into save game.");
-        file.bool(config.isCustomOnly());
-        file.bool(config.isHonorCustom());
-
-        double[] preferenceWeightsIndexed = new double[RacePrefCategory.values().length];
-        config.getRacePreferenceWeightMap().forEach((category, weight) -> {
-            preferenceWeightsIndexed[category.getIndex()] = weight;
-        });
-        file.ds(preferenceWeightsIndexed);
-
-        double[] standingWeightsIndexed = new double[RaceStandingCategory.values().length];
-        config.getRaceStandingWeightMap().forEach((category, weight) -> {
-            standingWeightsIndexed[category.getIndex()] = weight;
-        });
-        file.ds(standingWeightsIndexed);
+        log.debug("Saving RaceInteractionsConfig into save file");
+        ConfigMapper.toSaveGame(file, config);
     }
     public Optional<RaceInteractionsConfig> load(FileGetter file)  {
+        log.debug("Loading RaceInteractionsConfig from save file");
         try {
-            return Optional.of(ConfigMapper.map(file));
+            RaceInteractionsConfig config = ConfigMapper.fromSaveGame(file);
+            return Optional.of(config);
         } catch (Exception e) {
-            log.warn("Could load config from save game", e);
+            log.warn("Could load config from save file", e);
             return Optional.empty();
         }
     }

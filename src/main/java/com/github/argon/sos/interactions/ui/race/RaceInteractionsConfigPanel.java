@@ -79,7 +79,7 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
             configJsonService.saveProfileConfig(config);
         });
         // Load settings from user profile button
-        buttonSection.getLoadProfileButton().clickActionSet(() -> {
+        buttonSection.getLoadProfileButton().clickActionSet(() ->
             configJsonService.loadProfileConfig().ifPresent(config -> {
                 prefConfigSection.applyConfig(
                     config.isCustomOnly(),
@@ -87,8 +87,8 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
                     config.getRacePreferenceWeightMap()
                 );
                 buttonSection.markUnApplied();
-            });
-        });
+            })
+        );
 
         GuiSection container = new GuiSection();
         container.addRight(0, prefConfigSection);
@@ -107,6 +107,8 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         return RaceInteractionsConfig.builder()
                 .gameRaces(RaceInteractionsConfig.getCurrent()
                         .orElse(RaceInteractionsConfig.Default.getConfig()).getGameRaces())
+                .raceLookRange(standConfigSection.getRaceLookRangeValue())
+                .raceBoostSelf(standConfigSection.isRaceBoostSelf())
                 .racePreferenceWeightMap(prefConfigSection.getWeights())
                 .raceStandingWeightMap(standConfigSection.getWeights())
                 .honorCustom(prefConfigSection.isHonorCustom())

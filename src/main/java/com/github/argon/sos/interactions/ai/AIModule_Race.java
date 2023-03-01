@@ -14,8 +14,9 @@ public final class AIModule_Race extends AIModule{
 	private final static Logger log = Loggers.getLogger(AIModule_Race.class);
 
 	static CharSequence name = "Looking for other races";
+
 //	static {
-//		D.ts(AIModule_Muh.class);
+//		D.ts(AIModule_Race.class);
 //	}
 	
 	private final PlanRaceInteract raceInteract;
@@ -26,12 +27,22 @@ public final class AIModule_Race extends AIModule{
 	}
 
 	@Override
-	protected void update(Humanoid a, AIManager d, boolean newDay, int byteDelta, int upI) {
-		
+	protected void update(Humanoid a, AIManager ai, boolean newDay, int byteDelta, int updateOfDay) {
+		if ((updateOfDay & 0b011) == 0) {
+			raceInteract.getCooldown().set(ai, false);
+		}
 	}
 	
 	@Override
-	public int getPriority(Humanoid humanoid, AIManager d) {
-		return 8;
+	public int getPriority(Humanoid humanoid, AIManager ai) {
+		if (ai.plan() == raceInteract.lookForRaces) {
+			return 1;
+		}
+
+		if (raceInteract.getCooldown().is(ai)) {
+			return 0;
+		}
+
+		return 1;
 	}
 }

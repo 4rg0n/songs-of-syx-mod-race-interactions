@@ -1,5 +1,7 @@
 package com.github.argon.sos.interactions.config;
 
+import com.github.argon.sos.interactions.log.Logger;
+import com.github.argon.sos.interactions.log.Loggers;
 import lombok.*;
 
 import java.util.*;
@@ -12,6 +14,8 @@ import java.util.*;
 @Builder
 @RequiredArgsConstructor
 public class RaceInteractionsConfig {
+
+    private final static Logger log = Loggers.getLogger(RaceInteractionsConfig.class);
 
     /**
      * Name of the config file
@@ -33,6 +37,7 @@ public class RaceInteractionsConfig {
 
     public static void setCurrent(RaceInteractionsConfig currentConfig) {
         CURRENT_CONFIG = currentConfig;
+        log.debug("Set current config to: %s", currentConfig.toString());
     }
 
     /**
@@ -53,9 +58,22 @@ public class RaceInteractionsConfig {
     private final Map<RacePrefCategory, Double> racePreferenceWeightMap;
 
     /**
-     * 0 means disabled
+     * The range in tiles where citizens look for other races nearby
+     */
+    private final int raceLookRange;
+
+    /**
+     * Whether races should get boosted {@link RaceStandingCategory}s by their own race
+     */
+    private final boolean raceBoostSelf;
+
+    /**
+     * For boosting different {@link RaceStandingCategory}s
+     * when races are near {@link RaceInteractionsConfig#raceLookRange} other liked races.
+     * 0 means disabled.
      */
     private final Map<RaceStandingCategory, Double> raceStandingWeightMap;
+
 
     /**
      * A list of the vanilla game race names.
@@ -65,18 +83,22 @@ public class RaceInteractionsConfig {
     private final List<String> gameRaces;
 
     public static class Default {
-        public final static double MIN_WEIGHT = -2d;
-        public final static double MAX_WEIGHT = 2d;
+        public final static double DEFAULT_MIN_WEIGHT = -2d;
+        public final static double DEFAULT_MAX_WEIGHT = 2d;
         public final static double DEFAULT_PREFERENCE_WEIGHT = 1d;
         public final static double DEFAULT_STANDING_WEIGHT = 0d;
+        public final static int DEFAULT_RACE_LOOK_RANGE = 20;
+        public final static int DEFAULT_RACE_LOOK_MAX_RANGE = 100;
 
         public static RaceInteractionsConfig getConfig() {
             return RaceInteractionsConfig.builder()
                     .racePreferenceWeightMap(getPreferencesWeights())
                     .gameRaces(getGameRaces())
                     .raceStandingWeightMap(getStandingsWeights())
+                    .raceLookRange(DEFAULT_RACE_LOOK_RANGE)
                     .honorCustom(true)
                     .customOnly(true)
+                    .raceBoostSelf(false)
                     .build();
         }
 

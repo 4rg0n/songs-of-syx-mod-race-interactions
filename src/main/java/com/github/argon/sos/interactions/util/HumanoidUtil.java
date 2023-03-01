@@ -1,5 +1,6 @@
 package com.github.argon.sos.interactions.util;
 
+import init.race.Race;
 import settlement.entity.ENTITY;
 import settlement.entity.humanoid.Humanoid;
 import settlement.main.SETT;
@@ -58,18 +59,31 @@ public class HumanoidUtil {
             Humanoid friend = (Humanoid) entity;
 
             return (int) nearbyHumanoids.stream().filter(nearbyHumanoid ->
-                nearbyHumanoid.title().equals(friend.title())
+                nearbyHumanoid.equals(friend)
             ).count();
         }
 
         return 0;
     }
 
-    public static double avgRaceLikings(Humanoid humanoid, List<Humanoid> nearbyHumanoids) {
+    public static double avgRaceLikings(Humanoid humanoid, List<Humanoid> nearbyHumanoids, boolean ownRace) {
         double likeScore = 0d;
+        Race race = humanoid.race();
+
         for (Humanoid nearbyHumanoid : nearbyHumanoids) {
-            double liking = humanoid.race().pref().other(nearbyHumanoid.race());
+            Race otherRace = nearbyHumanoid.race();
+
+            // skip own race?
+            if (!ownRace && race.key.equals(otherRace.key)) {
+                continue;
+            }
+
+            double liking = race.pref().other(otherRace);
             likeScore += liking;
+        }
+
+        if (likeScore == 0d) {
+            return likeScore;
         }
 
         return nearbyHumanoids.size() / likeScore;

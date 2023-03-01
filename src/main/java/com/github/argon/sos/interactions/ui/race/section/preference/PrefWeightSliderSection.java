@@ -14,8 +14,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.github.argon.sos.interactions.Mapper.*;
-import static com.github.argon.sos.interactions.config.RaceInteractionsConfig.Default.MAX_WEIGHT;
-import static com.github.argon.sos.interactions.config.RaceInteractionsConfig.Default.MIN_WEIGHT;
+import static com.github.argon.sos.interactions.config.RaceInteractionsConfig.Default.DEFAULT_MAX_WEIGHT;
+import static com.github.argon.sos.interactions.config.RaceInteractionsConfig.Default.DEFAULT_MIN_WEIGHT;
 
 /**
  * Contains the sliders for setting up the weights.
@@ -56,8 +56,8 @@ public class PrefWeightSliderSection extends GuiSection {
         LinkedHashMap<RacePrefCategory, Double> orderedPrefMap = toOrderedMap(config.getRacePreferenceWeightMap());
 
         orderedPrefMap.forEach((racePrefCategory, weight) -> {
-            INT.INTE value = new SimpleINTE(fromWeightToSlider(weight), toSliderRange(MIN_WEIGHT), toSliderRange(MAX_WEIGHT));
-            Slider weightSlider = new Slider(value, toSliderWidth(MIN_WEIGHT, MAX_WEIGHT), true, true);
+            INT.INTE value = new SimpleINTE(fromWeightToSlider(weight), toSliderRange(DEFAULT_MIN_WEIGHT), toSliderRange(DEFAULT_MAX_WEIGHT));
+            Slider weightSlider = new Slider(value, toSliderWidth(DEFAULT_MIN_WEIGHT, DEFAULT_MAX_WEIGHT), true, true);
 
             sliders.put(racePrefCategory, weightSlider);
             sliderValues.put(racePrefCategory, value);

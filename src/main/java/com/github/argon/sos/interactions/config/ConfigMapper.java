@@ -4,6 +4,7 @@ import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
 import snake2d.Errors;
 import snake2d.util.file.FileGetter;
+import snake2d.util.file.FilePutter;
 import snake2d.util.file.Json;
 import snake2d.util.file.JsonE;
 
@@ -18,10 +19,33 @@ import static com.github.argon.sos.interactions.config.RaceInteractionsConfig.De
 public class ConfigMapper {
     private final static Logger log = Loggers.getLogger(ConfigMapper.class);
 
-    public static RaceInteractionsConfig map(FileGetter file) throws IOException {
-        log.debug("Mapping Race Interactions Config from save file.");
+    public static FilePutter toSaveGame(FilePutter file, RaceInteractionsConfig config) {
+        file.bool(config.isCustomOnly());
+        file.bool(config.isHonorCustom());
+        file.bool(config.isRaceBoostSelf());
+        file.i(config.getRaceLookRange());
+
+
+        double[] preferenceWeightsIndexed = new double[RacePrefCategory.values().length];
+        config.getRacePreferenceWeightMap().forEach((category, weight) ->
+            preferenceWeightsIndexed[category.getIndex()] = weight
+        );
+        file.ds(preferenceWeightsIndexed);
+
+        double[] standingWeightsIndexed = new double[RaceStandingCategory.values().length];
+        config.getRaceStandingWeightMap().forEach((category, weight) ->
+            standingWeightsIndexed[category.getIndex()] = weight
+        );
+        file.ds(standingWeightsIndexed);
+
+        return file;
+    }
+
+    public static RaceInteractionsConfig fromSaveGame(FileGetter file) throws IOException {
         boolean customOnly = file.bool();
         boolean honorCustom = file.bool();
+        boolean raceBoostSelf = file.bool();
+        int raceLookRange = file.i();
 
         double[] preferenceWeightsIndexed = new double[RacePrefCategory.values().length];
         double[] standingWeightsIndexed = new double[RaceStandingCategory.values().length];
@@ -45,18 +69,24 @@ public class ConfigMapper {
         RaceInteractionsConfig raceInteractionsConfig = RaceInteractionsConfig.builder()
                 .customOnly(customOnly)
                 .honorCustom(honorCustom)
-                .gameRaces(ConfigJsonService.getInstance().loadModConfig().getGameRaces())
+                .raceBoostSelf(raceBoostSelf)
+                .raceLookRange(raceLookRange)
+                .gameRaces(RaceInteractionsConfig.getCurrent()
+                        .orElse(RaceInteractionsConfig.Default.getConfig())
+                        .getGameRaces())
                 .racePreferenceWeightMap(preferenceWeightsMap)
                 .raceStandingWeightMap(standingWeightsMap)
                 .build();
 
-        log.trace("Mapped configuration %s", raceInteractionsConfig.toString());
+        log.trace("From save file %s", raceInteractionsConfig.toString());
         return raceInteractionsConfig;
     }
 
-    public static RaceInteractionsConfig map(Json configJson) {
+    public static RaceInteractionsConfig fromJson(Json configJson) {
         boolean customOnly = configJson.bool("CUSTOM_RACE_ONLY", true);
         boolean honorCustom = configJson.bool("HONOR_CUSTOM_RACE_LIKINGS", true);
+        int raceLookRange = configJson.i("RACE_LOOK_RANGE", 0, 100, DEFAULT_RACE_LOOK_RANGE);
+        boolean raceBoostSelf = configJson.bool("RACE_BOOST_SELF", false);
 
         // PREFERENCE_WEIGHTS
         Map<RacePrefCategory, Double> preferencesWeightMap = new HashMap<>(RacePrefCategory.values().length);
@@ -71,7 +101,7 @@ public class ConfigMapper {
                     weight = DEFAULT_PREFERENCE_WEIGHT;
                 } else {
                     try {
-                        weight = preferenceWeights.d(prefCategory.name(), MIN_WEIGHT, MAX_WEIGHT);
+                        weight = preferenceWeights.d(prefCategory.name(), DEFAULT_MIN_WEIGHT, DEFAULT_MAX_WEIGHT);
                     } catch (Errors.DataError e) {
                         // validation error
                         log.warn("Could not read weight for %s using default value %s. Error: %s",
@@ -100,7 +130,7 @@ public class ConfigMapper {
                     weight = DEFAULT_STANDING_WEIGHT;
                 } else {
                     try {
-                        weight = standingWeights.d(standingCategory.name(), MIN_WEIGHT, MAX_WEIGHT);
+                        weight = standingWeights.d(standingCategory.name(), DEFAULT_MIN_WEIGHT, DEFAULT_MAX_WEIGHT);
                     } catch (Errors.DataError e) {
                         // validation error
                         log.warn("Could not read weight for %s using default value %s. Error: %s",
@@ -127,12 +157,14 @@ public class ConfigMapper {
         RaceInteractionsConfig raceInteractionsConfig = RaceInteractionsConfig.builder()
                 .racePreferenceWeightMap(preferencesWeightMap)
                 .raceStandingWeightMap(standingsWeightMap)
+                .raceLookRange(raceLookRange)
+                .raceBoostSelf(raceBoostSelf)
                 .gameRaces(gameRaces)
                 .honorCustom(honorCustom)
                 .customOnly(customOnly)
                 .build();
 
-        log.trace("Mapped configuration %s", raceInteractionsConfig.toString());
+        log.trace("From json %s", raceInteractionsConfig.toString());
         return raceInteractionsConfig;
     }
 
@@ -143,13 +175,13 @@ public class ConfigMapper {
 
         JsonE preferenceWeights = new JsonE();
         config.getRacePreferenceWeightMap().forEach((category, weight) -> {
-            if (weight < MIN_WEIGHT || weight > MAX_WEIGHT) {
+            if (weight < DEFAULT_MIN_WEIGHT || weight > DEFAULT_MAX_WEIGHT) {
                 log.warn("Preference weight %s for %s is out of range from %s to %s. Using default %s",
-                        weight,
-                        category.name(),
-                        MIN_WEIGHT,
-                        MAX_WEIGHT,
-                        DEFAULT_PREFERENCE_WEIGHT);
+                    weight,
+                    category.name(),
+                    DEFAULT_MIN_WEIGHT,
+                    DEFAULT_MAX_WEIGHT,
+                    DEFAULT_PREFERENCE_WEIGHT);
                 weight = DEFAULT_PREFERENCE_WEIGHT;
             }
             preferenceWeights.add(category.name(), weight);
@@ -157,12 +189,12 @@ public class ConfigMapper {
 
         JsonE standingWeights = new JsonE();
         config.getRaceStandingWeightMap().forEach((category, weight) -> {
-            if (weight < MIN_WEIGHT || weight > MAX_WEIGHT) {
+            if (weight < DEFAULT_MIN_WEIGHT || weight > DEFAULT_MAX_WEIGHT) {
                 log.warn("Standing weight %s for %s is out of range from %s to %s. Using default %s",
                         weight,
                         category.name(),
-                        MIN_WEIGHT,
-                        MAX_WEIGHT,
+                        DEFAULT_MIN_WEIGHT,
+                        DEFAULT_MAX_WEIGHT,
                         DEFAULT_STANDING_WEIGHT);
                 weight = DEFAULT_STANDING_WEIGHT;
             }
@@ -171,6 +203,8 @@ public class ConfigMapper {
 
         json.add("CUSTOM_RACE_ONLY", config.isCustomOnly());
         json.add("HONOR_CUSTOM_RACE_LIKINGS", config.isHonorCustom());
+        json.add("RACE_BOOST_SELF", config.isRaceBoostSelf());
+        json.add("RACE_LOOK_RANGE", config.getRaceLookRange());
         json.add("PREFERENCE_WEIGHTS", preferenceWeights);
         json.add("STANDING_WEIGHTS", standingWeights);
         json.addStrings("VANILLA_RACES", config.getGameRaces().toArray(new String[0]));

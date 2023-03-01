@@ -18,7 +18,7 @@ public class RaceTableSection extends GuiSection {
     private final TableSection<RaceInfo> tableSection;
 
     public RaceTableSection(List<RaceInfo> raceInfo, int width) {
-        this.tableSection = TableBuilder.build(raceInfo, RaceTableRow::new, width, 8);
+        this.tableSection = TableBuilder.build(raceInfo, RaceTableRow::new, width, 7);
         body().setWidth(width);
 
         addRelBody(5, DIR.S, tableSection.getSection());

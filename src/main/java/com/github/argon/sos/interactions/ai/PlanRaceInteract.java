@@ -2,21 +2,17 @@ package com.github.argon.sos.interactions.ai;
 
 import com.github.argon.sos.interactions.RaceInteractions;
 import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
-import com.github.argon.sos.interactions.config.RaceStandingCategory;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
-import com.github.argon.sos.interactions.util.HumanoidUtil;
-import init.race.Race;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import settlement.entity.humanoid.Humanoid;
+import settlement.entity.humanoid.ai.main.AI;
+import settlement.entity.humanoid.ai.main.AIData;
 import settlement.entity.humanoid.ai.main.AIManager;
 import settlement.entity.humanoid.ai.main.AIPLAN;
 import settlement.entity.humanoid.ai.main.AISUB.AISubActivation;
 import snake2d.util.sprite.text.Str;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 public class PlanRaceInteract {
@@ -25,9 +21,12 @@ public class PlanRaceInteract {
 
 	private final RaceInteractions raceInteractions;
 
-//
+	@Getter
+	private final AIData.AIDataBit cooldown = AI.bit();
+
+
 //	static {
-//		D.ts(PlanInterract.class);
+//		D.ts(PlanRaceInteract.class);
 //	}
 	
 	final AIPLAN lookForRaces = new AIPLAN.PLANRES() {
@@ -40,26 +39,12 @@ public class PlanRaceInteract {
 		private final Resumer first = new Resumer("") {
 			
 			@Override
-			protected AISubActivation setAction(Humanoid humanoid, AIManager d) {
-				List<Humanoid> nearbyHumanoids = HumanoidUtil.getNearbyHumanoids(humanoid, 20);
-				double avgRaceLikings = HumanoidUtil.avgRaceLikings(humanoid, nearbyHumanoids);
-				int friendsCount = HumanoidUtil.countFriends(humanoid, nearbyHumanoids);
-
-				Map<RaceStandingCategory, Double> standingsWeightMap = new HashMap<>();
-				standingsWeightMap.put(RaceStandingCategory.EXPECTATION, avgRaceLikings);
-				standingsWeightMap.put(RaceStandingCategory.FULFILLMENT, avgRaceLikings);
-				standingsWeightMap.put(RaceStandingCategory.LOYALTY, avgRaceLikings);
-
-				// friend nearby?
-				if (friendsCount > 0) {
-					standingsWeightMap.put(RaceStandingCategory.HAPPINESS, avgRaceLikings);
-				}
-
-				RaceInteractionsConfig raceInteractionsConfig = RaceInteractionsConfig.getCurrent()
+			protected AISubActivation setAction(Humanoid humanoid, AIManager ai) {
+				RaceInteractionsConfig config = RaceInteractionsConfig.getCurrent()
 						.orElse(RaceInteractionsConfig.Default.getConfig());
-				Race race = humanoid.race();
-				raceInteractions.manipulateRaceStandings(raceInteractionsConfig.getRaceStandingWeightMap(), race, standingsWeightMap);
+				raceInteractions.manipulateRaceStandings(humanoid, config);
 
+				cooldown.set(ai, true);
 				return null;
 			}
 			

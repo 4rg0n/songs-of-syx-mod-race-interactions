@@ -13,10 +13,13 @@ import com.github.argon.sos.interactions.ui.race.section.preference.ButtonSectio
 import com.github.argon.sos.interactions.ui.race.section.preference.PrefConfigSection;
 import com.github.argon.sos.interactions.ui.race.section.preference.RaceTableSection;
 import com.github.argon.sos.interactions.ui.race.section.standing.StandConfigSection;
+import com.github.argon.sos.interactions.util.HumanoidUtil;
 import com.github.argon.sos.interactions.util.RaceUtil;
 import init.race.Race;
 import lombok.RequiredArgsConstructor;
+import settlement.entity.humanoid.Humanoid;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -62,16 +65,42 @@ public class RaceInteractions {
         }
     }
 
+    public void manipulateRaceStandings(Humanoid humanoid, RaceInteractionsConfig config) {
+        int raceLookRange = config.getRaceLookRange();
+        boolean raceBoostSelf = config.isRaceBoostSelf();
+
+        List<Humanoid> nearbyHumanoids = HumanoidUtil.getNearbyHumanoids(humanoid, raceLookRange);
+        double avgRaceLikings = HumanoidUtil.avgRaceLikings(humanoid, nearbyHumanoids, raceBoostSelf);
+        int friendsCount = HumanoidUtil.countFriends(humanoid, nearbyHumanoids);
+
+        Map<RaceStandingCategory, Double> standingsWeightMap = new HashMap<>();
+        standingsWeightMap.put(RaceStandingCategory.EXPECTATION, avgRaceLikings);
+        standingsWeightMap.put(RaceStandingCategory.FULFILLMENT, avgRaceLikings);
+        standingsWeightMap.put(RaceStandingCategory.LOYALTY, avgRaceLikings);
+
+        // friend nearby?
+        if (friendsCount > 0) {
+            standingsWeightMap.put(RaceStandingCategory.HAPPINESS, avgRaceLikings);
+        }
+
+        log.trace("%s looked for other races %s tiles nearby. " +
+                        "Found %s other citizens and %s friends with a average liking of %s",
+                humanoid.title(), raceLookRange, nearbyHumanoids.size(), friendsCount, avgRaceLikings);
+
+        Race race = humanoid.race();
+        manipulateRaceStandings(config.getRaceStandingWeightMap(), race, standingsWeightMap);
+    }
+
     public void manipulateRaceStandings(Map<RaceStandingCategory, Double> standingWeightsMap, Race race, Map<RaceStandingCategory , Double> incMap) {
         standingWeightsMap.forEach((category, weight) -> {
-            if (weight == null || weight == 0d) {
+            if ((weight == null || weight == 0d)) {
                 // 0 = means disabled
                 return;
             }
 
             Double inc = incMap.get(category);
             // no increment for this category?
-            if (inc == null) {
+            if (inc == null || inc == 0d) {
                 return;
             }
 

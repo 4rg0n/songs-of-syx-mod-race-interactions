@@ -25,7 +25,7 @@ public class RaceStandingsService {
     ) {
         int racePopulation = RaceUtil.citizenCount(race);
         int racePopulationThreshold = 1000;
-        double boost = (inc * weight) / (double) (racePopulationThreshold / racePopulation);
+         double boost = (inc * weight) / (double) (racePopulationThreshold / racePopulation);
         log.debug("Boosting standing %s of %s by (%s * %s) (%s / %s) = %s",
                 category.name(), race.key, inc, weight, racePopulationThreshold, racePopulation, boost);
         incStanding(category, race, boost);
