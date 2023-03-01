@@ -4,6 +4,8 @@ import com.github.argon.sos.interactions.RaceInteractions;
 import com.github.argon.sos.interactions.RaceInteractionsModScript;
 import com.github.argon.sos.interactions.config.ConfigJsonService;
 import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
+import com.github.argon.sos.interactions.log.Logger;
+import com.github.argon.sos.interactions.log.Loggers;
 import com.github.argon.sos.interactions.ui.HorizontalLine;
 import com.github.argon.sos.interactions.ui.VerticalLine;
 import com.github.argon.sos.interactions.ui.race.section.preference.ButtonSection;
@@ -21,16 +23,21 @@ import view.interrupter.ISidePanel;
  */
 @Getter
 public class RaceInteractionsConfigPanel extends ISidePanel {
+
+    private final static Logger log = Loggers.getLogger(RaceInteractionsConfigPanel.class);
     public final static String TITLE = RaceInteractionsModScript.MOD_INFO.name.toString();
 
     private final PrefConfigSection prefConfigSection;
     private final RaceTableSection overviewSection;
     private final ButtonSection buttonSection;
-
     private final StandConfigSection standConfigSection;
 
     private final RaceInteractions raceInteractions;
     private final ConfigJsonService configJsonService;
+
+    private double updateTimerSeconds = 0d;
+
+    private final static int UPDATE_INTERVAL_SECONDS = 1;
 
     public RaceInteractionsConfigPanel(
         RaceInteractions raceInteractions,
@@ -52,6 +59,14 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         this.configJsonService = configJsonService;
         this.standConfigSection = standConfigSection;
 
+        // Undo button
+        buttonSection.getUndoButton().clickActionSet(() ->
+            RaceInteractionsConfig.getCurrent().ifPresent(config -> {
+                applyConfig(config);
+                buttonSection.markApplied();
+            })
+        );
+
         // Apply button
         buttonSection.getApplyButton().clickActionSet(() -> {
             RaceInteractionsConfig config = getConfig();
@@ -62,12 +77,7 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         // Reset to mod configuration button
         buttonSection.getResetModButton().clickActionSet(() -> {
             RaceInteractionsConfig modConfig = configJsonService.loadModConfig();
-            prefConfigSection.applyConfig(
-                modConfig.isCustomOnly(),
-                modConfig.isHonorCustom(),
-                modConfig.getRacePreferenceWeightMap()
-            );
-            buttonSection.markUnApplied();
+            applyConfig(modConfig);
         });
         // Reset to vanilla race likings button
         buttonSection.getResetVanillaButton().clickActionSet(() ->
@@ -86,7 +96,6 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
                     config.isHonorCustom(),
                     config.getRacePreferenceWeightMap()
                 );
-                buttonSection.markUnApplied();
             })
         );
 
@@ -105,14 +114,53 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
 
     public RaceInteractionsConfig getConfig() {
         return RaceInteractionsConfig.builder()
-                .gameRaces(RaceInteractionsConfig.getCurrent()
-                        .orElse(RaceInteractionsConfig.Default.getConfig()).getGameRaces())
-                .raceLookRange(standConfigSection.getRaceLookRangeValue())
-                .raceBoostSelf(standConfigSection.isRaceBoostSelf())
-                .racePreferenceWeightMap(prefConfigSection.getWeights())
-                .raceStandingWeightMap(standConfigSection.getWeights())
-                .honorCustom(prefConfigSection.isHonorCustom())
-                .customOnly(prefConfigSection.isOnlyCustom())
-                .build();
+            .gameRaces(RaceInteractionsConfig.getCurrent()
+                .orElse(RaceInteractionsConfig.Default.getConfig()).getGameRaces())
+            .raceLookRange(standConfigSection.getRaceLookRangeValue())
+            .raceBoostSelf(standConfigSection.isRaceBoostSelf())
+            .racePreferenceWeightMap(prefConfigSection.getWeights())
+            .raceStandingWeightMap(standConfigSection.getWeights())
+            .honorCustom(prefConfigSection.isHonorCustom())
+            .customOnly(prefConfigSection.isOnlyCustom())
+            .build();
+    }
+
+    public void applyConfig(RaceInteractionsConfig config) {
+        prefConfigSection.applyConfig(
+            config.isCustomOnly(),
+            config.isHonorCustom(),
+            config.getRacePreferenceWeightMap()
+        );
+        standConfigSection.applyConfig(
+            config.getRaceStandingWeightMap(),
+            config.getRaceLookRange(),
+            config.isRaceBoostSelf()
+        );
+    }
+
+
+    @Override
+    protected void update(float seconds) {
+        updateTimerSeconds += seconds;
+
+        // check for changes in config
+        if (updateTimerSeconds >= UPDATE_INTERVAL_SECONDS) {
+            updateTimerSeconds = 0d;
+            if (isDirty()) {
+                buttonSection.markUnApplied();
+            }
+        }
+
+        super.update(seconds);
+    }
+
+    /**
+     * @return whether panel configuration is different from {@link RaceInteractionsConfig#getCurrent()}
+     */
+    private boolean isDirty() {
+        return RaceInteractionsConfig.getCurrent()
+                .map(currentConfig -> !getConfig().equals(currentConfig))
+                // no current config saved in memory
+                .orElse(true);
     }
 }

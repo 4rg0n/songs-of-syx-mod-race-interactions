@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import snake2d.LOG;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
@@ -20,7 +21,7 @@ public class Logger {
 
     public static final String PREFIX_MOD = "[MOD.RAI]";
     private final static Level DEFAULT_LEVEL = Level.INFO;
-    private final static String LOG_MSG_FORMAT = "%s %s %s%s";
+    private final static String LOG_MSG_FORMAT = "%s%s%s%s %s";
     private final static int NAME_DISPLAY_MAX_LENGTH = 32;
 
     @Getter
@@ -48,23 +49,23 @@ public class Logger {
     }
 
     public void info(String formatMsg, Object... args) {
-        log("[INFO] ", Level.INFO, formatMsg, args);
+        log("[INFO]", Level.INFO, formatMsg, args);
     }
 
     public void debug(String formatMsg, Object... args) {
-        log("[DEBUG] ", Level.FINE, formatMsg, args);
+        log("[DEBUG]", Level.FINE, formatMsg, args);
     }
 
     public void trace(String formatMsg, Object... args) {
-        log("[TRACE] ", Level.FINER, formatMsg, args);
+        log("[TRACE]", Level.FINER, formatMsg, args);
     }
 
     public void warn(String formatMsg, Object... args) {
-        log("[WARN] ", Level.WARNING, formatMsg, args);
+        log("[WARN]", Level.WARNING, formatMsg, args);
     }
 
     public void error(String formatMsg, Object... args) {
-        logErr("[ERROR] ", Level.SEVERE, formatMsg, args);
+        logErr("[ERROR]", Level.SEVERE, formatMsg, args);
     }
 
 
@@ -88,6 +89,7 @@ public class Logger {
     private void doLog(String msgPrefix, String formatMsg, Object[] args) {
         LOG.ln(String.format(LOG_MSG_FORMAT,
                 PREFIX_MOD,
+                timestamp(),
                 (name.length() > NAME_DISPLAY_MAX_LENGTH) ? shortName : name,
                 msgPrefix,
                 String.format(formatMsg, stringifyValues(args))));
@@ -112,6 +114,7 @@ public class Logger {
     private void doLogErr(String msgPrefix, String formatMsg, Object[] args) {
         LOG.err((String.format(LOG_MSG_FORMAT,
                 PREFIX_MOD,
+                timestamp(),
                 (name.length() > NAME_DISPLAY_MAX_LENGTH) ? shortName : name,
                 msgPrefix,
                 String.format(formatMsg, stringifyValues(args)))));
@@ -169,5 +172,9 @@ public class Logger {
         } else {
             return arg.toString();
         }
+    }
+
+    private String timestamp() {
+        return "[" + LocalDateTime.now() + "]";
     }
 }

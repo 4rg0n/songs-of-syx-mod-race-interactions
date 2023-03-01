@@ -39,13 +39,16 @@ public class StandConfigSection extends GuiSection {
         addDownC(5, container);
     }
 
-    public void applyConfig(Map<RaceStandingCategory, Double> standWeightMap) {
+    public void applyConfig(Map<RaceStandingCategory, Double> standWeightMap, int raceLookRange, boolean raceBoostSelf) {
         Map<RaceStandingCategory, INT.INTE> sliderValues = standSliderSection.getSliderValues();
 
         sliderValues.forEach((category, value) -> {
             int weight = Mapper.fromWeightToSlider(standWeightMap.get(category));
             value.set(weight);
         });
+
+        standSliderSection.getRaceLookRangeValue().set(raceLookRange);
+        standSliderSection.getRaceBoostSelf().selectedSet(raceBoostSelf);
     }
 
     public Map<RaceStandingCategory, Double> getWeights() {
@@ -59,7 +62,7 @@ public class StandConfigSection extends GuiSection {
     }
 
     public int getRaceLookRangeValue() {
-        return standSliderSection.getRaceLookRangeValue();
+        return standSliderSection.getRaceLookRangeValue().get();
     }
 
     public boolean isRaceBoostSelf() {

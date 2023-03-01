@@ -118,9 +118,4 @@ public class StandSliderSection extends GuiSection {
     public INT.INTE getSliderValue(RaceStandingCategory category) {
         return sliderValues.get(category);
     }
-
-    public int getRaceLookRangeValue() {
-        return raceLookRangeValue.get();
-    }
-
 }

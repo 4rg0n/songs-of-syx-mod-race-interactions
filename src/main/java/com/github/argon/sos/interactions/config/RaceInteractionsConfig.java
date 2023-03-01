@@ -10,6 +10,7 @@ import java.util.*;
  * Represents the mods configuration
  */
 @ToString
+@EqualsAndHashCode
 @Getter
 @Builder
 @RequiredArgsConstructor
@@ -27,18 +28,6 @@ public class RaceInteractionsConfig {
      * Used e.g. when the game saves.
      */
     private static RaceInteractionsConfig CURRENT_CONFIG;
-
-    /**
-     * @return currently set up configuration
-     */
-    public static Optional<RaceInteractionsConfig> getCurrent() {
-        return Optional.ofNullable(CURRENT_CONFIG);
-    }
-
-    public static void setCurrent(RaceInteractionsConfig currentConfig) {
-        CURRENT_CONFIG = currentConfig;
-        log.debug("Set current config to: %s", currentConfig.toString());
-    }
 
     /**
      * When true, will not affect any vanilla races, but only custom modded ones
@@ -81,6 +70,18 @@ public class RaceInteractionsConfig {
      * {@link RaceInteractionsConfig#customOnly} and {@link RaceInteractionsConfig#honorCustom}
      */
     private final List<String> gameRaces;
+
+    /**
+     * @return currently set up configuration
+     */
+    public static Optional<RaceInteractionsConfig> getCurrent() {
+        return Optional.ofNullable(CURRENT_CONFIG);
+    }
+
+    public static void setCurrent(RaceInteractionsConfig currentConfig) {
+        CURRENT_CONFIG = currentConfig;
+        log.debug("Set current config to: %s", currentConfig.toString());
+    }
 
     public static class Default {
         public final static double DEFAULT_MIN_WEIGHT = -2d;

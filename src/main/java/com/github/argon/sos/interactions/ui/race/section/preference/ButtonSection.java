@@ -10,13 +10,19 @@ import util.gui.misc.GButt;
  */
 @Getter
 public class ButtonSection extends GuiSection {
+    private final GButt.ButtPanel undoButton;
     private final GButt.ButtPanel applyButton;
     private final GButt.ButtPanel resetVanillaButton;
     private final GButt.ButtPanel resetModButton;
     private final GButt.ButtPanel saveProfileButton;
     private final GButt.ButtPanel loadProfileButton;
 
+
     public ButtonSection() {
+        this.undoButton = new GButt.ButtPanel("Undo");
+        undoButton.hoverInfoSet("Reset current made settings");
+        undoButton.bg(COLOR.WHITE25);
+
         this.applyButton = new GButt.ButtPanel("Apply");
         applyButton.hoverInfoSet("Manipulates race likings according to settings.");
         applyButton.bg(COLOR.WHITE15);
@@ -37,9 +43,10 @@ public class ButtonSection extends GuiSection {
 
         addDownC(0, resetVanillaButton);
         addDownC(5, resetModButton);
-        addDownC(20, loadProfileButton);
+        addDownC(10, loadProfileButton);
         addDownC(5, saveProfileButton);
-        addDownC(20, applyButton);
+        addDownC(10, undoButton);
+        addDownC(5, applyButton);
     }
 
     public void setButtonsWidth(int width) {
@@ -48,6 +55,7 @@ public class ButtonSection extends GuiSection {
         loadProfileButton.body.setWidth(width);
         saveProfileButton.body.setWidth(width);
         applyButton.body.setWidth(width);
+        undoButton.body.setWidth(width);
     }
 
     public void markUnApplied() {
