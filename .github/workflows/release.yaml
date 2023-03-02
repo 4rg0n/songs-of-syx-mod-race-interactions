@@ -6,18 +6,6 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - name: Create Draft Release
-        id: create-release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: "temp-version"
-          release_name: "draft-release"
-          body: ""
-          draft: true
-          prerelease: false
-
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -39,6 +27,23 @@ jobs:
 
       - name: Zip
         run: zip Race_Interactions "target/out/Race Interactions"
+
+      - name: Get versions
+        run: |
+          echo "RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+          echo "GAME_MAJOR_VERSION=$(mvn help:evaluate -Dexpression=game.version.major -q -DforceStdout)" >> $GITHUB_ENV
+
+      - name: Create Draft Release
+        id: create-release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.RELEASE_VERSION }}
+          release_name: Race Interactions ${{ env.RELEASE_VERSION }} for SoS V${{ env.GAME_MAJOR_VERSION }}
+          body: ""
+          draft: true
+          prerelease: false
 
       - name: Upload zip
         uses: actions/upload-release-asset@v1
