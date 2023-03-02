@@ -38,7 +38,7 @@ jobs:
         run: mvn -B -P github clean package
 
       - name: Zip
-        run: zip --junk-paths Race.Interactions "target/out/Race Interactions"
+        run: zip Race_Interactions "target/out/Race Interactions"
 
       - name: Upload zip
         uses: actions/upload-release-asset@v1
@@ -46,7 +46,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create-release.outputs.upload_url }}
-          asset_path: "Race.Interactions.zip"
+          asset_path: "Race_Interactions.zip"
           asset_name: "Race.Interactions.zip"
           asset_content_type: application/octet-stream
-
