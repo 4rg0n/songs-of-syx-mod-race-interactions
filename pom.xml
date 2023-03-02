@@ -27,6 +27,54 @@
             </repositories>
         </profile>
         <profile>
+            <id>local-game</id>
+            <build>
+                <plugins>
+                    <!-- Prepare game dependencies (thx @ https://github.com/MilanDierick for pointing me to the game source files) -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-install-plugin</artifactId>
+                        <executions>
+                            <!-- Install local game jar as dependency code -->
+                            <execution>
+                                <id>install-game-jar</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <configuration>
+                                    <groupId>org.songsofsyx</groupId>
+                                    <artifactId>songsofsyx</artifactId>
+                                    <version>${game.version.major}.${game.version.minor}</version>
+                                    <packaging>jar</packaging>
+                                    <file>${game.install.directory}/${game.jar.name}</file>
+                                    <generatePom>true</generatePom>
+                                </configuration>
+                            </execution>
+
+                            <!-- Install local game source jar as dependency code -->
+                            <execution>
+                                <id>install-game-sources-jar</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <configuration>
+                                    <groupId>org.songsofsyx</groupId>
+                                    <artifactId>songsofsyx</artifactId>
+                                    <version>${game.version.major}.${game.version.minor}</version>
+                                    <packaging>jar</packaging>
+                                    <classifier>sources</classifier>
+                                    <file>${game.install.directory}/info/${game.jar.source.name}</file>
+                                    <generatePom>false</generatePom>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <id>windows</id>
             <properties>
                 <game.mod.directory>${user.home}/AppData/Roaming/songsofsyx/mods</game.mod.directory>
@@ -241,48 +289,6 @@
                         </fileset>
                     </filesets>
                 </configuration>
-            </plugin>
-
-            <!-- Prepare game dependencies (thx @ https://github.com/MilanDierick for pointing me to the game source files) -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-install-plugin</artifactId>
-                <executions>
-                    <!-- Install game jar as dependency code -->
-                    <execution>
-                        <id>install-game-jar</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>install-file</goal>
-                        </goals>
-                        <configuration>
-                            <groupId>org.songsofsyx</groupId>
-                            <artifactId>songsofsyx</artifactId>
-                            <version>${game.version.major}.${game.version.minor}</version>
-                            <packaging>jar</packaging>
-                            <file>${game.install.directory}/${game.jar.name}</file>
-                            <generatePom>true</generatePom>
-                        </configuration>
-                    </execution>
-
-                    <!-- Install game source jar as dependency code -->
-                    <execution>
-                        <id>install-game-sources-jar</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>install-file</goal>
-                        </goals>
-                        <configuration>
-                            <groupId>org.songsofsyx</groupId>
-                            <artifactId>songsofsyx</artifactId>
-                            <version>${game.version.major}.${game.version.minor}</version>
-                            <packaging>jar</packaging>
-                            <classifier>sources</classifier>
-                            <file>${game.install.directory}/info/${game.jar.source.name}</file>
-                            <generatePom>false</generatePom>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
 
             <!-- Attach mod source code -->
