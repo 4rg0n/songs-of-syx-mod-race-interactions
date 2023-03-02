@@ -3,7 +3,7 @@ package com.github.argon.sos.interactions.race;
 import com.github.argon.sos.interactions.config.RaceStandingCategory;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
-import com.github.argon.sos.interactions.util.RaceUtil;
+import com.github.argon.sos.interactions.game.api.GameRaceApi;
 import init.race.Race;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,6 +14,8 @@ public class RaceStandingsService {
 
     private final static Logger log = Loggers.getLogger(RaceStandingsService.class);
 
+    private final GameRaceApi gameRaceApi = GameRaceApi.getInstance();
+
     @Getter(lazy = true)
     private final static RaceStandingsService instance = new RaceStandingsService();
 
@@ -23,7 +25,7 @@ public class RaceStandingsService {
             double inc,
             double weight
     ) {
-        int racePopulation = RaceUtil.citizenCount(race);
+        int racePopulation = gameRaceApi.citizenCount(race);
         int racePopulationThreshold = 1000;
          double boost = (inc * weight) / (double) (racePopulationThreshold / racePopulation);
         log.debug("Boosting standing %s of %s by (%s * %s) (%s / %s) = %s",
@@ -34,16 +36,16 @@ public class RaceStandingsService {
     public void incStanding(RaceStandingCategory category, Race race, double inc) {
         switch (category) {
             case LOYALTY:
-                RaceUtil.increaseLoyalty(race, inc);
+                gameRaceApi.increaseLoyalty(race, inc);
                 break;
             case EXPECTATION:
-                RaceUtil.increaseExpectation(race, inc);
+                gameRaceApi.increaseExpectation(race, inc);
                 break;
             case HAPPINESS:
-                RaceUtil.increaseHappiness(race, inc);
+                gameRaceApi.increaseHappiness(race, inc);
                 break;
             case FULFILLMENT:
-                RaceUtil.increaseFulfillment(race, inc);
+                gameRaceApi.increaseFulfillment(race, inc);
                 break;
         }
     }

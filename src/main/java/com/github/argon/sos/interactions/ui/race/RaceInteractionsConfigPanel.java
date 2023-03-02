@@ -12,7 +12,7 @@ import com.github.argon.sos.interactions.ui.race.section.preference.ButtonSectio
 import com.github.argon.sos.interactions.ui.race.section.preference.PrefConfigSection;
 import com.github.argon.sos.interactions.ui.race.section.preference.RaceTableSection;
 import com.github.argon.sos.interactions.ui.race.section.standing.StandConfigSection;
-import com.github.argon.sos.interactions.util.RaceUtil;
+import com.github.argon.sos.interactions.game.api.GameRaceApi;
 import lombok.Getter;
 import snake2d.util.gui.GuiSection;
 import view.interrupter.ISidePanel;
@@ -63,7 +63,6 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         buttonSection.getUndoButton().clickActionSet(() ->
             RaceInteractionsConfig.getCurrent().ifPresent(config -> {
                 applyConfig(config);
-                buttonSection.markApplied();
             })
         );
 
@@ -72,17 +71,13 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
             RaceInteractionsConfig config = getConfig();
             raceInteractions.manipulateRaceLikings(config);
             RaceInteractionsConfig.setCurrent(config);
-            buttonSection.markApplied();
         });
         // Reset to mod configuration button
         buttonSection.getResetModButton().clickActionSet(() -> {
             RaceInteractionsConfig modConfig = configJsonService.loadModOrDefaultConfig();
             applyConfig(modConfig);
+            raceInteractions.applyRaceLikings(GameRaceApi.getVanillaLikings());
         });
-        // Reset to vanilla race likings button
-        buttonSection.getResetVanillaButton().clickActionSet(() ->
-            raceInteractions.applyRaceLikings(RaceUtil.getVanillaLikings())
-        );
         // Save settings to user button
         buttonSection.getSaveProfileButton().clickActionSet(() -> {
             RaceInteractionsConfig config = getConfig();
@@ -148,6 +143,8 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
             updateTimerSeconds = 0d;
             if (isDirty()) {
                 buttonSection.markUnApplied();
+            } else {
+                buttonSection.markApplied();
             }
         }
 

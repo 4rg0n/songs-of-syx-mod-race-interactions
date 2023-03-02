@@ -1,6 +1,6 @@
 package com.github.argon.sos.interactions.ui.race.section.standing;
 
-import com.github.argon.sos.interactions.util.RaceUtil;
+import com.github.argon.sos.interactions.game.api.GameRaceApi;
 import settlement.stats.standing.STANDINGS;
 import snake2d.SPRITE_RENDERER;
 import snake2d.util.gui.GuiSection;
@@ -12,9 +12,12 @@ import util.gui.misc.GText;
 import util.info.GFORMAT;
 
 public class StandOverviewSection extends GuiSection {
+
+    private final GameRaceApi gameRaceApi = GameRaceApi.getInstance();
+
     public StandOverviewSection() {
-        addDown(0,happinessSection());
-        addDown(10, loyaltySection());
+        addDown(0, loyaltySection());
+        addDown(10, happinessSection());
     }
 
     private GuiSection happinessSection() {
@@ -25,13 +28,13 @@ public class StandOverviewSection extends GuiSection {
         headerSection.addRightC(5, new GStat() {
             @Override
             public void update(GText text) {
-                GFORMAT.perc(text, RaceUtil.getAvgHappiness());
+                GFORMAT.perc(text, gameRaceApi.getAvgHappiness());
             }
         });
         RENDEROBJ happinessMeter = new RENDEROBJ.RenderImp(150, 24) {
             @Override
             public void render(SPRITE_RENDERER r, float ds) {
-                double now = RaceUtil.getAvgHappiness();
+                double now = gameRaceApi.getAvgHappiness();
                 GMeter.render(r, GMeter.C_REDGREEN, now, body);
             }
         };
@@ -53,13 +56,13 @@ public class StandOverviewSection extends GuiSection {
         headerSection.addRightC(5, new GStat() {
             @Override
             public void update(GText text) {
-                GFORMAT.perc(text, RaceUtil.getAvgLoyalty());
+                GFORMAT.perc(text, gameRaceApi.getAvgLoyalty());
             }
         });
         RENDEROBJ loyaltyMeter = new RENDEROBJ.RenderImp(150, 24) {
             @Override
             public void render(SPRITE_RENDERER r, float ds) {
-                double now = RaceUtil.getAvgLoyalty();
+                double now = gameRaceApi.getAvgLoyalty();
                 GMeter.render(r, GMeter.C_REDGREEN, now, body);
             }
         };

@@ -11,9 +11,9 @@ import com.github.argon.sos.interactions.log.Loggers;
 import com.github.argon.sos.interactions.race.RaceService;
 import com.github.argon.sos.interactions.ui.UIGameConfig;
 import com.github.argon.sos.interactions.ui.race.RaceInteractionsConfigPanel;
-import com.github.argon.sos.interactions.util.AIUtil;
-import com.github.argon.sos.interactions.util.RaceUtil;
-import com.github.argon.sos.interactions.util.SCRIPT;
+import com.github.argon.sos.interactions.game.api.GameAiApi;
+import com.github.argon.sos.interactions.game.api.GameRaceApi;
+import com.github.argon.sos.interactions.game.SCRIPT;
 import lombok.NoArgsConstructor;
 import settlement.entity.humanoid.HTYPE;
 import util.info.INFO;
@@ -51,7 +51,7 @@ public final class RaceInteractionsModScript implements SCRIPT {
 	@Override
 	public void initGameRunning() {
 		// store vanilla likings for reset
-		RaceUtil.initVanillaLikings();
+		GameRaceApi.getInstance().initVanillaLikings();
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public final class RaceInteractionsModScript implements SCRIPT {
 		// Race InteractionsAI
 		AIModule_Race aiModuleRace = RaceInteractions.Builder.buildAI(raceInteractions);
 		// todo this COULD be configurable via json
-		AIUtil.injectAIModule(aiModuleRace,
+		GameAiApi.injectAIModule(aiModuleRace,
 			HTYPE.SUBJECT,
 			HTYPE.RETIREE,
 			HTYPE.RECRUIT,

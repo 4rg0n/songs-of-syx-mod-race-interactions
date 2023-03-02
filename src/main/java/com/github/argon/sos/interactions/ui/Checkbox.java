@@ -1,6 +1,6 @@
 package com.github.argon.sos.interactions.ui;
 
-import com.github.argon.sos.interactions.util.ACTION;
+import com.github.argon.sos.interactions.game.ACTION;
 import snake2d.SPRITE_RENDERER;
 import util.gui.misc.GButt;
 

@@ -1,4 +1,4 @@
-package com.github.argon.sos.interactions.util;
+package com.github.argon.sos.interactions.game;
 
 /**
  * Used for wiring e.g. a button click to functionality

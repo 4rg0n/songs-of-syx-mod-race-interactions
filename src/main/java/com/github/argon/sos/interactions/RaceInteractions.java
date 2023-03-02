@@ -13,8 +13,8 @@ import com.github.argon.sos.interactions.ui.race.section.preference.ButtonSectio
 import com.github.argon.sos.interactions.ui.race.section.preference.PrefConfigSection;
 import com.github.argon.sos.interactions.ui.race.section.preference.RaceTableSection;
 import com.github.argon.sos.interactions.ui.race.section.standing.StandConfigSection;
-import com.github.argon.sos.interactions.util.HumanoidUtil;
-import com.github.argon.sos.interactions.util.RaceUtil;
+import com.github.argon.sos.interactions.game.api.GameHumanoidApi;
+import com.github.argon.sos.interactions.game.api.GameRaceApi;
 import init.race.Race;
 import lombok.RequiredArgsConstructor;
 import settlement.entity.humanoid.Humanoid;
@@ -34,13 +34,16 @@ public class RaceInteractions {
     private final RaceService raceService;
     private final RaceStandingsService raceStandingsService;
 
+    private final GameRaceApi gameRaceApi = GameRaceApi.getInstance();
+    private final GameHumanoidApi gameHumanoidApi = GameHumanoidApi.getInstance();
+
     /**
      * Manipulates likings between races according to given {@link RaceInteractionsConfig}
      */
     public void manipulateRaceLikings(RaceInteractionsConfig config) {
         boolean customOnly = config.isCustomOnly();
         boolean honorCustom = config.isHonorCustom();
-        List<Race> races = RaceUtil.getAll();
+        List<Race> races = gameRaceApi.getAll();
         List<RaceComparator.Result> compareResults = raceComparator.compare(races);
         RaceLikingsCalculator raceLikingsCalculator = new RaceLikingsCalculator(config.getRacePreferenceWeightMap());
 
@@ -78,9 +81,9 @@ public class RaceInteractions {
         int raceLookRange = config.getRaceLookRange();
         boolean raceBoostSelf = config.isRaceBoostSelf();
 
-        List<Humanoid> nearbyHumanoids = HumanoidUtil.getNearbyHumanoids(humanoid, raceLookRange);
-        double avgRaceLikings = HumanoidUtil.avgRaceLikings(humanoid, nearbyHumanoids, raceBoostSelf);
-        int friendsCount = HumanoidUtil.countFriends(humanoid, nearbyHumanoids);
+        List<Humanoid> nearbyHumanoids = gameHumanoidApi.getNearbyHumanoids(humanoid, raceLookRange);
+        double avgRaceLikings = gameHumanoidApi.avgRaceLikings(humanoid, nearbyHumanoids, raceBoostSelf);
+        int friendsCount = gameHumanoidApi.countFriends(humanoid, nearbyHumanoids);
 
         Map<RaceStandingCategory, Double> standingsWeightMap = new HashMap<>();
         standingsWeightMap.put(RaceStandingCategory.EXPECTATION, avgRaceLikings);

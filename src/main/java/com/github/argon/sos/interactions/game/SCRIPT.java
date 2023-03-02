@@ -1,4 +1,4 @@
-package com.github.argon.sos.interactions.util;
+package com.github.argon.sos.interactions.game;
 
 public interface SCRIPT extends script.SCRIPT {
     /**

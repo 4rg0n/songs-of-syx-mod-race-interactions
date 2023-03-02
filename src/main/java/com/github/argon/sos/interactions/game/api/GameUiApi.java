@@ -1,7 +1,12 @@
-package com.github.argon.sos.interactions.util;
+package com.github.argon.sos.interactions.game.api;
 
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
+import com.github.argon.sos.interactions.util.ReflectionUtil;
+import com.github.argon.sos.interactions.util.UINotAvailableException;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import snake2d.util.gui.GuiSection;
 import view.interrupter.ISidePanel;
 import view.main.Interrupters;
@@ -15,16 +20,20 @@ import java.util.Optional;
 /**
  * For hooking into the games UI
  */
-public class UIUtil {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class GameUiApi {
 
-    private final static Logger log = Loggers.getLogger(UIUtil.class);
+    private final static Logger log = Loggers.getLogger(GameUiApi.class);
+
+    @Getter(lazy = true)
+    private final static GameUiApi instance = new GameUiApi();
 
     /**
      * Contains UIs like a yes/no prompt or a text input
      *
      * @throws UINotAvailableException when ui isn't initialized yet
      */
-    public static Interrupters interrupters() {
+    public Interrupters interrupters() {
         Interrupters interrupters = VIEW.inters();
 
         if (interrupters == null) {
@@ -39,7 +48,7 @@ public class UIUtil {
      *
      * @throws UINotAvailableException when ui isn't initialized yet
      */
-    public static SettView settlement() {
+    public SettView settlement() {
         SettView settView = VIEW.s();
 
         if (settView == null) {
@@ -52,7 +61,7 @@ public class UIUtil {
     /**
      * @throws UINotAvailableException when ui isn't initialized yet
      */
-    public static VIEW.ViewSub currentView() {
+    public VIEW.ViewSub currentView() {
         VIEW.ViewSub currentView = VIEW.current();
 
         if (currentView == null) {
@@ -65,18 +74,18 @@ public class UIUtil {
     /**
      * For showing tools like the selection tool when copying an area
      */
-    public static ToolManager tools() {
+    public ToolManager tools() {
         return settlement().tools;
     }
 
     /**
      * Will open up an {@link ISidePanel} on the left side of the games UI
      */
-    public static void showPanel(ISidePanel panel, boolean closeOthers) {
+    public void showPanel(ISidePanel panel, boolean closeOthers) {
         VIEW.s().panels.add(panel, closeOthers);
     }
 
-    public static Optional<GuiSection> getUIBuildPanelSection() {
+    public Optional<GuiSection> getUIBuildPanelSection() {
         return findUIElement(UIBuildPanel.class)
                 .flatMap(uiBuildPanel -> ReflectionUtil.getField("section", uiBuildPanel)
                 .map(GuiSection.class::cast));
@@ -85,7 +94,7 @@ public class UIUtil {
     /**
      * Tries to find the first UI element in the games ui managers matching the given class.
      */
-    public static <T> Optional<T> findUIElement(Class<T> clazz) {
+    public <T> Optional<T> findUIElement(Class<T> clazz) {
         // search in VIEW.current() uiManager
         Optional<T> optionalUiElement = findUIElementInCurrentView(clazz);
 
@@ -100,7 +109,7 @@ public class UIUtil {
     /**
      * Tries to find an ui element by class in {@link VIEW#current()} ui manager.
      */
-    public static <T> Optional<T> findUIElementInCurrentView(Class<T> clazz) {
+    public <T> Optional<T> findUIElementInCurrentView(Class<T> clazz) {
         return ReflectionUtil.getField("inters", currentView().uiManager)
                 .flatMap(inters -> extractFromIterable((Iterable<?>) inters, clazz));
     }
@@ -108,7 +117,7 @@ public class UIUtil {
     /**
      * Tries to find an ui element by class in {@link VIEW#s()} ui manager.
      */
-    public static <T> Optional<T> findUIElementInSettlementView(Class<T> clazz) {
+    public <T> Optional<T> findUIElementInSettlementView(Class<T> clazz) {
         return ReflectionUtil.getField("inters", settlement().uiManager)
                 .flatMap(inters -> extractFromIterable((Iterable<?>) inters, clazz));
     }
@@ -116,7 +125,7 @@ public class UIUtil {
     /**
      * Ui elements in popups are only available when displayed.
      */
-    public static <T> Optional<T> findUIElementInPopups(Class<T> clazz) {
+    public <T> Optional<T> findUIElementInPopups(Class<T> clazz) {
         return ReflectionUtil.getField("m", interrupters().popup)
                 .flatMap(uiManager ->
                     ReflectionUtil.getField("inters", uiManager).flatMap(inters ->
@@ -124,7 +133,7 @@ public class UIUtil {
                 );
     }
 
-    private static <T> Optional<T> extractFromIterable(Iterable<?> iterable, Class<T> clazz) {
+    private <T> Optional<T> extractFromIterable(Iterable<?> iterable, Class<T> clazz) {
         for (Object inter : iterable) {
             if (clazz.isInstance(inter)) {
                 log.debug("Found ui element %s", clazz.getSimpleName());

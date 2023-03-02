@@ -1,6 +1,9 @@
-package com.github.argon.sos.interactions.util;
+package com.github.argon.sos.interactions.game.api;
 
 import init.race.Race;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import settlement.entity.ENTITY;
 import settlement.entity.humanoid.Humanoid;
 import settlement.main.SETT;
@@ -11,8 +14,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class HumanoidUtil {
-    public static List<Humanoid> getNearbyHumanoids(Humanoid humanoid, int radius) {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class GameHumanoidApi {
+    @Getter(lazy = true)
+    private final static GameHumanoidApi instance = new GameHumanoidApi();
+    public List<Humanoid> getNearbyHumanoids(Humanoid humanoid, int radius) {
         SComponent settlementComponent = SETT.PATH().finders().otherHumanoid.findComp(humanoid, radius);
         if (settlementComponent == null) {
             return Collections.emptyList();
@@ -52,7 +58,7 @@ public class HumanoidUtil {
     /**
      * @return 0 or 1; currently a humanoid can only have one friend
      */
-    public static int countFriends(Humanoid humanoid, List<Humanoid> nearbyHumanoids) {
+    public int countFriends(Humanoid humanoid, List<Humanoid> nearbyHumanoids) {
         ENTITY entity = STATS.POP().FRIEND.get(humanoid.indu());
 
         if (entity != humanoid && entity instanceof Humanoid) {
@@ -66,7 +72,7 @@ public class HumanoidUtil {
         return 0;
     }
 
-    public static double avgRaceLikings(Humanoid humanoid, List<Humanoid> nearbyHumanoids, boolean ownRace) {
+    public double avgRaceLikings(Humanoid humanoid, List<Humanoid> nearbyHumanoids, boolean ownRace) {
         double likeScore = 0d;
         Race race = humanoid.race();
 

@@ -12,7 +12,6 @@ import util.gui.misc.GButt;
 public class ButtonSection extends GuiSection {
     private final GButt.ButtPanel undoButton;
     private final GButt.ButtPanel applyButton;
-    private final GButt.ButtPanel resetVanillaButton;
     private final GButt.ButtPanel resetModButton;
     private final GButt.ButtPanel saveProfileButton;
     private final GButt.ButtPanel loadProfileButton;
@@ -27,11 +26,8 @@ public class ButtonSection extends GuiSection {
         applyButton.hoverInfoSet("Manipulates race likings according to settings.");
         applyButton.bg(COLOR.WHITE15);
 
-        this.resetVanillaButton = new GButt.ButtPanel("Reset to Vanilla");
-        resetVanillaButton.hoverInfoSet("Restores likings back to original game settings.");
-
-        this.resetModButton = new GButt.ButtPanel("Reset Mod");
-        resetModButton.hoverInfoSet("Restores likings to the default mod settings.");
+        this.resetModButton = new GButt.ButtPanel("Reset");
+        resetModButton.hoverInfoSet("Restores vanilla likings and default mod settings.");
 
         this.saveProfileButton = new GButt.ButtPanel("Save to profile");
         saveProfileButton.hoverInfoSet("Saves settings to user profile. So it can be used in another save.");
@@ -41,16 +37,14 @@ public class ButtonSection extends GuiSection {
 
         setButtonsWidth(loadProfileButton.body.width() + 8);
 
-        addDownC(0, resetVanillaButton);
-        addDownC(5, resetModButton);
-        addDownC(10, loadProfileButton);
+        addDownC(0, resetModButton);
+        addDownC(20, loadProfileButton);
         addDownC(5, saveProfileButton);
-        addDownC(10, undoButton);
+        addDownC(20, undoButton);
         addDownC(5, applyButton);
     }
 
     public void setButtonsWidth(int width) {
-        resetVanillaButton.body.setWidth(width);
         resetModButton.body.setWidth(width);
         loadProfileButton.body.setWidth(width);
         saveProfileButton.body.setWidth(width);

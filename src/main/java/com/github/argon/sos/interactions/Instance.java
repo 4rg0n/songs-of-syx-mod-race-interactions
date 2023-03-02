@@ -5,7 +5,7 @@ import com.github.argon.sos.interactions.config.ConfigJsonService;
 import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
-import com.github.argon.sos.interactions.util.SCRIPT;
+import com.github.argon.sos.interactions.game.SCRIPT;
 import lombok.RequiredArgsConstructor;
 import snake2d.MButt;
 import snake2d.Renderer;
