@@ -1,10 +1,11 @@
 package com.github.argon.sos.interactions.config;
 
-import com.github.argon.sos.interactions.log.Logger;
-import com.github.argon.sos.interactions.log.Loggers;
 import lombok.*;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Represents the mods configuration
@@ -18,18 +19,11 @@ import java.util.*;
 @RequiredArgsConstructor
 public class RaceInteractionsConfig {
 
-    private final static Logger log = Loggers.getLogger(RaceInteractionsConfig.class);
-
     /**
      * Name of the config file
      */
     public final static String FILE_NAME = "RaceInteractions";
 
-    /**
-     * Holds the current set configuration.
-     * Used e.g. when the game saves.
-     */
-    private static RaceInteractionsConfig CURRENT_CONFIG;
 
     /**
      * When true, will not affect any vanilla races, but only custom modded ones
@@ -72,18 +66,6 @@ public class RaceInteractionsConfig {
      * {@link RaceInteractionsConfig#customOnly} and {@link RaceInteractionsConfig#honorCustom}
      */
     private final List<String> gameRaces;
-
-    /**
-     * @return currently set up configuration
-     */
-    public static Optional<RaceInteractionsConfig> getCurrent() {
-        return Optional.ofNullable(CURRENT_CONFIG);
-    }
-
-    public static void setCurrent(RaceInteractionsConfig currentConfig) {
-        CURRENT_CONFIG = currentConfig;
-        log.debug("Set current config to: %s", currentConfig.toString());
-    }
 
     public static class Default {
         public final static double DEFAULT_MIN_WEIGHT = -2d;

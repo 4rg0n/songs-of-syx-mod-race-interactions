@@ -1,6 +1,7 @@
 package com.github.argon.sos.interactions.ai;
 
 import com.github.argon.sos.interactions.RaceInteractions;
+import com.github.argon.sos.interactions.config.ConfigStore;
 import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
@@ -20,6 +21,8 @@ public class PlanRaceInteract {
 	private final static Logger log = Loggers.getLogger(PlanRaceInteract.class);
 
 	private final RaceInteractions raceInteractions;
+
+	private final ConfigStore configStore;
 
 	@Getter
 	private final AIData.AIDataBit cooldown = AI.bit();
@@ -43,7 +46,7 @@ public class PlanRaceInteract {
 
 			@Override
 			protected AISubActivation setAction(Humanoid humanoid, AIManager ai) {
-				RaceInteractionsConfig config = RaceInteractionsConfig.getCurrent()
+				RaceInteractionsConfig config = configStore.getCurrentConfig()
 						.orElse(RaceInteractionsConfig.Default.getConfig());
 				raceInteractions.manipulateRaceStandingsByNearbyRaces(humanoid, config);
 

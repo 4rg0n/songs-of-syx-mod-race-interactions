@@ -5,10 +5,8 @@ import com.github.argon.sos.interactions.log.Loggers;
 import init.race.Race;
 import snake2d.util.sets.LIST;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Mapper {
     private final static Logger log = Loggers.getLogger(Mapper.class);
@@ -28,8 +26,13 @@ public class Mapper {
         return Math.abs(toSliderRange(minWeight)) + Math.abs(toSliderRange(maxWeight));
     }
 
-    public static <K, V> LinkedHashMap<K, V> toOrderedMap(Map<K, V> map) {
-        return new LinkedHashMap<>(map);
+    public static <K extends Enum<K>, V> LinkedHashMap<K, V> toOrderedMap(Map<K, V> map) {
+        return map.entrySet().stream()
+            .sorted(Comparator.comparing(entry -> entry.getKey().ordinal()))
+            .collect(Collectors.toMap(
+                Map.Entry::getKey, Map.Entry::getValue,
+                (oldValue, newValue) -> oldValue,
+                LinkedHashMap::new));
     }
 
     public static List<Race> toJavaList(LIST<Race> raceLIST) {

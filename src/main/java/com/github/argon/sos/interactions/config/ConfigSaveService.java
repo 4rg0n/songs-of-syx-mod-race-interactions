@@ -14,11 +14,11 @@ import java.util.Optional;
  * Takes care of saving and loading {@link RaceInteractionsConfig} into and from the save game
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ConfigSaver {
-    private final static Logger log = Loggers.getLogger(ConfigSaver.class);
+public class ConfigSaveService {
+    private final static Logger log = Loggers.getLogger(ConfigSaveService.class);
 
     @Getter(lazy = true)
-    private final static ConfigSaver instance = new ConfigSaver();
+    private final static ConfigSaveService instance = new ConfigSaveService();
 
     public void save(FilePutter file, RaceInteractionsConfig config) {
         log.debug("Saving RaceInteractionsConfig into save file");

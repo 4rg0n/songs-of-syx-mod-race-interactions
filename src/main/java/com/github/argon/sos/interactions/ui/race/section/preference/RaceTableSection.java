@@ -1,8 +1,8 @@
 package com.github.argon.sos.interactions.ui.race.section.preference;
 
 import com.github.argon.sos.interactions.race.RaceInfo;
-import com.github.argon.sos.interactions.ui.table.TableBuilder;
-import com.github.argon.sos.interactions.ui.table.TableSection;
+import com.github.argon.sos.interactions.ui.element.table.TableBuilder;
+import com.github.argon.sos.interactions.ui.element.table.TableSection;
 import lombok.Getter;
 import snake2d.util.datatypes.DIR;
 import snake2d.util.gui.GuiSection;

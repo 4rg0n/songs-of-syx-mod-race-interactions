@@ -1,10 +1,10 @@
 package com.github.argon.sos.interactions.ui.race.section.preference;
 
 import com.github.argon.sos.interactions.race.RaceInfo;
-import com.github.argon.sos.interactions.ui.HorizontalLine;
-import com.github.argon.sos.interactions.ui.Spacer;
-import com.github.argon.sos.interactions.ui.table.TableRow;
-import com.github.argon.sos.interactions.ui.table.TableStore;
+import com.github.argon.sos.interactions.ui.element.HorizontalLine;
+import com.github.argon.sos.interactions.ui.element.Spacer;
+import com.github.argon.sos.interactions.ui.element.table.TableRow;
+import com.github.argon.sos.interactions.ui.element.table.TableStore;
 import init.race.RACES;
 import init.race.Race;
 import init.sprite.ICON;
@@ -58,17 +58,20 @@ public class RaceTableRow extends TableRow<RaceInfo> {
             ee.add(new ArrowsGauge(otherRace.appearance().icon) {
                 @Override
                 double getValue() {
-                    return Math.abs(getEntry().getRace().pref().other(otherRace));
+                    return Math.abs(getEntry().getRace().pref()
+                        .other(otherRace));
                 }
 
                 @Override
                 SPRITE get(double value) {
-                    return getEntry().getRace().pref().other(otherRace) < 0 ? SPRITES.icons().s.arrowDown : SPRITES.icons().s.arrowUp;
+                    return getEntry().getRace().pref()
+                        .other(otherRace) < 0 ? SPRITES.icons().s.arrowDown : SPRITES.icons().s.arrowUp;
                 }
 
                 @Override
                 COLOR color(double value) {
-                    return getEntry().getRace().pref().other(otherRace) < 0 ? GCOLOR.UI().BAD.normal : GCOLOR.UI().GOOD.normal;
+                    return getEntry().getRace().pref()
+                        .other(otherRace) < 0 ? GCOLOR.UI().BAD.normal : GCOLOR.UI().GOOD.normal;
                 }
 
                 @Override
@@ -95,6 +98,7 @@ public class RaceTableRow extends TableRow<RaceInfo> {
 
     @Override
     public void render(SPRITE_RENDERER r, float ds) {
+        // color each even row with other background
         if (getIndex().get() != null && getIndex().get() % 2 != 0) {
             background(COLOR.WHITE20);
         }
@@ -102,7 +106,7 @@ public class RaceTableRow extends TableRow<RaceInfo> {
     }
 
     /**
-     * Red or green arrows pointing down or up
+     * Row of red or green arrows pointing down or up
      */
     private static abstract class ArrowsGauge extends HoverableAbs {
 

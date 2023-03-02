@@ -2,11 +2,11 @@ package com.github.argon.sos.interactions.ui.race.section.standing;
 
 import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
 import com.github.argon.sos.interactions.config.RaceStandingCategory;
-import com.github.argon.sos.interactions.ui.Checkbox;
-import com.github.argon.sos.interactions.ui.CheckboxTitle;
-import com.github.argon.sos.interactions.ui.HorizontalLine;
-import com.github.argon.sos.interactions.ui.Slider;
-import com.github.argon.sos.interactions.game.SimpleINTE;
+import com.github.argon.sos.interactions.game.SimpleInt;
+import com.github.argon.sos.interactions.ui.element.Checkbox;
+import com.github.argon.sos.interactions.ui.element.CheckboxTitle;
+import com.github.argon.sos.interactions.ui.element.HorizontalLine;
+import com.github.argon.sos.interactions.ui.element.Slider;
 import lombok.Getter;
 import snake2d.util.gui.GuiSection;
 import util.data.INT;
@@ -14,12 +14,10 @@ import util.gui.misc.GButt;
 import util.gui.slider.GSliderInt;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.github.argon.sos.interactions.Mapper.*;
 import static com.github.argon.sos.interactions.config.RaceInteractionsConfig.Default.*;
-import static com.github.argon.sos.interactions.config.RaceInteractionsConfig.Default.DEFAULT_RACE_LOOK_MAX_RANGE;
 
 @Getter
 public class StandSliderSection extends GuiSection {
@@ -46,7 +44,7 @@ public class StandSliderSection extends GuiSection {
         GuiSection checkboxSection = new GuiSection();
 
         // weight sliders for each RaceStandingCategory
-        sliders.forEach((category, slider) -> {
+        toOrderedMap(sliders).forEach((category, slider) -> {
             GButt.Glow name = new GButt.Glow(category.name());
             name.hoverInfoSet("How much " + category.name() + " shall be boosted");
             name.clickSoundSet(null);
@@ -80,7 +78,7 @@ public class StandSliderSection extends GuiSection {
         raceBoostSelfCheck.selectedSet(raceBoostSelf);
 
         // Race look range slider
-        this.raceLookRangeValue = new SimpleINTE(raceLookRange,0 , DEFAULT_RACE_LOOK_MAX_RANGE);
+        this.raceLookRangeValue = new SimpleInt(raceLookRange,0 , DEFAULT_RACE_LOOK_MAX_RANGE);
         this.raceLookRangeSlider = new GSliderInt(raceLookRangeValue, 200, true);
 
         // Race look range slider label
@@ -109,10 +107,10 @@ public class StandSliderSection extends GuiSection {
 
         Map<RaceStandingCategory, Slider> sliders = new HashMap<>(RaceStandingCategory.values().length);
         Map<RaceStandingCategory, INT.INTE> sliderValues = new HashMap<>(RaceStandingCategory.values().length);
-        LinkedHashMap<RaceStandingCategory, Double> orderedMap = toOrderedMap(config.getRaceStandingWeightMap());
+        Map<RaceStandingCategory, Double> orderedMap = config.getRaceStandingWeightMap();
 
         orderedMap.forEach((category, weight) -> {
-            INT.INTE value = new SimpleINTE(fromWeightToSlider(weight), toSliderRange(DEFAULT_MIN_WEIGHT), toSliderRange(DEFAULT_MAX_WEIGHT));
+            INT.INTE value = new SimpleInt(fromWeightToSlider(weight), toSliderRange(DEFAULT_MIN_WEIGHT), toSliderRange(DEFAULT_MAX_WEIGHT));
             Slider weightSlider = new Slider(value, toSliderWidth(DEFAULT_MIN_WEIGHT, DEFAULT_MAX_WEIGHT), true, true);
 
             sliders.put(category, weightSlider);

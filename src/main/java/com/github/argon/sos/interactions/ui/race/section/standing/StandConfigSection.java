@@ -3,8 +3,10 @@ package com.github.argon.sos.interactions.ui.race.section.standing;
 import com.github.argon.sos.interactions.Mapper;
 import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
 import com.github.argon.sos.interactions.config.RaceStandingCategory;
-import com.github.argon.sos.interactions.ui.HorizontalLine;
-import com.github.argon.sos.interactions.ui.VerticalLine;
+import com.github.argon.sos.interactions.log.Logger;
+import com.github.argon.sos.interactions.log.Loggers;
+import com.github.argon.sos.interactions.ui.element.HorizontalLine;
+import com.github.argon.sos.interactions.ui.element.VerticalLine;
 import lombok.Getter;
 import snake2d.util.gui.GuiSection;
 import util.data.INT;
@@ -19,6 +21,7 @@ import java.util.Map;
  */
 @Getter
 public class StandConfigSection extends GuiSection {
+    private final static Logger log = Loggers.getLogger(StandConfigSection.class);
     private final StandSliderSection standSliderSection;
     private final RaceInteractionsConfig config;
 
@@ -31,7 +34,7 @@ public class StandConfigSection extends GuiSection {
 
         GuiSection container = new GuiSection();
         container.addRight(0, standSliderSection);
-        container.addRight(0, new VerticalLine(11, standSliderSection.body().height(), 1));
+        container.addRight(10, new VerticalLine(5, standSliderSection.body().height(), 1));
         container.addRight(5, standOverviewSection);
 
         addDownC(0, new GHeader("Boost standings when liked races are nearby"));
@@ -45,6 +48,7 @@ public class StandConfigSection extends GuiSection {
         sliderValues.forEach((category, value) -> {
             int weight = Mapper.fromWeightToSlider(standWeightMap.get(category));
             value.set(weight);
+            log.trace("Set slider %s to %s", category.name(), weight);
         });
 
         standSliderSection.getRaceLookRangeValue().set(raceLookRange);

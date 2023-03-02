@@ -1,4 +1,4 @@
-package com.github.argon.sos.interactions.ui;
+package com.github.argon.sos.interactions.ui.element;
 
 import com.github.argon.sos.interactions.game.ACTION;
 import snake2d.SPRITE_RENDERER;
@@ -10,9 +10,9 @@ import util.gui.misc.GButt;
 public class Checkbox extends GButt.Checkbox {
 
     @SuppressWarnings("unchecked")
-    private ACTION.ACTION_O<com.github.argon.sos.interactions.ui.Checkbox> clickObjectAction = ACTION.NOPO;
+    private ACTION.ACTION_O<com.github.argon.sos.interactions.ui.element.Checkbox> clickObjectAction = ACTION.NOPO;
     @SuppressWarnings("unchecked")
-    private ACTION.ACTION_O<com.github.argon.sos.interactions.ui.Checkbox> renderObjectAction = ACTION.NOPO;
+    private ACTION.ACTION_O<com.github.argon.sos.interactions.ui.element.Checkbox> renderObjectAction = ACTION.NOPO;
 
     public Checkbox() {
     }
@@ -40,11 +40,11 @@ public class Checkbox extends GButt.Checkbox {
         super.render(r, ds, isActive, isSelected, isHovered);
     }
 
-    public void clickActionSet(ACTION.ACTION_O<com.github.argon.sos.interactions.ui.Checkbox> action) {
+    public void clickActionSet(ACTION.ACTION_O<com.github.argon.sos.interactions.ui.element.Checkbox> action) {
         clickObjectAction = action;
     }
 
-    public void renderActionSet(ACTION.ACTION_O<com.github.argon.sos.interactions.ui.Checkbox> action) {
+    public void renderActionSet(ACTION.ACTION_O<com.github.argon.sos.interactions.ui.element.Checkbox> action) {
         renderObjectAction = action;
     }
 }

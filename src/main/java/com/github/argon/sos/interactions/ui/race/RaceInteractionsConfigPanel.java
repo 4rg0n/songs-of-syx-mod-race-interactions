@@ -1,18 +1,19 @@
 package com.github.argon.sos.interactions.ui.race;
 
+import com.github.argon.sos.interactions.Mapper;
 import com.github.argon.sos.interactions.RaceInteractions;
 import com.github.argon.sos.interactions.RaceInteractionsModScript;
-import com.github.argon.sos.interactions.config.ConfigJsonService;
+import com.github.argon.sos.interactions.config.ConfigStore;
 import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
+import com.github.argon.sos.interactions.game.api.GameRaceApi;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
-import com.github.argon.sos.interactions.ui.HorizontalLine;
-import com.github.argon.sos.interactions.ui.VerticalLine;
+import com.github.argon.sos.interactions.ui.element.HorizontalLine;
+import com.github.argon.sos.interactions.ui.element.VerticalLine;
 import com.github.argon.sos.interactions.ui.race.section.preference.ButtonSection;
 import com.github.argon.sos.interactions.ui.race.section.preference.PrefConfigSection;
 import com.github.argon.sos.interactions.ui.race.section.preference.RaceTableSection;
 import com.github.argon.sos.interactions.ui.race.section.standing.StandConfigSection;
-import com.github.argon.sos.interactions.game.api.GameRaceApi;
 import lombok.Getter;
 import snake2d.util.gui.GuiSection;
 import view.interrupter.ISidePanel;
@@ -33,7 +34,9 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
     private final StandConfigSection standConfigSection;
 
     private final RaceInteractions raceInteractions;
-    private final ConfigJsonService configJsonService;
+    private final ConfigStore configStore;
+
+    private final GameRaceApi gameRaceApi = GameRaceApi.getInstance();
 
     private double updateTimerSeconds = 0d;
 
@@ -45,7 +48,7 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         RaceTableSection overviewSection,
         ButtonSection buttonSection,
         StandConfigSection standConfigSection,
-        ConfigJsonService configJsonService,
+        ConfigStore configStore,
         int width
     ) {
         this.section = new GuiSection();
@@ -56,42 +59,45 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         this.prefConfigSection = prefConfigSection;
         this.overviewSection = overviewSection;
         this.buttonSection = buttonSection;
-        this.configJsonService = configJsonService;
+        this.configStore = configStore;
         this.standConfigSection = standConfigSection;
 
         // Undo button
-        buttonSection.getUndoButton().clickActionSet(() ->
-            RaceInteractionsConfig.getCurrent().ifPresent(config -> {
-                applyConfig(config);
-            })
+        buttonSection.getUndoButton().clickActionSet(() -> {
+            log.debug("Undo click");
+                configStore.getCurrentConfig()
+                    .ifPresent(this::applyConfig);
+            }
         );
 
         // Apply button
         buttonSection.getApplyButton().clickActionSet(() -> {
+            log.debug("Apply click");
             RaceInteractionsConfig config = getConfig();
             raceInteractions.manipulateRaceLikings(config);
-            RaceInteractionsConfig.setCurrent(config);
+            configStore.setCurrentConfig(config);
         });
         // Reset to mod configuration button
         buttonSection.getResetModButton().clickActionSet(() -> {
-            RaceInteractionsConfig modConfig = configJsonService.loadModOrDefaultConfig();
+            log.debug("Reset click");
+            RaceInteractionsConfig modConfig = configStore.getModConfig()
+                .orElse(configStore.getDefaultConfig());
             applyConfig(modConfig);
-            raceInteractions.applyRaceLikings(GameRaceApi.getVanillaLikings());
+            raceInteractions.applyRaceLikings(gameRaceApi.getVanillaLikings());
         });
         // Save settings to user button
         buttonSection.getSaveProfileButton().clickActionSet(() -> {
+            log.debug("Save to Profile click");
             RaceInteractionsConfig config = getConfig();
-            configJsonService.saveProfileConfig(config);
+            configStore.saveProfileConfig(config);
         });
         // Load settings from user profile button
-        buttonSection.getLoadProfileButton().clickActionSet(() ->
-            configJsonService.loadProfileConfig().ifPresent(config -> {
-                prefConfigSection.applyConfig(
-                    config.isCustomOnly(),
-                    config.isHonorCustom(),
-                    config.getRacePreferenceWeightMap()
-                );
-            })
+        buttonSection.getLoadProfileButton().clickActionSet(() -> {
+            log.debug("Load from Profile click");
+                configStore.getProfileConfig().ifPresent(config -> {
+                    applyConfig(config);
+                });
+            }
         );
 
         GuiSection container = new GuiSection();
@@ -109,18 +115,19 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
 
     public RaceInteractionsConfig getConfig() {
         return RaceInteractionsConfig.builder()
-            .gameRaces(RaceInteractionsConfig.getCurrent()
-                .orElse(RaceInteractionsConfig.Default.getConfig()).getGameRaces())
+            .gameRaces(configStore.getCurrentConfig()
+                .orElse(configStore.getDefaultConfig()).getGameRaces())
             .raceLookRange(standConfigSection.getRaceLookRangeValue())
             .raceBoostSelf(standConfigSection.isRaceBoostSelf())
-            .racePreferenceWeightMap(prefConfigSection.getWeights())
-            .raceStandingWeightMap(standConfigSection.getWeights())
+            .racePreferenceWeightMap(Mapper.toOrderedMap(prefConfigSection.getWeights()))
+            .raceStandingWeightMap(Mapper.toOrderedMap(standConfigSection.getWeights()))
             .honorCustom(prefConfigSection.isHonorCustom())
             .customOnly(prefConfigSection.isOnlyCustom())
             .build();
     }
 
     public void applyConfig(RaceInteractionsConfig config) {
+        log.debug("Applying config to ui panel: %s", config);
         prefConfigSection.applyConfig(
             config.isCustomOnly(),
             config.isHonorCustom(),
@@ -152,10 +159,10 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
     }
 
     /**
-     * @return whether panel configuration is different from {@link RaceInteractionsConfig#getCurrent()}
+     * @return whether panel configuration is different from {@link ConfigStore#getCurrentConfig()} ()}
      */
     private boolean isDirty() {
-        return RaceInteractionsConfig.getCurrent()
+        return configStore.getCurrentConfig()
                 .map(currentConfig -> !getConfig().equals(currentConfig))
                 // no current config saved in memory
                 .orElse(true);

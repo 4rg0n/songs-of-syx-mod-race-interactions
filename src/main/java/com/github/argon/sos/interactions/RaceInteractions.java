@@ -2,9 +2,11 @@ package com.github.argon.sos.interactions;
 
 import com.github.argon.sos.interactions.ai.AIModule_Race;
 import com.github.argon.sos.interactions.ai.PlanRaceInteract;
-import com.github.argon.sos.interactions.config.ConfigJsonService;
+import com.github.argon.sos.interactions.config.ConfigStore;
 import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
 import com.github.argon.sos.interactions.config.RaceStandingCategory;
+import com.github.argon.sos.interactions.game.api.GameHumanoidApi;
+import com.github.argon.sos.interactions.game.api.GameRaceApi;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
 import com.github.argon.sos.interactions.race.*;
@@ -13,8 +15,6 @@ import com.github.argon.sos.interactions.ui.race.section.preference.ButtonSectio
 import com.github.argon.sos.interactions.ui.race.section.preference.PrefConfigSection;
 import com.github.argon.sos.interactions.ui.race.section.preference.RaceTableSection;
 import com.github.argon.sos.interactions.ui.race.section.standing.StandConfigSection;
-import com.github.argon.sos.interactions.game.api.GameHumanoidApi;
-import com.github.argon.sos.interactions.game.api.GameRaceApi;
 import init.race.Race;
 import lombok.RequiredArgsConstructor;
 import settlement.entity.humanoid.Humanoid;
@@ -173,14 +173,14 @@ public class RaceInteractions {
                 overviewSection,
                 buttonSection,
                 standConfigSection,
-                ConfigJsonService.getInstance(),
+                ConfigStore.getInstance(),
                 width
             );
         }
 
         public static AIModule_Race buildAI(RaceInteractions raceInteractions) {
             log.debug("Setting up ai modules");
-            PlanRaceInteract planRaceInteract = new PlanRaceInteract(raceInteractions);
+            PlanRaceInteract planRaceInteract = new PlanRaceInteract(raceInteractions, ConfigStore.getInstance());
             return new AIModule_Race(planRaceInteract);
         }
     }

@@ -1,11 +1,10 @@
 package com.github.argon.sos.interactions;
 
-import com.github.argon.sos.interactions.config.ConfigSaver;
-import com.github.argon.sos.interactions.config.ConfigJsonService;
+import com.github.argon.sos.interactions.config.ConfigStore;
 import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
+import com.github.argon.sos.interactions.game.SCRIPT;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
-import com.github.argon.sos.interactions.game.SCRIPT;
 import lombok.RequiredArgsConstructor;
 import snake2d.MButt;
 import snake2d.Renderer;
@@ -16,8 +15,6 @@ import util.gui.misc.GBox;
 import view.keyboard.KEYS;
 import view.main.VIEW;
 
-import java.io.IOException;
-
 @RequiredArgsConstructor
 final class Instance implements SCRIPT.SCRIPT_INSTANCE {
 
@@ -25,31 +22,28 @@ final class Instance implements SCRIPT.SCRIPT_INSTANCE {
 
 	private boolean init = false;
 
-	private boolean initGameLoaded = false;
+	private boolean initGamePresent = false;
 
-	private final SCRIPT script;
+	private final SCRIPT<RaceInteractionsConfig> script;
 
-	private final ConfigSaver configSaver;
-
-	private final ConfigJsonService configJsonService;
-
+	private final ConfigStore configStore;
 
 	@Override
 	public void save(FilePutter file) {
-		RaceInteractionsConfig.getCurrent().ifPresent(config -> configSaver.save(file, config));
+		configStore.saveGame(file);
 	}
 
 	@Override
-	public void load(FileGetter file) throws IOException {
-		RaceInteractionsConfig config = configSaver.load(file)
-			.orElse(configJsonService.loadProfileConfig()
-				.orElse(configJsonService.loadModOrDefaultConfig()));
-		RaceInteractionsConfig.setCurrent(config);
+	public void load(FileGetter file) {
+		RaceInteractionsConfig config = configStore.loadSave(file)
+			.orElseGet(configStore::loadJsonOrDefault);
+		configStore.setCurrentConfig(config);
+		script.initGameLoaded(config);
 	}
 
 	@Override
 	public boolean handleBrokenSavedState() {
-		RaceInteractionsConfig.setCurrent(configJsonService.loadProfileConfig().orElseGet(configJsonService::loadModOrDefaultConfig));
+		configStore.setCurrentConfig(configStore.loadJsonOrDefault());
 		return true;
 	}
 
@@ -61,10 +55,10 @@ final class Instance implements SCRIPT.SCRIPT_INSTANCE {
 			init = true;
 		}
 
-		if (!initGameLoaded && !VIEW.inters().load.isActivated()) {
+		if (!initGamePresent && !VIEW.inters().load.isActivated()) {
 			log.debug("initGameLoaded");
-			script.initGameLoaded();
-			initGameLoaded = true;
+			script.initGamePresent();
+			initGamePresent = true;
 		}
 	}
 	

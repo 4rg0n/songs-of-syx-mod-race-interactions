@@ -1,4 +1,4 @@
-package com.github.argon.sos.interactions.ui.table;
+package com.github.argon.sos.interactions.ui.element.table;
 
 import lombok.Getter;
 import snake2d.util.gui.GuiSection;

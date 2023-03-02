@@ -1,4 +1,4 @@
-package com.github.argon.sos.interactions.ui;
+package com.github.argon.sos.interactions.ui.element;
 
 import init.D;
 import init.sprite.ICON;

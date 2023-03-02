@@ -1,6 +1,6 @@
 package com.github.argon.sos.interactions.game;
 
-public interface SCRIPT extends script.SCRIPT {
+public interface SCRIPT<T> extends script.SCRIPT {
     /**
      * Executed when the game is running
      */
@@ -9,5 +9,7 @@ public interface SCRIPT extends script.SCRIPT {
     /**
      * Executed right after "CLICK TO CONTINUE"
      */
-    void initGameLoaded();
+    void initGamePresent();
+
+    void initGameLoaded(T config);
 }

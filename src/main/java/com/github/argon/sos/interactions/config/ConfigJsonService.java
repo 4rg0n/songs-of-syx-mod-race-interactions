@@ -23,24 +23,12 @@ import static com.github.argon.sos.interactions.config.RaceInteractionsConfig.FI
 public class ConfigJsonService {
     private final static Logger log = Loggers.getLogger(ConfigJsonService.class);
 
-    private static RaceInteractionsConfig MOD_CONFIG;
-
     @Getter(lazy = true)
     private final static ConfigJsonService instance = new ConfigJsonService();
 
-    /**
-     * Loads mod configuration once.
-     *
-     * @return already loaded config
-     */
-    public RaceInteractionsConfig loadModOrDefaultConfig() {
-        if (MOD_CONFIG == null) {
-            PATH configPath = PATHS.INIT().getFolder("config");
-            MOD_CONFIG = load(configPath)
-                    .orElseGet(RaceInteractionsConfig.Default::getConfig);
-        }
-
-        return MOD_CONFIG;
+    public Optional<RaceInteractionsConfig> loadModConfig() {
+        PATH configPath = PATHS.INIT().getFolder("config");
+        return load(configPath);
     }
 
     /**

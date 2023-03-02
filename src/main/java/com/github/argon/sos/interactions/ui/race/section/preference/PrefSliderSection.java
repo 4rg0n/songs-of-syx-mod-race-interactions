@@ -2,15 +2,14 @@ package com.github.argon.sos.interactions.ui.race.section.preference;
 
 import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
 import com.github.argon.sos.interactions.config.RacePrefCategory;
-import com.github.argon.sos.interactions.ui.Slider;
-import com.github.argon.sos.interactions.game.SimpleINTE;
+import com.github.argon.sos.interactions.game.SimpleInt;
+import com.github.argon.sos.interactions.ui.element.Slider;
 import lombok.Getter;
 import snake2d.util.gui.GuiSection;
 import util.data.INT;
 import util.gui.misc.GButt;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.github.argon.sos.interactions.Mapper.*;
@@ -22,19 +21,19 @@ import static com.github.argon.sos.interactions.config.RaceInteractionsConfig.De
  * Each {@link RacePrefCategory} gets a slider.
  */
 @Getter
-public class PrefWeightSliderSection extends GuiSection {
+public class PrefSliderSection extends GuiSection {
 
     private final Map<RacePrefCategory, Slider> sliders;
     private final Map<RacePrefCategory, INT.INTE> sliderValues;
 
-    private PrefWeightSliderSection(Map<RacePrefCategory, Slider> sliders, Map<RacePrefCategory, INT.INTE> sliderValues) {
+    private PrefSliderSection(Map<RacePrefCategory, Slider> sliders, Map<RacePrefCategory, INT.INTE> sliderValues) {
         this.sliders = sliders;
         this.sliderValues = sliderValues;
 
         GuiSection slidersSection = new GuiSection();
         GuiSection namesSection = new GuiSection();
 
-        sliders.forEach((category, slider) -> {
+        toOrderedMap(sliders).forEach((category, slider) -> {
             GButt.Glow name = new GButt.Glow(category.name());
             name.hoverInfoSet("How much " + category.name() + " preferences shall influence likings between races");
             name.clickSoundSet(null);
@@ -49,21 +48,21 @@ public class PrefWeightSliderSection extends GuiSection {
         addRight(10, slidersSection);
     }
 
-    public static PrefWeightSliderSection build(RaceInteractionsConfig config) {
+    public static PrefSliderSection build(RaceInteractionsConfig config) {
 
         Map<RacePrefCategory, Slider> sliders = new HashMap<>(RacePrefCategory.values().length);
         Map<RacePrefCategory, INT.INTE> sliderValues = new HashMap<>(RacePrefCategory.values().length);
-        LinkedHashMap<RacePrefCategory, Double> orderedPrefMap = toOrderedMap(config.getRacePreferenceWeightMap());
+        Map<RacePrefCategory, Double> orderedPrefMap = config.getRacePreferenceWeightMap();
 
         orderedPrefMap.forEach((racePrefCategory, weight) -> {
-            INT.INTE value = new SimpleINTE(fromWeightToSlider(weight), toSliderRange(DEFAULT_MIN_WEIGHT), toSliderRange(DEFAULT_MAX_WEIGHT));
+            INT.INTE value = new SimpleInt(fromWeightToSlider(weight), toSliderRange(DEFAULT_MIN_WEIGHT), toSliderRange(DEFAULT_MAX_WEIGHT));
             Slider weightSlider = new Slider(value, toSliderWidth(DEFAULT_MIN_WEIGHT, DEFAULT_MAX_WEIGHT), true, true);
 
             sliders.put(racePrefCategory, weightSlider);
             sliderValues.put(racePrefCategory, value);
         });
 
-        return new PrefWeightSliderSection(sliders, sliderValues);
+        return new PrefSliderSection(sliders, sliderValues);
     }
 
     public Slider getSlider(RacePrefCategory category) {

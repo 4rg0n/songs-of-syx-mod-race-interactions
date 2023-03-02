@@ -1,4 +1,4 @@
-package com.github.argon.sos.interactions.ui;
+package com.github.argon.sos.interactions.ui.element;
 
 import snake2d.SPRITE_RENDERER;
 import snake2d.util.sprite.SPRITE;

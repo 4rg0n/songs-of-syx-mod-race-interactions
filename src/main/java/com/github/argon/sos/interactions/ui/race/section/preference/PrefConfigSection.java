@@ -3,7 +3,7 @@ package com.github.argon.sos.interactions.ui.race.section.preference;
 import com.github.argon.sos.interactions.Mapper;
 import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
 import com.github.argon.sos.interactions.config.RacePrefCategory;
-import com.github.argon.sos.interactions.ui.CheckboxTitle;
+import com.github.argon.sos.interactions.ui.element.CheckboxTitle;
 import lombok.Getter;
 import snake2d.util.gui.GuiSection;
 import util.data.INT;
@@ -20,7 +20,7 @@ import java.util.Map;
 public class PrefConfigSection extends GuiSection {
     private final GButt.CheckboxTitle onlyCustomRaces;
     private final GButt.CheckboxTitle honorCustomRaces;
-    private final PrefWeightSliderSection prefWeightSliderSection;
+    private final PrefSliderSection prefSliderSection;
 
     public PrefConfigSection(RaceInteractionsConfig config) {
         this.onlyCustomRaces = new CheckboxTitle("Only custom races");
@@ -31,18 +31,18 @@ public class PrefConfigSection extends GuiSection {
         honorCustomRaces.hoverInfoSet("Will not manipulate custom mod races likings to vanilla races when checked");
         honorCustomRaces.selectedSet(config.isHonorCustom());
 
-        this.prefWeightSliderSection = PrefWeightSliderSection.build(config);
+        this.prefSliderSection = PrefSliderSection.build(config);
 
         addDown(5, onlyCustomRaces);
         addDown(5, honorCustomRaces);
-        addDown(20, prefWeightSliderSection);
+        addDown(20, prefSliderSection);
     }
 
     public void applyConfig(boolean onlyCustom, boolean honorCustom, Map<RacePrefCategory, Double> prefWeightMap) {
         onlyCustomRaces.selectedSet(onlyCustom);
         honorCustomRaces.selectedSet(honorCustom);
 
-        Map<RacePrefCategory, INT.INTE> sliderValues = prefWeightSliderSection.getSliderValues();
+        Map<RacePrefCategory, INT.INTE> sliderValues = prefSliderSection.getSliderValues();
 
         sliderValues.forEach((category, value) -> {
             int weight = Mapper.fromWeightToSlider(prefWeightMap.get(category));
@@ -60,7 +60,7 @@ public class PrefConfigSection extends GuiSection {
 
     public Map<RacePrefCategory, Double> getWeights() {
         Map<RacePrefCategory, Double> prefWeightMap = new HashMap<>();
-        getPrefWeightSliderSection().getSliderValues().forEach((category, inte) -> {
+        getPrefSliderSection().getSliderValues().forEach((category, inte) -> {
             double value =  Mapper.fromSliderToWeight(inte.get());
             prefWeightMap.put(category, value);
         });
