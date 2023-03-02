@@ -27,8 +27,14 @@ jobs:
           java-version: 8
           distribution: temurin
           cache: maven
+          server-id: github
+          server-username: REPOSITORY_USERNAME_REF
+          server-password: REPOSITORY_TOKEN_REF
 
       - name: Package
+        env:
+          REPOSITORY_USERNAME_REF: ${{ vars.USERNAME }}
+          REPOSITORY_TOKEN_REF: ${{ secrets.PERSONAL_TOKEN }}
         run: mvn -B -P github clean package
 
       - name: Zip
