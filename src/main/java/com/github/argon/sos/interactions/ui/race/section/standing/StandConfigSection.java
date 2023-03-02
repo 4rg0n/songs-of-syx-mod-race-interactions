@@ -48,7 +48,7 @@ public class StandConfigSection extends GuiSection {
         });
 
         standSliderSection.getRaceLookRangeValue().set(raceLookRange);
-        standSliderSection.getRaceBoostSelf().selectedSet(raceBoostSelf);
+        standSliderSection.getRaceBoostSelfCheck().selectedSet(raceBoostSelf);
     }
 
     public Map<RaceStandingCategory, Double> getWeights() {
@@ -66,6 +66,6 @@ public class StandConfigSection extends GuiSection {
     }
 
     public boolean isRaceBoostSelf() {
-        return standSliderSection.getRaceBoostSelf().selectedIs();
+        return standSliderSection.getRaceBoostSelfCheck().selectedIs();
     }
 }

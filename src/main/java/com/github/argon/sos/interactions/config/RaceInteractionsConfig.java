@@ -8,6 +8,8 @@ import java.util.*;
 
 /**
  * Represents the mods configuration
+ *
+ * TODO split into multiple objects for cleaner method APIs?
  */
 @ToString
 @EqualsAndHashCode

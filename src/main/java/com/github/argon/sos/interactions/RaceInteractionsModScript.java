@@ -59,22 +59,37 @@ public final class RaceInteractionsModScript implements SCRIPT {
 		log.debug("Initializing game resources and mod config");
 		ConfigJsonService configJsonService = ConfigJsonService.getInstance();
 
-		// load current config from save game or from user profile or use mod config
+		// load current config from save game (current) or from user profile or use mod config or fallback to default =D
 		RaceInteractionsConfig config = RaceInteractionsConfig.getCurrent().orElseGet(() ->
-				configJsonService.loadProfileConfig().orElseGet(configJsonService::loadModConfig));
+				configJsonService.loadProfileConfig().orElseGet(configJsonService::loadModOrDefaultConfig));
 
+		// "business logic"
 		RaceService raceService = new RaceService(config.getGameRaces());
 		RaceInteractions raceInteractions = RaceInteractions.Builder.build(raceService);
-		AIModule_Race ai = RaceInteractions.Builder.buildAI(raceInteractions);
-		AIUtil.injectAIModule(HTYPE.SUBJECT, ai);
 
-		RaceInteractionsConfigPanel configPanel = RaceInteractions.Builder.buildConfigUI(config, raceInteractions, raceService.getAllRaceInfo());
+		// Race InteractionsAI
+		AIModule_Race aiModuleRace = RaceInteractions.Builder.buildAI(raceInteractions);
+		// todo this COULD be configurable via json
+		AIUtil.injectAIModule(aiModuleRace,
+			HTYPE.SUBJECT,
+			HTYPE.RETIREE,
+			HTYPE.RECRUIT,
+			HTYPE.STUDENT,
+			HTYPE.NOBILITY,
+			HTYPE.CHILD
+		);
+
+		// Config UI Panel
+		RaceInteractionsConfigPanel configPanel = RaceInteractions.Builder.buildConfigUI(
+			config,
+			raceInteractions,
+			raceService.getAllRaceInfo()
+		);
+		UIGameConfig uiGameConfig = new UIGameConfig(configPanel);
+		uiGameConfig.init();
 
 		// adjust likings when game loaded
 		raceInteractions.manipulateRaceLikings(config);
-		UIGameConfig uiGameConfig = new UIGameConfig(configPanel);
-		// inject ui elements into game ui
-		uiGameConfig.init();
 	}
 
 	@Override

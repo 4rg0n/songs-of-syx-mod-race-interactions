@@ -43,13 +43,13 @@ final class Instance implements SCRIPT.SCRIPT_INSTANCE {
 	public void load(FileGetter file) throws IOException {
 		RaceInteractionsConfig config = configSaver.load(file)
 			.orElse(configJsonService.loadProfileConfig()
-				.orElse(configJsonService.loadModConfig()));
+				.orElse(configJsonService.loadModOrDefaultConfig()));
 		RaceInteractionsConfig.setCurrent(config);
 	}
 
 	@Override
 	public boolean handleBrokenSavedState() {
-		RaceInteractionsConfig.setCurrent(configJsonService.loadProfileConfig().orElseGet(configJsonService::loadModConfig));
+		RaceInteractionsConfig.setCurrent(configJsonService.loadProfileConfig().orElseGet(configJsonService::loadModOrDefaultConfig));
 		return true;
 	}
 

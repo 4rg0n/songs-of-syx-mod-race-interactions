@@ -3,11 +3,16 @@ package com.github.argon.sos.interactions.ai;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
 import lombok.RequiredArgsConstructor;
+import settlement.entity.humanoid.HTYPE;
 import settlement.entity.humanoid.Humanoid;
 import settlement.entity.humanoid.ai.main.AIManager;
 import settlement.entity.humanoid.ai.main.AIModule;
 import settlement.entity.humanoid.ai.main.AIPLAN.AiPlanActivation;
 
+/**
+ * An {@link AIModule}, which is injected via {@link com.github.argon.sos.interactions.util.AIUtil#injectAIModule(AIModule, HTYPE...)}.
+ * Used for all race specific AI tasks.
+ */
 @RequiredArgsConstructor
 public final class AIModule_Race extends AIModule{
 

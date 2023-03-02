@@ -33,7 +33,7 @@ public class ConfigJsonService {
      *
      * @return already loaded config
      */
-    public RaceInteractionsConfig loadModConfig() {
+    public RaceInteractionsConfig loadModOrDefaultConfig() {
         if (MOD_CONFIG == null) {
             PATH configPath = PATHS.INIT().getFolder("config");
             MOD_CONFIG = load(configPath)

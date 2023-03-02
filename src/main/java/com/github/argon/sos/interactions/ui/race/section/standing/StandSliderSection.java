@@ -28,9 +28,16 @@ public class StandSliderSection extends GuiSection {
 
     private final GSliderInt raceLookRangeSlider;
     private final INT.INTE raceLookRangeValue;
-    private final CheckboxTitle raceBoostSelf;
+    private final CheckboxTitle raceBoostSelfCheck;
 
-    private StandSliderSection(Map<RaceStandingCategory, Slider> sliders, Map<RaceStandingCategory, INT.INTE> sliderValues, int raceLookRange) {
+    private StandSliderSection(
+        Map<RaceStandingCategory,
+        Slider> sliders,
+        Map<RaceStandingCategory,
+        INT.INTE> sliderValues,
+        int raceLookRange,
+        boolean raceBoostSelf
+    ) {
         this.sliders = sliders;
         this.sliderValues = sliderValues;
 
@@ -67,12 +74,16 @@ public class StandSliderSection extends GuiSection {
             slidersSection.addDown(10, slider);
         });
 
-        this.raceBoostSelf = new CheckboxTitle("Boost Self");
-        raceBoostSelf.hoverInfoSet("Whether races should get boosted by their own race");
+        // Boost self checkbox
+        this.raceBoostSelfCheck = new CheckboxTitle("Boost Self");
+        raceBoostSelfCheck.hoverInfoSet("Whether races should get boosted by their own race");
+        raceBoostSelfCheck.selectedSet(raceBoostSelf);
 
+        // Race look range slider
         this.raceLookRangeValue = new SimpleINTE(raceLookRange,0 , DEFAULT_RACE_LOOK_MAX_RANGE);
         this.raceLookRangeSlider = new GSliderInt(raceLookRangeValue, 200, true);
 
+        // Race look range slider label
         GuiSection rangeSliderContainer = new GuiSection();
         GButt.Glow raceLookRangeSliderName = new GButt.Glow("Look Range");
         raceLookRangeSliderName.hoverInfoSet("How far citizens will look for other races nearby in tiles");
@@ -80,7 +91,7 @@ public class StandSliderSection extends GuiSection {
         raceLookRangeSliderName.clickActionSet(null);
         raceLookRangeSliderName.body.setHeight(raceLookRangeSlider.body().height());
 
-        rangeSliderContainer.addRightC(0, raceBoostSelf);
+        rangeSliderContainer.addRightC(0, raceBoostSelfCheck);
         rangeSliderContainer.addRightC(88, raceLookRangeSliderName);
         rangeSliderContainer.addRightC(5, raceLookRangeSlider);
 
@@ -108,7 +119,7 @@ public class StandSliderSection extends GuiSection {
             sliderValues.put(category, value);
         });
 
-        return new StandSliderSection(sliders, sliderValues, config.getRaceLookRange());
+        return new StandSliderSection(sliders, sliderValues, config.getRaceLookRange(), config.isRaceBoostSelf());
     }
 
     public Slider getSlider(RaceStandingCategory category) {

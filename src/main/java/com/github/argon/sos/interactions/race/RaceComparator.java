@@ -64,7 +64,7 @@ public class RaceComparator {
                 .race(race.key)
                 .otherRace(otherRace.key)
                 .foodMatches(foodMatches)
-                // FIXME: 23.02.2023 always 1?
+                // FIXME: 23.02.2023 always 1? useless?
                 .homeMatches(homeMatches)
                 .buildingPrefDiff(buildingPrefDifferenceMap)
                 .workPrefDiff(workPrefDifferenceMap)

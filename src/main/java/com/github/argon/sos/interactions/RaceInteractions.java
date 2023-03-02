@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Provides an API to manipulate race likings via a {@link RaceInteractionsConfig}
+ * Provides an API to manipulate race likings and standings via a {@link RaceInteractionsConfig}
  */
 @RequiredArgsConstructor
 public class RaceInteractions {
@@ -34,6 +34,9 @@ public class RaceInteractions {
     private final RaceService raceService;
     private final RaceStandingsService raceStandingsService;
 
+    /**
+     * Manipulates likings between races according to given {@link RaceInteractionsConfig}
+     */
     public void manipulateRaceLikings(RaceInteractionsConfig config) {
         boolean customOnly = config.isCustomOnly();
         boolean honorCustom = config.isHonorCustom();
@@ -65,7 +68,13 @@ public class RaceInteractions {
         }
     }
 
-    public void manipulateRaceStandings(Humanoid humanoid, RaceInteractionsConfig config) {
+    /**
+     * Decreases or increases standings {@link RaceStandingCategory} for a certain race.
+     * Based of nearby races around given {@link Humanoid}.
+     *
+     * @param humanoid looking for other races nearby
+     */
+    public void manipulateRaceStandingsByNearbyRaces(Humanoid humanoid, RaceInteractionsConfig config) {
         int raceLookRange = config.getRaceLookRange();
         boolean raceBoostSelf = config.isRaceBoostSelf();
 
@@ -91,7 +100,18 @@ public class RaceInteractions {
         manipulateRaceStandings(config.getRaceStandingWeightMap(), race, standingsWeightMap);
     }
 
-    public void manipulateRaceStandings(Map<RaceStandingCategory, Double> standingWeightsMap, Race race, Map<RaceStandingCategory , Double> incMap) {
+    /**
+     * Decreases or increases standings {@link RaceStandingCategory} for a certain race.
+     *
+     * @param standingWeightsMap map with weights for each {@link RaceStandingCategory}
+     * @param race to manipulate
+     * @param incMap increase values for each {@link RaceStandingCategory}
+     */
+    public void manipulateRaceStandings(
+        Map<RaceStandingCategory, Double> standingWeightsMap,
+        Race race,
+        Map<RaceStandingCategory, Double> incMap
+    ) {
         standingWeightsMap.forEach((category, weight) -> {
             if ((weight == null || weight == 0d)) {
                 // 0 = means disabled
@@ -117,6 +137,9 @@ public class RaceInteractions {
         }
     }
 
+    /**
+     * Builds the main components of the mod
+     */
     public static class Builder {
         public static RaceInteractions build(RaceService raceService) {
             log.debug("Setting up service elements");
@@ -153,6 +176,7 @@ public class RaceInteractions {
         }
 
         public static AIModule_Race buildAI(RaceInteractions raceInteractions) {
+            log.debug("Setting up ai modules");
             PlanRaceInteract planRaceInteract = new PlanRaceInteract(raceInteractions);
             return new AIModule_Race(planRaceInteract);
         }

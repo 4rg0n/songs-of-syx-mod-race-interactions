@@ -28,7 +28,10 @@ public class PlanRaceInteract {
 //	static {
 //		D.ts(PlanRaceInteract.class);
 //	}
-	
+
+	/**
+	 * Look for other races in a {@link RaceInteractionsConfig#getRaceLookRange()} tile radius.
+	 */
 	final AIPLAN lookForRaces = new AIPLAN.PLANRES() {
 		
 		@Override
@@ -37,12 +40,12 @@ public class PlanRaceInteract {
 		}
 		
 		private final Resumer first = new Resumer("") {
-			
+
 			@Override
 			protected AISubActivation setAction(Humanoid humanoid, AIManager ai) {
 				RaceInteractionsConfig config = RaceInteractionsConfig.getCurrent()
 						.orElse(RaceInteractionsConfig.Default.getConfig());
-				raceInteractions.manipulateRaceStandings(humanoid, config);
+				raceInteractions.manipulateRaceStandingsByNearbyRaces(humanoid, config);
 
 				cooldown.set(ai, true);
 				return null;

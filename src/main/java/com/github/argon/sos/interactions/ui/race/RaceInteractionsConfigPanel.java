@@ -76,7 +76,7 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         });
         // Reset to mod configuration button
         buttonSection.getResetModButton().clickActionSet(() -> {
-            RaceInteractionsConfig modConfig = configJsonService.loadModConfig();
+            RaceInteractionsConfig modConfig = configJsonService.loadModOrDefaultConfig();
             applyConfig(modConfig);
         });
         // Reset to vanilla race likings button
