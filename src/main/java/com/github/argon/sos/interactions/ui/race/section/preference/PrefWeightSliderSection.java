@@ -3,7 +3,7 @@ package com.github.argon.sos.interactions.ui.race.section.preference;
 import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
 import com.github.argon.sos.interactions.config.RacePrefCategory;
 import com.github.argon.sos.interactions.ui.Slider;
-import com.github.argon.sos.interactions.util.SimpleINTE;
+import com.github.argon.sos.interactions.game.SimpleINTE;
 import lombok.Getter;
 import snake2d.util.gui.GuiSection;
 import util.data.INT;

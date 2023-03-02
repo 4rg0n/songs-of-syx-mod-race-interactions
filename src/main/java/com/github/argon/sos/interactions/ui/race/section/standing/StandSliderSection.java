@@ -6,7 +6,7 @@ import com.github.argon.sos.interactions.ui.Checkbox;
 import com.github.argon.sos.interactions.ui.CheckboxTitle;
 import com.github.argon.sos.interactions.ui.HorizontalLine;
 import com.github.argon.sos.interactions.ui.Slider;
-import com.github.argon.sos.interactions.util.SimpleINTE;
+import com.github.argon.sos.interactions.game.SimpleINTE;
 import lombok.Getter;
 import snake2d.util.gui.GuiSection;
 import util.data.INT;

@@ -1,4 +1,4 @@
-package com.github.argon.sos.interactions.util;
+package com.github.argon.sos.interactions.game;
 
 import util.data.INT;
 

@@ -3,7 +3,7 @@ package com.github.argon.sos.interactions.game.api;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
 import com.github.argon.sos.interactions.util.ReflectionUtil;
-import com.github.argon.sos.interactions.util.UINotAvailableException;
+import com.github.argon.sos.interactions.game.GameUiNotAvailableException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,13 +31,13 @@ public class GameUiApi {
     /**
      * Contains UIs like a yes/no prompt or a text input
      *
-     * @throws UINotAvailableException when ui isn't initialized yet
+     * @throws GameUiNotAvailableException when ui isn't initialized yet
      */
     public Interrupters interrupters() {
         Interrupters interrupters = VIEW.inters();
 
         if (interrupters == null) {
-            throw new UINotAvailableException("Games interrupt ui isn't initialized yet.");
+            throw new GameUiNotAvailableException("Games interrupt ui isn't initialized yet.");
         }
 
         return interrupters;
@@ -46,26 +46,26 @@ public class GameUiApi {
     /**
      * Contains the settlements ui elements
      *
-     * @throws UINotAvailableException when ui isn't initialized yet
+     * @throws GameUiNotAvailableException when ui isn't initialized yet
      */
     public SettView settlement() {
         SettView settView = VIEW.s();
 
         if (settView == null) {
-            throw new UINotAvailableException("Games settlement ui isn't initialized yet.");
+            throw new GameUiNotAvailableException("Games settlement ui isn't initialized yet.");
         }
 
         return settView;
     }
 
     /**
-     * @throws UINotAvailableException when ui isn't initialized yet
+     * @throws GameUiNotAvailableException when ui isn't initialized yet
      */
     public VIEW.ViewSub currentView() {
         VIEW.ViewSub currentView = VIEW.current();
 
         if (currentView == null) {
-            throw new UINotAvailableException("Games current view isn't initialized yet.");
+            throw new GameUiNotAvailableException("Games current view isn't initialized yet.");
         }
 
         return currentView;
