@@ -15,5 +15,12 @@ jobs:
       - name: Unzip
         run: unzip Race.Interactions.zip
 
-      - name: Echo
-        run: ls -la
+      - uses: arma-actions/workshop-upload@v1.0.2
+        with:
+          appId: '1162750'
+          itemId: '2937853965'
+          contentPath: 'Race Interactions'
+          changelog: ${{ steps.fetch-release.outputs.body }}
+        env:
+          STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
+          STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
