@@ -29,7 +29,7 @@ jobs:
           cache: maven
 
       - name: Package
-        run: mvn -B clean package
+        run: mvn -B -P github clean package
 
       - name: Zip
         run: zip --junk-paths Race.Interactions "target/out/Race Interactions"
