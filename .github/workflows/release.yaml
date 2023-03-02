@@ -1,0 +1,46 @@
+name: Release
+on: workflow_dispatch
+
+jobs:
+  release:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Create Draft Release
+        id: create-release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: "temp-version"
+          release_name: "draft-release"
+          body: ""
+          draft: true
+          prerelease: false
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 8
+          distribution: temurin
+          cache: maven
+
+      - name: Package
+        run: mvn -B clean package
+
+      - name: Zip
+        run: zip --junk-paths Race.Interactions "target/out/Race Interactions"
+
+      - name: Upload zip
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create-release.outputs.upload_url }}
+          asset_path: "Race.Interactions.zip"
+          asset_name: "Race.Interactions.zip"
+          asset_content_type: application/octet-stream
+

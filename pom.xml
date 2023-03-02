@@ -135,9 +135,9 @@
     <dependencies>
         <!-- Game dependency SongsOfSyx.jar -->
         <dependency>
-            <groupId>org.songsofsyx</groupId>
-            <artifactId>songsofsyx</artifactId>
-            <version>${game.version.major}.${game.version.minor}</version>
+            <groupId>com.songsofsyx</groupId>
+            <artifactId>songs-of-syx</artifactId>
+            <version>0.63.45</version>
         </dependency>
 
         <!-- Lazy Developer -->
