@@ -16,12 +16,14 @@ jobs:
       - name: Unzip
         run: unzip Race.Interactions.zip
 
-      - uses: Weilbyte/steam-workshop-upload@v1.1
+      - name: Setup steamcmd
+        uses: CyberAndrii/setup-steamcmd@v1.1.5
+
+      - name: Generate auth code
+        id: generate
+        uses: CyberAndrii/steam-totp@v1.0.3
         with:
-          appid: '1162750'
-          itemid: '2937853965'
-          path: 'Race Interactions'
-        env:
-          STEAM_USERNAME: ${{ secrets.STEAM_USERNAME }}
-          STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
-          STEAM_TFASEED: ${{ secrets.STEAM_2FASEED }}
+          shared_secret: ${{ secrets.STEAM_2FASEED }}
+
+      - name: Steam Login
+        run: steamcmd +login ${{ secrets.STEAM_USERNAME }} ${{ secrets.STEAM_PASSWORD }} ${{ steps.generate.outputs.code }} +quit
