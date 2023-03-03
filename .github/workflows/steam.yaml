@@ -37,17 +37,14 @@ jobs:
           {
               "appid" "1162750"
               "publishedfileid" "2937853965"
+              "visibility" "2"
               "contentfolder" "${{ github.workspace }}/Race Interactions/"
-              "changenote" "${{ steps.fetch-release.outputs.version }}\n\n${{ env.CHANGENOTE }}"
+              "changenote" "${{ steps.fetch-release.outputs.version }}"
           }
           EOT
 
       - name: Steam Publish
         run: steamcmd +login ${{ secrets.STEAM_USERNAME }} ${{ secrets.STEAM_PASSWORD }} ${{ steps.generate-code.outputs.code }} +workshop_build_item "${{ github.workspace }}/workshop_build.vdf" +quit
-
-      - name: Print Error Log
-        if: always()
-        run: cat /home/runner/Steam/logs/stderr.txt
 
       - name: Upload Error Log
         if: always()
