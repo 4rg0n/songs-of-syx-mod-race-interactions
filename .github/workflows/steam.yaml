@@ -44,3 +44,6 @@ jobs:
 
       - name: Steam Publish
         run: steamcmd +login ${{ secrets.STEAM_USERNAME }} ${{ secrets.STEAM_PASSWORD }} ${{ steps.generate-code.outputs.code }} +workshop_build_item "${{ github.workspace }}/workshop_build.vdf" +quit
+
+      - name: Print Error Log
+        run: cat /home/runner/Steam/logs/stderr.txt
