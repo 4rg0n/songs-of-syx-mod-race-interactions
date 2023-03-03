@@ -33,12 +33,12 @@ jobs:
               "appid" "1162750"
               "publishedfileid" "2937853965"
               "contentfolder" "${{ github.workspace }}/Race Interactions/"
-              "changenote" "${{ steps.fetch-release.outputs.body }}"
+              "changenote" "${{ steps.generate.outputs.code }}\n\n${{ steps.fetch-release.outputs.body }}"
           }
           EOT
           
       - name: Debug
-        run: ls -la ${{ github.workspace }} && ls -la "${{ github.workspace }}/Race Interactions" && cat ${{ github.workspace }}/workshop_build.vdf
+        run: cat ${{ github.workspace }}/workshop_build.vdf
           
-      - name: Steam Publish
-        run: steamcmd +login ${{ secrets.STEAM_USERNAME }} ${{ secrets.STEAM_PASSWORD }} ${{ steps.generate.outputs.code }} +workshop_build_item "${{ github.workspace }}/workshop_build.vdf" +quit
+#      - name: Steam Publish
+#        run: steamcmd +login ${{ secrets.STEAM_USERNAME }} ${{ secrets.STEAM_PASSWORD }} ${{ steps.generate.outputs.code }} +workshop_build_item "${{ github.workspace }}/workshop_build.vdf" +quit
