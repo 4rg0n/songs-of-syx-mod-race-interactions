@@ -39,8 +39,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.RELEASE_VERSION }}
-          release_name: Race Interactions ${{ env.RELEASE_VERSION }} for SoS V${{ env.GAME_MAJOR_VERSION }}
+          tag_name: "v${{ env.RELEASE_VERSION }}"
+          release_name: "Race Interactions v${{ env.RELEASE_VERSION }} for SoS V${{ env.GAME_MAJOR_VERSION }}"
           body: ""
           draft: true
           prerelease: false
