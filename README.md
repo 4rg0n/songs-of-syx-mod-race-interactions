@@ -7,6 +7,8 @@ This will make the assignment of who likes who more dynamic.
 * **Steam** https://steamcommunity.com/sharedfiles/filedetails/?id=2937853965
 * **Mod.io** https://mod.io/g/songsofsyx/m/race-interactions
 
+![Logo](doc/img/logo2.png)
+
 ## But why?!
 
 This was suggested in the [Discord](https://discord.gg/USqtpm89) of Songs of Syx by the user **Twiggy#3123** and solves the following problem.

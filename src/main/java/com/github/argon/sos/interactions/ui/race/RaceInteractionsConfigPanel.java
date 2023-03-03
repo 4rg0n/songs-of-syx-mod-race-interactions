@@ -1,6 +1,5 @@
 package com.github.argon.sos.interactions.ui.race;
 
-import com.github.argon.sos.interactions.Mapper;
 import com.github.argon.sos.interactions.RaceInteractions;
 import com.github.argon.sos.interactions.RaceInteractionsModScript;
 import com.github.argon.sos.interactions.config.ConfigStore;
@@ -119,8 +118,8 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
                 .orElse(configStore.getDefaultConfig()).getGameRaces())
             .raceLookRange(standConfigSection.getRaceLookRangeValue())
             .raceBoostSelf(standConfigSection.isRaceBoostSelf())
-            .racePreferenceWeightMap(Mapper.toOrderedMap(prefConfigSection.getWeights()))
-            .raceStandingWeightMap(Mapper.toOrderedMap(standConfigSection.getWeights()))
+            .racePreferenceWeightMap(prefConfigSection.getWeights())
+            .raceStandingWeightMap(standConfigSection.getWeights())
             .honorCustom(prefConfigSection.isHonorCustom())
             .customOnly(prefConfigSection.isOnlyCustom())
             .build();

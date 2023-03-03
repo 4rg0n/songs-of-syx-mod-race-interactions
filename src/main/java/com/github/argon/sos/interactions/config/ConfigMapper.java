@@ -1,6 +1,5 @@
 package com.github.argon.sos.interactions.config;
 
-import com.github.argon.sos.interactions.Mapper;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
 import snake2d.Errors;
@@ -75,8 +74,8 @@ public class ConfigMapper {
                 .gameRaces(ConfigStore.getInstance().getCurrentConfig()
                         .orElse(RaceInteractionsConfig.Default.getConfig())
                         .getGameRaces())
-                .racePreferenceWeightMap(Mapper.toOrderedMap(preferenceWeightsMap))
-                .raceStandingWeightMap(Mapper.toOrderedMap(standingWeightsMap))
+                .racePreferenceWeightMap(preferenceWeightsMap)
+                .raceStandingWeightMap(standingWeightsMap)
                 .build();
 
         log.trace("From save file %s", raceInteractionsConfig.toString());
@@ -156,8 +155,8 @@ public class ConfigMapper {
         }
 
         RaceInteractionsConfig raceInteractionsConfig = RaceInteractionsConfig.builder()
-                .racePreferenceWeightMap(Mapper.toOrderedMap(preferencesWeightMap))
-                .raceStandingWeightMap(Mapper.toOrderedMap(standingsWeightMap))
+                .racePreferenceWeightMap(preferencesWeightMap)
+                .raceStandingWeightMap(standingsWeightMap)
                 .raceLookRange(raceLookRange)
                 .raceBoostSelf(raceBoostSelf)
                 .gameRaces(gameRaces)
