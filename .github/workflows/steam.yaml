@@ -27,18 +27,18 @@ jobs:
 
       - name: Create vdf file
         run: |
-          cat << EOT > workshop_build.vdf
+          cat << EOT > ${{ github.workspace }}/workshop_build.vdf
           "workshopitem"
           {
               "appid" "1162750"
               "publishedfileid" "2937853965"
-              "contentfolder" "Race Interactions"
+              "contentfolder" "${{ github.workspace }}/Race Interactions/"
               "changenote" "${{ steps.fetch-release.outputs.body }}"
           }
           EOT
           
       - name: Debug
-        run: ls -la && cat workshop_build.vdf
+        run: ls -la ${{ github.workspace }} && ls -la "${{ github.workspace }}/Race Interactions" && cat ${{ github.workspace }}/workshop_build.vdf
           
       - name: Steam Publish
-        run: steamcmd +login ${{ secrets.STEAM_USERNAME }} ${{ secrets.STEAM_PASSWORD }} ${{ steps.generate.outputs.code }} +workshop_build_item "$(pwd)/workshop_build.vdf" +quit
+        run: steamcmd +login ${{ secrets.STEAM_USERNAME }} ${{ secrets.STEAM_PASSWORD }} ${{ steps.generate.outputs.code }} +workshop_build_item "${{ github.workspace }}/workshop_build.vdf" +quit
