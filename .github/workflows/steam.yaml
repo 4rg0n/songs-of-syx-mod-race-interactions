@@ -20,7 +20,7 @@ jobs:
         uses: CyberAndrii/setup-steamcmd@v1.1.5
 
       - name: Generate auth code
-        id: generate
+        id: generate-code
         uses: CyberAndrii/steam-totp@v1.0.3
         with:
           shared_secret: ${{ secrets.STEAM_2FASEED }}
@@ -33,12 +33,12 @@ jobs:
               "appid" "1162750"
               "publishedfileid" "2937853965"
               "contentfolder" "${{ github.workspace }}/Race Interactions/"
-              "changenote" "${{ steps.generate.outputs.code }}\n\n${{ steps.fetch-release.outputs.body }}"
+              "changenote" "${{ steps.fetch-release.outputs.version }}\n\n${{ steps.fetch-release.outputs.body }}"
           }
           EOT
           
       - name: Debug
         run: cat ${{ github.workspace }}/workshop_build.vdf
-          
+
 #      - name: Steam Publish
-#        run: steamcmd +login ${{ secrets.STEAM_USERNAME }} ${{ secrets.STEAM_PASSWORD }} ${{ steps.generate.outputs.code }} +workshop_build_item "${{ github.workspace }}/workshop_build.vdf" +quit
+#        run: steamcmd +login ${{ secrets.STEAM_USERNAME }} ${{ secrets.STEAM_PASSWORD }} ${{ steps.generate-code.outputs.code }} +workshop_build_item "${{ github.workspace }}/workshop_build.vdf" +quit
