@@ -25,11 +25,6 @@ jobs:
         with:
           shared_secret: ${{ secrets.STEAM_2FASEED }}
 
-      - name: Sanitize Changenote
-        run: |
-          cn=$(echo "${{ steps.fetch-release.outputs.body }}" | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g')
-          echo "CHANGENOTE=$cn" >> $GITHUB_ENV
-
       - name: Create vdf file
         run: |
           cat << EOT > ${{ github.workspace }}/workshop_build.vdf
@@ -39,7 +34,9 @@ jobs:
               "publishedfileid" "2937853965"
               "visibility" "2"
               "contentfolder" "${{ github.workspace }}/Race Interactions/"
-              "changenote" "${{ steps.fetch-release.outputs.version }}\n\n${{ env.CHANGENOTE }}"
+              "changenote" "${{ steps.fetch-release.outputs.version }}
+          
+          ${{ steps.fetch-release.outputs.body }}"
           }
           EOT
 
