@@ -25,6 +25,11 @@ jobs:
         with:
           shared_secret: ${{ secrets.STEAM_2FASEED }}
 
+      - name: Sanitize Changenote
+        run: |
+          cn=$(echo "${{ steps.fetch-release.outputs.body }}" | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g')
+          echo "CHANGENOTE=$cn" >> $GITHUB_ENV
+
       - name: Create vdf file
         run: |
           cat << EOT > ${{ github.workspace }}/workshop_build.vdf
@@ -33,9 +38,12 @@ jobs:
               "appid" "1162750"
               "publishedfileid" "2937853965"
               "contentfolder" "${{ github.workspace }}/Race Interactions/"
-              "changenote" "${{ steps.fetch-release.outputs.version }}\n\n${{ steps.fetch-release.outputs.body }}"
+              "changenote" "${{ steps.fetch-release.outputs.version }}\n\n${{ env.CHANGENOTE }}"
           }
           EOT
 
-      - name: Steam Publish
-        run: steamcmd +login ${{ secrets.STEAM_USERNAME }} ${{ secrets.STEAM_PASSWORD }} ${{ steps.generate-code.outputs.code }} +workshop_build_item "${{ github.workspace }}/workshop_build.vdf" +quit
+      - name: Debug
+        run: cat "${{ github.workspace }}/workshop_build.vdf"
+
+#      - name: Steam Publish
+#        run: steamcmd +login ${{ secrets.STEAM_USERNAME }} ${{ secrets.STEAM_PASSWORD }} ${{ steps.generate-code.outputs.code }} +workshop_build_item "${{ github.workspace }}/workshop_build.vdf" +quit
