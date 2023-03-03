@@ -26,7 +26,7 @@ jobs:
         run: mvn -B -P github clean package
 
       - name: Zip
-        run: zip Race_Interactions "target/out/Race Interactions"
+        run: cd target/out/ && zip -r Race_Interactions "Race Interactions" && mv Race_Interactions.zip ../../ && cd ../../
 
       - name: Get versions
         run: |
