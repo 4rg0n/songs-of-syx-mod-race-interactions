@@ -37,5 +37,8 @@ jobs:
           }
           EOT
           
-      - name: Steam Publish
-        run: steamcmd +login ${{ secrets.STEAM_USERNAME }} ${{ secrets.STEAM_PASSWORD }} ${{ steps.generate.outputs.code }} +workshop_build_item "$(pwd)/item.vdf" +quit
+      - name: Debug
+        run: cat item.vdf
+          
+#      - name: Steam Publish
+#        run: steamcmd +login ${{ secrets.STEAM_USERNAME }} ${{ secrets.STEAM_PASSWORD }} ${{ steps.generate.outputs.code }} +workshop_build_item "$(pwd)/item.vdf" +quit
