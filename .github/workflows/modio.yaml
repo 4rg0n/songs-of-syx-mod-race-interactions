@@ -1,0 +1,27 @@
+name: Mod.io Publish
+on: workflow_dispatch
+
+jobs:
+  publish:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Fetch Github Release Asset
+        id: fetch-release
+        uses: dsaltares/fetch-gh-release-asset@1.1.0
+        with:
+          file: 'Race.Interactions.zip'
+          target: 'Race.Interactions.zip'
+
+      - uses: nickelc/upload-to-modio@v2.0.0
+        with:
+          token: ${{ secrets.MODIO_TOKEN }}
+          game: 1199
+          mod: 2828000
+          active: false
+          version: ${{ steps.fetch-release.outputs.version }}
+          changelog: |
+            ${{ steps.fetch-release.outputs.version }}
+          
+            ${{ steps.fetch-release.outputs.body }}
+          path: 'Race.Interactions.zip'
