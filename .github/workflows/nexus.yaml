@@ -26,7 +26,7 @@ jobs:
           unex upload 11 "Race.Interactions.zip" -v "${{ steps.fetch-release.outputs.version }}" ;
           unex changelog "${{ steps.fetch-release.outputs.version }}" "${{ steps.fetch-release.outputs.body }}"
         env:
-          UNEX_GAME: ${{ inputs.nexusmods_game_id }}
+          UNEX_GAME: songsofsyx
           UNEX_MODID: 11
           UNEX_FILENAME: 'Race Interactions'
           UNEX_FILEDESCRIPTION: ${{ steps.fetch-release.outputs.body }}
