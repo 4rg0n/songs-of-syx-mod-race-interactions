@@ -27,7 +27,7 @@ jobs:
 
       - name: Create vdf file
         run: |
-          cat << EOT > item.vdf
+          cat << EOT > workshop_build.vdf
           "workshopitem"
           {
               "appid" "1162750"
@@ -38,7 +38,7 @@ jobs:
           EOT
           
       - name: Debug
-        run: cat item.vdf
+        run: ls -la && cat workshop_build.vdf
           
-#      - name: Steam Publish
-#        run: steamcmd +login ${{ secrets.STEAM_USERNAME }} ${{ secrets.STEAM_PASSWORD }} ${{ steps.generate.outputs.code }} +workshop_build_item "$(pwd)/item.vdf" +quit
+      - name: Steam Publish
+        run: steamcmd +login ${{ secrets.STEAM_USERNAME }} ${{ secrets.STEAM_PASSWORD }} ${{ steps.generate.outputs.code }} +workshop_build_item "$(pwd)/workshop_build.vdf" +quit
