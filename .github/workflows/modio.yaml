@@ -20,8 +20,5 @@ jobs:
           mod: 2828000
           active: false
           version: ${{ steps.fetch-release.outputs.version }}
-          changelog: |
-            ${{ steps.fetch-release.outputs.version }}
-          
-            ${{ steps.fetch-release.outputs.body }}
+          changelog: ${{ steps.fetch-release.outputs.body }}
           path: 'Race.Interactions.zip'
