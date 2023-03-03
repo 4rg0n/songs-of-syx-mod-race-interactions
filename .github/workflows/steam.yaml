@@ -39,7 +39,7 @@ jobs:
               "publishedfileid" "2937853965"
               "visibility" "2"
               "contentfolder" "${{ github.workspace }}/Race Interactions/"
-              "changenote" "${{ steps.fetch-release.outputs.version }}"
+              "changenote" "${{ steps.fetch-release.outputs.version }}\n\n${{ env.CHANGENOTE }}"
           }
           EOT
 
