@@ -50,6 +50,7 @@ jobs:
         run: cat /home/runner/Steam/logs/stderr.txt
 
       - name: Upload Error Log
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: steam-error-log
