@@ -25,9 +25,6 @@ jobs:
         with:
           shared_secret: ${{ secrets.STEAM_2FASEED }}
 
-      - name: Steam Login
-        run: steamcmd +login ${{ secrets.STEAM_USERNAME }} ${{ secrets.STEAM_PASSWORD }} ${{ steps.generate.outputs.code }} +quit
-
       - name: Create vdf file
         run: |
           cat << EOT > item.vdf
@@ -40,5 +37,5 @@ jobs:
           }
           EOT
           
-      - name: Publish
-        run: steamcmd +workshop_build_item "$(pwd)/item.vdf" +quit
+      - name: Steam Publish
+        run: steamcmd +login ${{ secrets.STEAM_USERNAME }} ${{ secrets.STEAM_PASSWORD }} ${{ steps.generate.outputs.code }} +workshop_build_item "$(pwd)/item.vdf" +quit
