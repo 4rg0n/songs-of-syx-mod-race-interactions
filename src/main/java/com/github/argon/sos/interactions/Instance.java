@@ -30,11 +30,13 @@ final class Instance implements SCRIPT.SCRIPT_INSTANCE {
 
 	@Override
 	public void save(FilePutter file) {
+		log.debug("writing to save file");
 		configStore.saveGame(file);
 	}
 
 	@Override
 	public void load(FileGetter file) {
+		log.debug("loading from save file");
 		RaceInteractionsConfig config = configStore.loadSave(file)
 			.orElseGet(configStore::loadJsonOrDefault);
 		configStore.setCurrentConfig(config);

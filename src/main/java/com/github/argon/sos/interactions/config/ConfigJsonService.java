@@ -17,7 +17,7 @@ import java.util.Optional;
 import static com.github.argon.sos.interactions.config.RaceInteractionsConfig.FILE_NAME;
 
 /**
- * For saving, loading and building {@link RaceInteractionsConfig} as json
+ * For saving and loading {@link RaceInteractionsConfig} as json
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConfigJsonService {
@@ -26,15 +26,16 @@ public class ConfigJsonService {
     @Getter(lazy = true)
     private final static ConfigJsonService instance = new ConfigJsonService();
 
+    /**
+     * Configuration provided by the mod-files
+     */
     public Optional<RaceInteractionsConfig> loadModConfig() {
         PATH configPath = PATHS.INIT().getFolder("config");
         return load(configPath);
     }
 
     /**
-     * Loads mod configuration from profile once.
-     *
-     * @return already loaded config
+     * Configuration from games user profile
      */
     public Optional<RaceInteractionsConfig> loadProfileConfig() {
         PATH profiePath = PATHS.local().PROFILE;

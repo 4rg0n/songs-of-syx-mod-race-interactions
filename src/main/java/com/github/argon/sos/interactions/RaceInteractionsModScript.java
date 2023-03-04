@@ -5,6 +5,7 @@ import com.github.argon.sos.interactions.ai.AIModule_Race;
 import com.github.argon.sos.interactions.config.ConfigStore;
 import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
 import com.github.argon.sos.interactions.config.RacePrefCategory;
+import com.github.argon.sos.interactions.config.RaceStandingCategory;
 import com.github.argon.sos.interactions.game.SCRIPT;
 import com.github.argon.sos.interactions.game.api.GameAiApi;
 import com.github.argon.sos.interactions.game.api.GameRaceApi;
@@ -29,7 +30,10 @@ public final class RaceInteractionsModScript implements SCRIPT<RaceInteractionsC
 	public final static INFO MOD_INFO = new INFO(
 			"Race Interactions",
 			"Manipulates the likings of races to each other based on their equality in preferences: " +
-					Arrays.toString(RacePrefCategory.values()));
+				Arrays.toString(RacePrefCategory.values()) + ". " +
+				"Races nearby other liked races can get boosted standings: " +
+				Arrays.toString(RaceStandingCategory.values()));
+
 
 	private RaceService raceService;
 	private RaceInteractions raceInteractions;
@@ -85,6 +89,7 @@ public final class RaceInteractionsModScript implements SCRIPT<RaceInteractionsC
 
 	@Override
 	public void initGamePresent() {
+		// inject mod ai into game ai
 		GameAiApi.injectAIModule(aiModuleRace,
 			HTYPE.SUBJECT,
 			HTYPE.RETIREE,
@@ -94,6 +99,7 @@ public final class RaceInteractionsModScript implements SCRIPT<RaceInteractionsC
 			HTYPE.CHILD
 		);
 
+		// inject mod ui into game ui
 		UIGameConfig uiGameConfig = new UIGameConfig(configPanel);
 		uiGameConfig.init();
 	}

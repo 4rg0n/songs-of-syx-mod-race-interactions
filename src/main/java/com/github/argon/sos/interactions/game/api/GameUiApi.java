@@ -85,6 +85,9 @@ public class GameUiApi {
         VIEW.s().panels.add(panel, closeOthers);
     }
 
+    /**
+     * @return bottom build section of the game ui
+     */
     public Optional<GuiSection> getUIBuildPanelSection() {
         return findUIElement(UIBuildPanel.class)
                 .flatMap(uiBuildPanel -> ReflectionUtil.getField("section", uiBuildPanel)

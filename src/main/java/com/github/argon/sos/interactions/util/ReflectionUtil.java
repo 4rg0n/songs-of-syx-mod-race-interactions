@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 /**
- * For accessing game class properties
+ * For accessing game classes and properties, which are normally not public available
  */
 public class ReflectionUtil {
 

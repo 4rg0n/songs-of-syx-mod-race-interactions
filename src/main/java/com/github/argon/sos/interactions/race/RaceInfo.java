@@ -6,6 +6,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
+/**
+ * Just a container for future additions.
+ * No real usage yet.
+ */
 @ToString
 @Getter
 @Builder

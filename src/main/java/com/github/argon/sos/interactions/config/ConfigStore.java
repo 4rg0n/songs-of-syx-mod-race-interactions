@@ -1,7 +1,9 @@
 package com.github.argon.sos.interactions.config;
 
+import com.github.argon.sos.interactions.ai.PlanRaceInteract;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
+import com.github.argon.sos.interactions.ui.race.RaceInteractionsConfigPanel;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +13,12 @@ import snake2d.util.file.FilePutter;
 
 import java.util.Optional;
 
+/**
+ * For handling json and save game config.
+ * Stores different configs from different sources e.g. {@link ConfigStore#saveConfig}.
+ * Holds the {@link ConfigStore#currentConfig}, which is used by {@link RaceInteractionsConfigPanel}
+ * and the {@link PlanRaceInteract} classes. It serves as storage of the current used configuration.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConfigStore {
     private final static Logger log = Loggers.getLogger(ConfigStore.class);
@@ -30,6 +38,9 @@ public class ConfigStore {
     private final ConfigJsonService configJsonService = ConfigJsonService.getInstance();
     private final ConfigSaveService configSaveService = ConfigSaveService.getInstance();
 
+    /**
+     * Used by the mod as current configuration to apply and use
+     */
     public void setCurrentConfig(RaceInteractionsConfig currentConfig) {
         log.debug("Set current config to: %s", currentConfig);
         this.currentConfig = currentConfig;
@@ -48,6 +59,9 @@ public class ConfigStore {
         return Optional.ofNullable(currentConfig);
     }
 
+    /**
+     * @return configuration provided by the mod-files
+     */
     public Optional<RaceInteractionsConfig> getModConfig() {
         if (modConfig != null) {
             return Optional.of(modConfig);
@@ -59,6 +73,9 @@ public class ConfigStore {
         });
     }
 
+    /**
+     * @return configuration from the games user profile
+     */
     public Optional<RaceInteractionsConfig> getProfileConfig() {
         if (profileConfig != null) {
             return Optional.of(profileConfig);
@@ -70,14 +87,23 @@ public class ConfigStore {
         });
     }
 
+    /**
+     * @return configuration, which was loaded from the save game
+     */
     public Optional<RaceInteractionsConfig> getSaveConfig() {
         return Optional.ofNullable(saveConfig);
     }
 
+    /**
+     * Save into games user profile
+     */
     public void saveProfileConfig(RaceInteractionsConfig config) {
         configJsonService.saveProfileConfig(config);
     }
 
+    /**
+     * Save into save game
+     */
     public void saveGame(FilePutter filePutter) {
         getCurrentConfig().ifPresent(config -> {
             configSaveService.save(filePutter, config);
@@ -85,6 +111,9 @@ public class ConfigStore {
         });
     }
 
+    /**
+     * @return configuration read from save game
+     */
     public Optional<RaceInteractionsConfig> loadSave(FileGetter fileGetter) {
         Optional<RaceInteractionsConfig> raceInteractionsConfig = configSaveService.load(fileGetter).map(config -> {
             setSaveConfig(config);

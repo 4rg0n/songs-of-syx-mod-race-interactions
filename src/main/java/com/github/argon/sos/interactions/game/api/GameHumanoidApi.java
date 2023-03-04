@@ -18,6 +18,10 @@ import java.util.List;
 public class GameHumanoidApi {
     @Getter(lazy = true)
     private final static GameHumanoidApi instance = new GameHumanoidApi();
+
+    /**
+     * @return list of humanoids in radius nearby given humanoid
+     */
     public List<Humanoid> getNearbyHumanoids(Humanoid humanoid, int radius) {
         SComponent settlementComponent = SETT.PATH().finders().otherHumanoid.findComp(humanoid, radius);
         if (settlementComponent == null) {
@@ -72,6 +76,9 @@ public class GameHumanoidApi {
         return 0;
     }
 
+    /**
+     * @return average race liking between a humanoid and other humanoids
+     */
     public double avgRaceLikings(Humanoid humanoid, List<Humanoid> nearbyHumanoids, boolean ownRace) {
         double likeScore = 0d;
         Race race = humanoid.race();

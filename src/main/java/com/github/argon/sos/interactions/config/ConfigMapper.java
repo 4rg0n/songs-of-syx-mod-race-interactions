@@ -16,6 +16,10 @@ import java.util.Map;
 
 import static com.github.argon.sos.interactions.config.RaceInteractionsConfig.Default.*;
 
+/**
+ * For mapping {@link RaceInteractionsConfig} in and from json as also from and into the save file.
+ * Takes care of the different storage formats for the config.
+ */
 public class ConfigMapper {
     private final static Logger log = Loggers.getLogger(ConfigMapper.class);
 

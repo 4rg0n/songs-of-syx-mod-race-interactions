@@ -37,12 +37,18 @@ public class RaceService {
         );
     }
 
+    /**
+     * Sets the liking between two races
+     */
     public void setLiking(String raceName, String otherRaceName, double liking) {
         gameRaceApi.getRace(raceName)
             .ifPresent(race -> gameRaceApi.getRace(otherRaceName)
                 .ifPresent(otherRace -> gameRaceApi.setLiking(race, otherRace, liking)));
     }
 
+    /**
+     * @return whether race is a vanilla or modded
+     */
     public boolean isCustom(String name) {
         return !gameRaces.contains(name);
     }
@@ -53,6 +59,9 @@ public class RaceService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * @return list of custom modded races
+     */
     public List<Race> getCustomRaces() {
         return GameRaceApi.getInstance().getAll().stream()
                 .filter(race -> !gameRaces.contains(race.key))

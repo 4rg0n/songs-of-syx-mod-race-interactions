@@ -70,6 +70,9 @@ public class GameRaceApi {
         }
     }
 
+    /**
+     * For storing the game's default likings between races in memory
+     */
     public void initVanillaLikings() {
         if (vanillaLikings == null) {
             vanillaLikings = getAllLikings();
@@ -143,6 +146,9 @@ public class GameRaceApi {
         return STATS.POP().POP.data(cl).get(race, 0) + World.ARMIES().cityDivs().total(race);
     }
 
+    /**
+     * @return average happiness of races in the current settlement
+     */
     public double getAvgHappiness() {
         List<Race> races = getCitizenRaces();
         double allHappiness = races.stream()
@@ -153,6 +159,9 @@ public class GameRaceApi {
         return allHappiness / races.size();
     }
 
+    /**
+     * @return average loyalty of races in the current settlement
+     */
     public double getAvgLoyalty() {
         List<Race> races = getCitizenRaces();
         double allLoyalty = races.stream()
@@ -183,7 +192,9 @@ public class GameRaceApi {
             .get(race, 0);
     }
 
-
+    /**
+     * @return races in the settlement
+     */
     public List<Race> getCitizenRaces() {
        return getAll().stream()
            .filter(this::isCitizen)
