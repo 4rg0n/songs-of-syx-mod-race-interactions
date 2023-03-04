@@ -24,6 +24,9 @@ public class PlanRaceInteract {
 
 	private final ConfigStore configStore;
 
+	/**
+	 * For deciding when to execute the plan
+	 */
 	@Getter
 	private final AIData.AIDataBit cooldown = AI.bit();
 

@@ -42,6 +42,9 @@ public class StandConfigSection extends GuiSection {
         addDownC(5, container);
     }
 
+    /**
+     * Displays set configuration in the UI
+     */
     public void applyConfig(Map<RaceStandingCategory, Double> standWeightMap, int raceLookRange, boolean raceBoostSelf) {
         Map<RaceStandingCategory, INT.INTE> sliderValues = standSliderSection.getSliderValues();
 

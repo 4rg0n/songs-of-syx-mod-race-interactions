@@ -15,7 +15,7 @@ import java.util.logging.Level;
 public class Loggers {
     private final static Map<String, Logger> loggers = new HashMap<>();
 
-    public static Logger getLogger(@SuppressWarnings("rawtypes") Class clazz) {
+    public static Logger getLogger(Class<?> clazz) {
         return getLogger(clazz.getName());
     }
 
@@ -28,7 +28,7 @@ public class Loggers {
     }
 
 
-    public static void setLevel(@SuppressWarnings("rawtypes") Class clazz, Level level) {
+    public static void setLevel(Class<?> clazz, Level level) {
         setLevels(clazz.getName(), level);
     }
 

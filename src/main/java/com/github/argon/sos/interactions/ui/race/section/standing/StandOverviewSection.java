@@ -20,6 +20,9 @@ public class StandOverviewSection extends GuiSection {
         addDown(10, happinessSection());
     }
 
+    /**
+     * Meter, which displays the current average happiness of all the races in the settlement
+     */
     private GuiSection happinessSection() {
         GuiSection headerSection = new GuiSection();
         GuiSection meterSection = new GuiSection();
@@ -48,6 +51,9 @@ public class StandOverviewSection extends GuiSection {
         return section;
     }
 
+    /**
+     * Meter, which displays the current average loyalty of all the races in the settlement
+     */
     private GuiSection loyaltySection() {
         GuiSection headerSection = new GuiSection();
         GuiSection meterSection = new GuiSection();

@@ -139,7 +139,6 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         );
     }
 
-
     @Override
     protected void update(float seconds) {
         updateTimerSeconds += seconds;
@@ -163,7 +162,7 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
     private boolean isDirty() {
         return configStore.getCurrentConfig()
                 .map(currentConfig -> !getConfig().equals(currentConfig))
-                // no current config saved in memory
+                // no current config in memory
                 .orElse(true);
     }
 }
