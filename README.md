@@ -6,8 +6,15 @@ This will make the assignment of who likes who more dynamic.
 
 * **Steam** https://steamcommunity.com/sharedfiles/filedetails/?id=2937853965
 * **Mod.io** https://mod.io/g/songsofsyx/m/race-interactions
+* **NexusMods** https://www.nexusmods.com/songsofsyx/mods/11
 
 ![Logo](doc/img/logo2.png)
+
+## v2.0.0
+
+With version **v2.0.0** citizens became a new AI. They will now look for other races nearby. 
+The standings "Happiness", "Loyalty", "Expectations" and "Fulfillment" will get boosted for liked races.
+
 
 ## But why?!
 
@@ -33,7 +40,7 @@ It can also be saved and loaded from the games user profile for reusing it in an
 
 **(1)** Do all at once: Install games jar file as dependency; compile mod source; prepare mod file structure; copy mod files to game mod directory
 ```
-mvn validate install
+mvn -P install-local-game validate install
 ```
 
 **(!)** Game installation and mod directory paths are configured in the `pom.xml` in the `<profiles>` and are default set to:
@@ -55,7 +62,7 @@ mvn validate install
 
 **(i)** Installs only the games `SongsOfSyx.jar` and `info/SongsOfSyx-sources.jar` as a dependency, and validate whether it was successful.
 ```
-mvn validate
+mvn -P install-local-game validate
 ```
 
 **(!)** This is required or the project won't find the games code.
