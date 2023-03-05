@@ -3,12 +3,8 @@ package com.github.argon.sos.interactions.util;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.UndeclaredThrowableException;
-import java.util.Arrays;
-import java.util.Optional;
+import java.lang.reflect.*;
+import java.util.*;
 
 /**
  * For accessing game classes and properties, which are normally not public available
@@ -18,6 +14,8 @@ public class ReflectionUtil {
     private final static Logger log = Loggers.getLogger(ReflectionUtil.class);
 
     private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
+
+    private static final Type[] NO_TYPES = {};
 
     public static void setField(String fieldName, Object instance, Object newValue) throws NoSuchFieldException, IllegalAccessException {
         Field field = instance.getClass().getDeclaredField(fieldName);
@@ -112,5 +110,62 @@ public class ReflectionUtil {
             throw (Error) ex;
         }
         throw new UndeclaredThrowableException(ex);
+    }
+
+    public static Optional<Field> getField(String fieldName, Class<?> clazz) {
+        try {
+            return Optional.of(clazz.getDeclaredField(fieldName));
+        } catch (NoSuchFieldException e) {
+            log.warn("", e);
+            return Optional.empty();
+        }
+    }
+
+    public static Optional<Class<?>> getGenericClass(String fieldName, Class<?> clazz) {
+        return getField(fieldName, clazz)
+            .flatMap(ReflectionUtil::getGenericClass);
+    }
+
+    public static Optional<Class<?>> getGenericClass(Field field) {
+        List<Class<?>> classes = getGenericClasses(field);
+
+        if (classes.size() == 0) {
+            return Optional.empty();
+        }
+
+        return Optional.of(classes.get(0));
+    }
+
+    public static List<Class<?>> getGenericClasses(Field field) {
+        Type[] genericTypes = getGenericTypes(field);
+        List<Class<?>> classes = new ArrayList<>();
+
+        for (Type typeArgument : genericTypes) {
+            classes.add((Class<?>) typeArgument);
+        }
+
+        return classes;
+    }
+
+    public static Type[] getGenericTypes(Field field) {
+        Type fieldGenericType = field.getGenericType();
+        return getGenericTypes(fieldGenericType);
+    }
+
+    public static Type[] getGenericTypes(Type type) {
+        if (!(type instanceof ParameterizedType)) {
+            return NO_TYPES;
+        }
+
+        return getGenericTypes((ParameterizedType) type);
+    }
+
+    public static Type[] getGenericTypes(ParameterizedType parameterizedType) {
+        Type[] typeArguments = parameterizedType.getActualTypeArguments();
+        if (typeArguments.length == 0) {
+            return NO_TYPES;
+        }
+
+        return typeArguments;
     }
 }
