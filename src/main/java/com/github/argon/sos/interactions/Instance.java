@@ -41,6 +41,9 @@ final class Instance implements SCRIPT.SCRIPT_INSTANCE {
 			.orElseGet(configStore::loadJsonOrDefault);
 		configStore.setCurrentConfig(config);
 		script.initGameLoaded(config);
+
+		// todo load configs from other mods... config versioning?!
+		//      make other mods configs applicable via select box
 	}
 
 	@Override

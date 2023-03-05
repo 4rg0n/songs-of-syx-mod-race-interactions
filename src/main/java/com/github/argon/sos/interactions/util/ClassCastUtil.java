@@ -1,9 +1,16 @@
 package com.github.argon.sos.interactions.util;
 
+import com.github.argon.sos.interactions.log.Logger;
+import com.github.argon.sos.interactions.log.Loggers;
+
+import java.math.BigDecimal;
+import java.time.temporal.Temporal;
 import java.util.Arrays;
 import java.util.Collection;
 
 public class ClassCastUtil {
+    private final static Logger log = Loggers.getLogger(ClassCastUtil.class);
+
     public static boolean instanceOf(Object object, Class<?> clazz) {
         return instanceOf(object.getClass(), clazz);
     }
@@ -59,6 +66,7 @@ public class ClassCastUtil {
     }
 
     public static int toInt(Long aLong) {
+        log.info("Casting long %s to an int value. You may loose information here.", aLong);
         return aLong.intValue();
     }
 
@@ -71,6 +79,9 @@ public class ClassCastUtil {
             return toString((Enum<?>) object);
         } else if (object instanceof String) {
             return (String) object;
+        } else if (object instanceof Temporal) {
+            Temporal temporal = (Temporal) object;
+            return temporal.toString();
         } else {
             return object.toString();
         }
@@ -101,8 +112,7 @@ public class ClassCastUtil {
         int i = 0;
 
         for (Object object : longs) {
-            Long aLong = (Long) object;
-            ints[i] = aLong.intValue();
+            ints[i] = toInt((Long) object);
             i++;
         }
 
@@ -214,6 +224,28 @@ public class ClassCastUtil {
         return doubles;
     }
 
+    public static double[] toDoubleArray(BigDecimal[] bigDecimals) {
+        double[] doubles = new double[bigDecimals.length];
+
+        for (int i = 0, length = bigDecimals.length; i < length; i++) {
+            doubles[i] = toDouble(bigDecimals[i]);
+        }
+
+        return doubles;
+    }
+
+    public static double[] toDoubleArrayBigDecimal(Collection<?> bigDecimals) {
+        double[] doubles = new double[bigDecimals.size()];
+        int i = 0;
+
+        for (Object object : bigDecimals) {
+            doubles[i] = toDouble((BigDecimal) object);
+            i++;
+        }
+
+        return doubles;
+    }
+
     public static double[] toDoubleArrayFloat(Collection<?> floats) {
         double[] doubles = new double[floats.size()];
         int i = 0;
@@ -248,6 +280,10 @@ public class ClassCastUtil {
 
     public static double toDouble(Float aFloat) {
         return aFloat.doubleValue();
+    }
+
+    public static double toDouble(BigDecimal bigDecimal) {
+        return bigDecimal.doubleValue();
     }
 
     public static Object box(Object object) {

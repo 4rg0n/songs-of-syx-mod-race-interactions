@@ -10,18 +10,22 @@ public class MethodUtil {
         }
         String methodName = method.getName();
 
+        // get()
         if (methodName.startsWith("get") && methodName.length() == 3) {
             return true;
         }
 
+        // is()
         if (methodName.startsWith("is") && methodName.length() == 2) {
             return true;
         }
 
+        // isXxx...()
         if (methodName.startsWith("is") && methodName.length() > 2 && Character.isUpperCase(methodName.charAt(2))) {
             return true;
         }
 
+        // getXxx..()
         if (methodName.startsWith("get") && methodName.length() > 3 && Character.isUpperCase(methodName.charAt(3))) {
             return true;
         }

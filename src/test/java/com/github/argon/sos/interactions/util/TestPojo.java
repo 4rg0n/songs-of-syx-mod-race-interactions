@@ -3,13 +3,14 @@ package com.github.argon.sos.interactions.util;
 import lombok.Data;
 import org.assertj.core.util.Lists;
 
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
 @Data
 public class TestPojo {
     private String stringValue = "String";
+    private BigDecimal bigDecimal = BigDecimal.TEN;
 
     private Integer integerValue = 1;
     private int primitiveIntegerValue = 2;
@@ -35,8 +36,6 @@ public class TestPojo {
 
     private TestEnum testEnum = TestEnum.TEST1;
 
-    private LocalDateTime dateTime = LocalDateTime.now();
-
     private Integer[] integerArray = new Integer[]{1, 2, 3};
     private int[] primitiveIntegerArray = new int[]{4, 5, 6};
     private List<Integer> integerList = Lists.list(integerArray);
@@ -59,6 +58,9 @@ public class TestPojo {
     private Double[] doubleArray = new Double[]{1.1D, 2.2D, 3.3D};
     private double[] primitiveDoubleArray = new double[]{4.4d, 5.5d, 6.6d};
     private List<Double> doubleList = Lists.list(doubleArray);
+
+    private BigDecimal[] bigDecimalArray = new BigDecimal[]{BigDecimal.ONE, BigDecimal.TEN, BigDecimal.ZERO};
+    private List<BigDecimal> bigDecimalList = Lists.list(bigDecimalArray);
 
     private Float[] floatArray = new Float[]{1.1F, 2.2F, 3.3F};
     private float[] primitiveFloatArray = new float[]{4.4f, 5.5f, 6.6f};
@@ -89,6 +91,12 @@ public class TestPojo {
         "Pojo3", new TestNestedPojo()
     );
 
+    private Map<String, Map<String, List<TestNestedPojo>>> nestedMapNestedPojo =  MapUtil.of(
+        "Pojo1", MapUtil.of("Pojo1.1", nestedPojoList),
+        "Pojo2", MapUtil.of("Pojo2.1", nestedPojoList),
+        "Pojo3", MapUtil.of("Pojo3.1", nestedPojoList)
+    );
+
     @Data
     public static class TestNestedPojo {
         private String stringValue = "String";
@@ -116,8 +124,6 @@ public class TestPojo {
         private boolean primitiveBooleanValue = false;
 
         private TestEnum testEnum = TestEnum.TEST1;
-
-        private LocalDateTime dateTime = LocalDateTime.now();
 
         private Integer[] integerArray = new Integer[]{1, 2, 3};
         private int[] primitiveIntegerArray = new int[]{4, 5, 6};

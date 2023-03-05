@@ -1,12 +1,14 @@
 package com.github.argon.sos.interactions.log;
 
 
+import com.github.argon.sos.interactions.util.StringUtil;
 import lombok.Getter;
 import lombok.Setter;
 import snake2d.LOG;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -169,12 +171,18 @@ public class Logger {
     private String stringifyValue(Object arg) {
         if (arg instanceof Double) {
             return String.format("%1$,.4f", (Double) arg);
+        } else if (arg instanceof Map) {
+            return StringUtil.toString((Map<?, ?>) arg);
+        } else if (arg instanceof Object[]) {
+            return StringUtil.toString((Object[]) arg);
+        } else if (arg.getClass().isArray()) {
+            return StringUtil.toStringPrimitiveArray(arg);
         } else {
             return arg.toString();
         }
     }
 
     private String timestamp() {
-        return "[" + LocalDateTime.now() + "]";
+        return "[" + LocalTime.now() + "]";
     }
 }
