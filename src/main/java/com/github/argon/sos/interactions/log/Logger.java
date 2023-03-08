@@ -169,7 +169,9 @@ public class Logger {
     }
 
     private String stringifyValue(Object arg) {
-        if (arg instanceof Double) {
+        if (arg instanceof String) {
+            return (String) arg;
+        } if (arg instanceof Double) {
             return String.format("%1$,.4f", (Double) arg);
         } else if (arg instanceof Map) {
             return StringUtil.toString((Map<?, ?>) arg);

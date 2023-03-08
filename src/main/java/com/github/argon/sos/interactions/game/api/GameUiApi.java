@@ -90,7 +90,7 @@ public class GameUiApi {
      */
     public Optional<GuiSection> getUIBuildPanelSection() {
         return findUIElement(UIBuildPanel.class)
-                .flatMap(uiBuildPanel -> ReflectionUtil.getField("section", uiBuildPanel)
+                .flatMap(uiBuildPanel -> ReflectionUtil.getDeclaredField("section", uiBuildPanel)
                 .map(GuiSection.class::cast));
     }
 
@@ -113,7 +113,7 @@ public class GameUiApi {
      * Tries to find an ui element by class in {@link VIEW#current()} ui manager.
      */
     public <T> Optional<T> findUIElementInCurrentView(Class<T> clazz) {
-        return ReflectionUtil.getField("inters", currentView().uiManager)
+        return ReflectionUtil.getDeclaredField("inters", currentView().uiManager)
                 .flatMap(inters -> extractFromIterable((Iterable<?>) inters, clazz));
     }
 
@@ -121,7 +121,7 @@ public class GameUiApi {
      * Tries to find an ui element by class in {@link VIEW#s()} ui manager.
      */
     public <T> Optional<T> findUIElementInSettlementView(Class<T> clazz) {
-        return ReflectionUtil.getField("inters", settlement().uiManager)
+        return ReflectionUtil.getDeclaredField("inters", settlement().uiManager)
                 .flatMap(inters -> extractFromIterable((Iterable<?>) inters, clazz));
     }
 
@@ -129,9 +129,9 @@ public class GameUiApi {
      * Ui elements in popups are only available when displayed.
      */
     public <T> Optional<T> findUIElementInPopups(Class<T> clazz) {
-        return ReflectionUtil.getField("m", interrupters().popup)
+        return ReflectionUtil.getDeclaredField("m", interrupters().popup)
                 .flatMap(uiManager ->
-                    ReflectionUtil.getField("inters", uiManager).flatMap(inters ->
+                    ReflectionUtil.getDeclaredField("inters", uiManager).flatMap(inters ->
                         extractFromIterable((Iterable<?>) inters, clazz))
                 );
     }

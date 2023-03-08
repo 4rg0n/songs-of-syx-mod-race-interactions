@@ -116,7 +116,7 @@ public class GameRaceApi {
      */
     public void setLiking(Race race, Race otherRace, double liking) {
         try {
-            ReflectionUtil.getField("others", race.pref())
+            ReflectionUtil.getDeclaredField("others", race.pref())
                 .map(o -> (double[]) o)
                 .ifPresent(racePrefs -> {
                     Integer otherRaceIdx = raceIndexMap.get(otherRace.key);

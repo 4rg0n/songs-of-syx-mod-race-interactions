@@ -20,7 +20,7 @@ public class GameAiApi {
     private final static GameAiApi instance = new GameAiApi();
 
     public static void injectAIModule(AIModule module, HTYPE... humanoidTypes) {
-        ReflectionUtil.getField("modules", AI.modules())
+        ReflectionUtil.getDeclaredField("modules", AI.modules())
             .map(o -> (AIModule[][]) o)
             .ifPresent(aiModules -> {
                 for (HTYPE humanoidType : humanoidTypes) {

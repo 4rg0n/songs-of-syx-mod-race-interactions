@@ -4,7 +4,11 @@ import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
 
 import java.lang.reflect.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * For accessing game classes and properties, which are normally not public available
@@ -30,17 +34,17 @@ public class ReflectionUtil {
         field.set(instance, newValue);
     }
 
-    public static <T> Optional<T> getField(String fieldName, Object instance)  {
+    public static <T> Optional<T> getDeclaredField(String fieldName, Object instance)  {
         try {
             Field field = instance.getClass().getDeclaredField(fieldName);
-            return getField(field, instance);
+            return getDeclaredField(field, instance);
         } catch (NoSuchFieldException e) {
             log.error("Field %s does not exist", fieldName, e);
             return Optional.empty();
         }
     }
 
-    public static <T> Optional<T> getField(Field field, Object instance) {
+    public static <T> Optional<T> getDeclaredField(Field field, Object instance) {
         field.setAccessible(true);
 
         try {
@@ -49,6 +53,24 @@ public class ReflectionUtil {
         } catch (Exception e) {
             log.error("Can not access field %s in %s.",
                     field.getName(), instance.getClass().getSimpleName(), e);
+            return Optional.empty();
+        }
+    }
+
+    public static Optional<Field> getDeclaredField(String fieldName, Class<?> clazz) {
+        try {
+            return Optional.of(clazz.getDeclaredField(fieldName));
+        } catch (NoSuchFieldException e) {
+            log.warn("Can not access field %s in %s.", fieldName, clazz.getSimpleName(), e);
+            return Optional.empty();
+        }
+    }
+
+    public static Optional<Field> getField(String fieldName, Class<?> clazz) {
+        try {
+            return Optional.of(clazz.getField(fieldName));
+        } catch (NoSuchFieldException e) {
+            log.warn("Can not access field %s in %s.", fieldName, clazz.getSimpleName(), e);
             return Optional.empty();
         }
     }
@@ -69,6 +91,10 @@ public class ReflectionUtil {
         }
 
         return invokeMethod(method, instance, args);
+    }
+
+    public static Object invokeMethodOneArgument(Method method, Object instance, Object arg) {
+        return invokeMethod(method, instance, arg);
     }
 
     public static Object invokeMethod(Method method, Object instance, Object... args) {
@@ -112,17 +138,8 @@ public class ReflectionUtil {
         throw new UndeclaredThrowableException(ex);
     }
 
-    public static Optional<Field> getField(String fieldName, Class<?> clazz) {
-        try {
-            return Optional.of(clazz.getDeclaredField(fieldName));
-        } catch (NoSuchFieldException e) {
-            log.warn("", e);
-            return Optional.empty();
-        }
-    }
-
     public static Optional<Class<?>> getGenericClass(String fieldName, Class<?> clazz) {
-        return getField(fieldName, clazz)
+        return getDeclaredField(fieldName, clazz)
             .flatMap(ReflectionUtil::getGenericClass);
     }
 
@@ -167,5 +184,10 @@ public class ReflectionUtil {
         }
 
         return typeArguments;
+    }
+
+    public static boolean hasNoArgsConstructor(Class<?> clazz) {
+        return Stream.of(clazz.getConstructors())
+            .anyMatch((c) -> c.getParameterCount() == 0);
     }
 }
