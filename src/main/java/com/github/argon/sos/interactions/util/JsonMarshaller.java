@@ -19,6 +19,11 @@ import static com.github.argon.sos.interactions.util.ClassUtil.instanceOf;
 import static com.github.argon.sos.interactions.util.MethodUtil.*;
 import static com.github.argon.sos.interactions.util.PrimitivesCastUtil.*;
 
+/**
+ * For transforming an object with getter methods to the games json configuration format
+ *
+ * (unfinished :x)
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JsonMarshaller {
 

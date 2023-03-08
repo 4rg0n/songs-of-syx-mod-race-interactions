@@ -23,6 +23,11 @@ import static com.github.argon.sos.interactions.util.ClassUtil.instanceOf;
 import static com.github.argon.sos.interactions.util.MethodUtil.*;
 import static com.github.argon.sos.interactions.util.ReflectionUtil.invokeMethodOneArgument;
 
+/**
+ * For transforming the games configuration into an object with setter methods
+ *
+ * (unfinished :x)
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JsonUnmarshaller {
 
