@@ -15,30 +15,34 @@ import java.util.Collection;
 import java.util.Map;
 
 import static com.github.argon.sos.interactions.util.ClassCastUtil.*;
-import static com.github.argon.sos.interactions.util.MethodUtil.isGetterMethod;
+import static com.github.argon.sos.interactions.util.ClassUtil.instanceOf;
+import static com.github.argon.sos.interactions.util.MethodUtil.*;
+import static com.github.argon.sos.interactions.util.PrimitivesCastUtil.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class JsonConverter {
+public class JsonMarshaller {
 
-    private final static Logger log = Loggers.getLogger(JsonConverter.class);
+    private final static Logger log = Loggers.getLogger(JsonMarshaller.class);
 
     @Getter(lazy = true)
-    private final static JsonConverter instance = new JsonConverter();
+    private final static JsonMarshaller instance = new JsonMarshaller();
 
     public JsonE fromPojo(Object object) {
         Class<?> clazz = object.getClass();
         JsonE json = new JsonE();
 
-        log.debug("> CONVERTING Pojo %s", clazz.getCanonicalName());
+        // todo optional implement Serializable + version check
+
+        log.debug("> MARSHALL Pojo %s", clazz.getCanonicalName());
         for (Method method : clazz.getDeclaredMethods()) {
             if (!isGetterMethod(method)) {
                 continue;
             }
 
-            String fieldName = extractFieldName(method);
-            Field field = ReflectionUtil.getField(fieldName, clazz)
+            String fieldName = extractSetterGetterFieldName(method);
+            Field field = ReflectionUtil.getDeclaredField(fieldName, clazz)
                 .orElseThrow(() -> new JsonConversionException(
-                    "No field for getter method " + method.getName() + " in class " + clazz.getCanonicalName()));
+                    "No field for getter method " + method.getName() + " in " + clazz.getCanonicalName()));
             Type fieldType = field.getGenericType();
 
             Object returned;
@@ -50,7 +54,7 @@ public class JsonConverter {
             }
 
             String key = toJsonKey(method);
-            log.trace("Converting %s from '%s()' for '%s' with %s",
+            log.trace("Marshall %s from '%s()' for '%s' with %s",
                 returned, method.getName(), key, fieldType.getTypeName());
             insertValue(json, key, returned, fieldType);
         }
@@ -60,7 +64,7 @@ public class JsonConverter {
 
     public JsonE fromMap(Map<?, ?> map, Type genericValueType) {
         JsonE json = new JsonE();
-        log.trace("> CONVERTING Map<?, ?> with value type %s", genericValueType.getTypeName());
+        log.trace("> MARSHALL Map<?, ?> with value type %s", genericValueType.getTypeName());
 
         map.forEach((mapkey, mapValue) -> {
             String key = ClassCastUtil.toString(mapkey);
@@ -71,9 +75,9 @@ public class JsonConverter {
         return json;
     }
 
-    public JsonE[] fromObjectArray(Object[] objects) {
+    private JsonE[] fromObjectArray(Object[] objects) {
         JsonE[] jsons = new JsonE[objects.length];
-        log.trace("> CONVERTING Object[] %s", objects.getClass().getTypeName());
+        log.trace("> MARSHALL Object[] %s", objects.getClass().getTypeName());
 
         for (int i = 0, objectsLength = objects.length; i < objectsLength; i++) {
             Object object = objects[i];
@@ -84,15 +88,14 @@ public class JsonConverter {
         return jsons;
     }
 
-    public JsonE[] fromCollection(Collection<?> objects) {
+    private JsonE[] fromCollection(Collection<?> objects, Class<?> genericClass) {
         JsonE[] jsons = new JsonE[objects.size()];
-        int i = 0;
-        log.trace("CONVERTING Collection<?> %s", objects.getClass().getTypeName());
 
-        for (Object object : objects) {
-            // recursion
-            jsons[i] = fromPojo(object);
-            i++;
+        if (instanceOf(genericClass, Collection.class) || genericClass.isArray()) {
+            throw new JsonConversionException("No list in lists possible =(");
+        } else if (instanceOf(genericClass, Map.class)) {
+
+        } else {
         }
 
         return jsons;
@@ -102,11 +105,11 @@ public class JsonConverter {
         if (value instanceof Integer) {
             json.add(key, (int) value);
         } else if (value instanceof Long) {
-            json.add(key, toInt((Long) value));
+            json.add(key, toInteger((Long) value));
         } else if (value instanceof Byte) {
-            json.add(key, toInt((Byte) value));
+            json.add(key, toInteger((Byte) value));
         } else if (value instanceof Short) {
-            json.add(key, toInt((Short) value));
+            json.add(key, toInteger((Short) value));
         } else if (value instanceof String) {
             json.addString(key, (String) value);
         } else if (value instanceof Double) {
@@ -141,23 +144,23 @@ public class JsonConverter {
 
     private JsonE injectArray(JsonE json, String key, Object objects) {
         if (objects instanceof Integer[]) {
-            json.add(key, toIntArray((Integer[]) objects));
+            json.add(key, PrimitivesCastUtil.toIntegerArray((Integer[]) objects));
         } else if (objects instanceof int[]) {
             json.add(key, (int[]) objects);
         } else if (objects instanceof Long[]) {
-            json.add(key, toIntArray((Long[]) objects));
+            json.add(key, PrimitivesCastUtil.toIntegerArray((Long[]) objects));
         } else if (objects instanceof BigDecimal[]) {
             json.add(key, toDoubleArray((BigDecimal[]) objects));
         } else if (objects instanceof long[]) {
-            json.add(key, toIntArray((long[]) objects));
+            json.add(key, PrimitivesCastUtil.toIntegerArray((long[]) objects));
         } else if (objects instanceof Byte[]) {
-            json.add(key, toIntArray((Byte[]) objects));
+            json.add(key, PrimitivesCastUtil.toIntegerArray((Byte[]) objects));
         } else if (objects instanceof byte[]) {
-            json.add(key, toIntArray((byte[]) objects));
+            json.add(key, PrimitivesCastUtil.toIntegerArray((byte[]) objects));
         } else if (objects instanceof Short[]) {
-            json.add(key, toIntArray((Short[]) objects));
+            json.add(key, PrimitivesCastUtil.toIntegerArray((Short[]) objects));
         } else if (objects instanceof short[]) {
-            json.add(key, toIntArray((short[]) objects));
+            json.add(key, PrimitivesCastUtil.toIntegerArray((short[]) objects));
         } else if (objects instanceof Enum[]) {
             json.addStrings(key, toStringArray((Enum<?>[]) objects));
         } else if (objects instanceof String[]) {
@@ -174,7 +177,7 @@ public class JsonConverter {
             // recursion
             json.add(key, fromObjectArray((Object[]) objects));
         } else {
-            throw new JsonConversionException("Unknown class to inject as array: " + objects.getClass().getTypeName());
+            throw new JsonConversionException("Unknown class to inject into " + key + " as array: " + objects.getClass().getTypeName());
         }
 
         return json;
@@ -183,57 +186,40 @@ public class JsonConverter {
     private JsonE injectCollection(JsonE json, String key, Collection<?> objects, Type genericType) {
         Class<?> genericClass = (Class<?>) genericType;
         if (instanceOf(genericClass, Integer.class)) {
-            json.add(key, toIntArrayInteger(objects));
+            json.add(key, toIntegerArrayInteger(objects));
         } else if (instanceOf(genericClass, Long.class)) {
-            json.add(key, toIntArrayLong(objects));
+            json.add(key, toIntegerArrayLong(objects));
         } else if (instanceOf(genericClass, Byte.class)) {
-            json.add(key, toIntArrayByte(objects));
+            json.add(key, toIntegerArrayByte(objects));
         } else if (instanceOf(genericClass, Short.class)) {
-            json.add(key, toIntArrayShort(objects));
-        }  else if (instanceOf(genericClass, String.class)) {
+            json.add(key, toIntegerArrayShort(objects));
+        } else if (instanceOf(genericClass, String.class)) {
             json.addStrings(key, toStringArrayString(objects));
         } else if (instanceOf(genericClass, Double.class)) {
             json.add(key, toDoubleArrayDouble(objects));
         } else if (instanceOf(genericClass, Float.class)) {
             json.add(key, toDoubleArrayFloat(objects));
         } else if (instanceOf(genericClass, BigDecimal.class)) {
-            json.add(key, toDoubleArrayBigDecimal(objects));
+            json.add(key, toeDoubleArrayBigDecimal(objects));
         } else if (instanceOf(genericClass, Enum.class)) {
             json.add(key, toStringArrayEnum(objects));
-        } else {
-            JsonE[] jsons = fromCollection(objects);
+        } else if (instanceOf(genericClass, Collection.class)) {
+            JsonE[] jsons = fromCollection(objects, genericClass);
             // recursion
             json.add(key, jsons);
+        } else if (instanceOf(genericClass, Map.class)) {
+            // todo does not work?
+            Type[] genericTypes = ReflectionUtil.getGenericTypes(genericType);
+            JsonE jsonMap = fromMap((Map<?, ?>) objects, genericTypes[1]);
+            json.add(key, jsonMap);
+        }else if (genericClass.isArray()) {
+            // todo
+        } else {
+            throw new JsonConversionException("Unknown class to inject into " + key + " as collection: " + genericType.getTypeName());
         }
 
         return json;
     }
 
-    private String toJsonKey(Method method) {
-        String methodName = method.getName();
-        String name = stripMethodPrefix(methodName);
 
-        return StringUtil.toScreamingSnakeCase(name);
-    }
-
-    private String extractFieldName(Method method) {
-        String methodName = method.getName();
-        String name = stripMethodPrefix(methodName);
-
-        return StringUtil.unCapitalize(name);
-    }
-
-    private String stripMethodPrefix(String methodName) {
-        String name;
-
-        if (methodName.startsWith("get") || methodName.startsWith("set")) {
-            name = methodName.substring(3);
-        } else if (methodName.startsWith("is")) {
-            name = methodName.substring(2);
-        } else {
-            name = methodName;
-        }
-
-        return name;
-    }
 }

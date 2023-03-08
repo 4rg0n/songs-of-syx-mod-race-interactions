@@ -1,39 +1,36 @@
 package com.github.argon.sos.interactions.util;
 
-import com.github.argon.sos.interactions.log.Logger;
-import com.github.argon.sos.interactions.log.Loggers;
-
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.time.temporal.Temporal;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class ClassCastUtil {
-    private final static Logger log = Loggers.getLogger(ClassCastUtil.class);
-
-    public static boolean instanceOf(Object object, Class<?> clazz) {
-        return instanceOf(object.getClass(), clazz);
+    public static Long toLong(int integer) {
+        return (long) integer;
     }
 
-    public static boolean instanceOf(Object object, Object otherObject) {
-        return instanceOf(object.getClass(), otherObject.getClass());
+    public static Byte toByte(int integer) {
+        return (byte) integer;
     }
 
-    public static boolean instanceOf(Class<?> clazz, Class<?> otherClazz) {
-        if (clazz.getCanonicalName().equals(otherClazz.getCanonicalName())) {
-            return true;
-        }
-
-        if (otherClazz.isAssignableFrom(clazz)) {
-            return true;
-        }
-
-        return false;
+    public static Short toShort(int integer) {
+        return (short) integer;
     }
 
+    public static Float toFloat(double aDouble) {
+        return (float) aDouble;
+    }
 
-    public static Object[] toArray(Object object) {
-        return (Object[]) object;
+    public static BigDecimal toBigDecimal(double aDouble) {
+        return BigDecimal.valueOf(aDouble);
+    }
+
+    public static Enum<?> toEnum(String string, Class<?> clazz) {
+        //noinspection unchecked,rawtypes
+        return Enum.valueOf((Class<Enum>) clazz, string);
     }
 
     public static String[] toStringArray(Object[] objects) {
@@ -48,7 +45,10 @@ public class ClassCastUtil {
     }
 
     public static String[] toStringArrayString(Collection<?> strings) {
-        return strings.toArray(strings.toArray(new String[0]));
+        //noinspection SuspiciousToArrayCall
+        return strings.toArray(
+            strings.toArray(new String[0])
+        );
     }
 
     public static String[] toStringArrayEnum(Collection<?> enums) {
@@ -59,19 +59,6 @@ public class ClassCastUtil {
 
     public static String toString(Enum<?> aEnum) {
         return aEnum.name();
-    }
-
-    public static int toInt(Short sShort) {
-        return sShort.intValue();
-    }
-
-    public static int toInt(Long aLong) {
-        log.info("Casting long %s to an int value. You may loose information here.", aLong);
-        return aLong.intValue();
-    }
-
-    public static int toInt(Byte aByte) {
-        return aByte.intValue();
     }
 
     public static String toString(Object object) {
@@ -87,210 +74,92 @@ public class ClassCastUtil {
         }
     }
 
-    public static int[] toIntArray(long[] longs) {
-        int[] ints = new int[longs.length];
+    public static Enum<?>[] toEnumArray(String[] strings, Class<?> clazz) {
+        Enum<?>[] enums = (Enum<?>[]) Array.newInstance(clazz, strings.length);
 
-        for (int i = 0, length = longs.length; i < length; i++) {
-            ints[i] = (int) longs[i];
+        for (int i = 0, length = strings.length; i < length; i++) {
+            enums[i] = toEnum(strings[i], clazz);
         }
 
-        return ints;
+        return enums;
     }
 
-    public static int[] toIntArray(Long[] longs) {
-        int[] ints = new int[longs.length];
+    public static Double[] toDoubleArray(double[] primitiveDoubles) {
+        Double[] doubles = new Double[primitiveDoubles.length];
 
-        for (int i = 0, length = longs.length; i < length; i++) {
-            ints[i] = toInt(longs[i]);
-        }
-
-        return ints;
-    }
-
-    public static int[] toIntArrayLong(Collection<?> longs) {
-        int[] ints = new int[longs.size()];
-        int i = 0;
-
-        for (Object object : longs) {
-            ints[i] = toInt((Long) object);
-            i++;
-        }
-
-        return ints;
-    }
-
-    public static int[] toIntArray(byte[] bytes) {
-        int[] ints = new int[bytes.length];
-
-        for (int i = 0, length = bytes.length; i < length; i++) {
-            ints[i] = bytes[i];
-        }
-
-        return ints;
-    }
-
-    public static int[] toIntArray(Byte[] bytes) {
-        int[] ints = new int[bytes.length];
-
-        for (int i = 0, length = bytes.length; i < length; i++) {
-            ints[i] = bytes[i];
-        }
-
-        return ints;
-    }
-
-    public static int[] toIntArrayByte(Collection<?> bytes) {
-        int[] ints = new int[bytes.size()];
-        int i = 0;
-
-        for (Object object : bytes) {
-            Byte aByte = (Byte) object;
-            ints[i] = aByte;
-            i++;
-        }
-
-        return ints;
-    }
-
-    public static int[] toIntArray(short[] shorts) {
-        int[] ints = new int[shorts.length];
-
-        for (int i = 0, length = shorts.length; i < length; i++) {
-            ints[i] = shorts[i];
-        }
-
-        return ints;
-    }
-
-    public static int[] toIntArray(Short[] shorts) {
-        int[] ints = new int[shorts.length];
-
-        for (int i = 0, length = shorts.length; i < length; i++) {
-            ints[i] = shorts[i];
-        }
-
-        return ints;
-    }
-
-    public static int[] toIntArrayShort(Collection<?> shorts) {
-        int[] ints = new int[shorts.size()];
-        int i = 0;
-
-        for (Object object : shorts) {
-            Short aShort = (Short) object;
-            ints[i] = aShort;
-            i++;
-        }
-
-        return ints;
-    }
-
-    public static int[] toIntArray(Integer[] integers) {
-        return Arrays.stream(integers)
-            .mapToInt(Integer::intValue)
-            .toArray();
-    }
-
-    public static int[] toIntArrayInteger(Collection<?> integers) {
-        int[] ints = new int[integers.size()];
-        int i = 0;
-
-        for (Object object : integers) {
-            Integer integer = (Integer) object;
-            ints[i] = integer;
-            i++;
-        }
-
-        return ints;
-    }
-
-    public static double[] toDoubleArray(float[] floats) {
-        double[] doubles = new double[floats.length];
-
-        for (int i = 0, length = floats.length; i < length; i++) {
-            doubles[i] = floats[i];
+        for (int i = 0, length = primitiveDoubles.length; i < length; i++) {
+            doubles[i] = primitiveDoubles[i];
         }
 
         return doubles;
     }
 
-    public static double[] toDoubleArray(Float[] floats) {
-        double[] doubles = new double[floats.length];
+    public static Float[] toFloatArray(double[] primitiveDoubles) {
+        Float[] floats = new Float[primitiveDoubles.length];
 
-        for (int i = 0, length = floats.length; i < length; i++) {
-            doubles[i] = toDouble(floats[i]);
+        for (int i = 0, length = primitiveDoubles.length; i < length; i++) {
+            floats[i] = toFloat(primitiveDoubles[i]);
         }
 
-        return doubles;
+        return floats;
     }
 
-    public static double[] toDoubleArray(BigDecimal[] bigDecimals) {
-        double[] doubles = new double[bigDecimals.length];
+    public static Integer[] toIntegerArray(int[] primitiveIntegers) {
+        Integer[] integers = new Integer[primitiveIntegers.length];
 
-        for (int i = 0, length = bigDecimals.length; i < length; i++) {
-            doubles[i] = toDouble(bigDecimals[i]);
+        for (int i = 0, length = primitiveIntegers.length; i < length; i++) {
+            integers[i] = primitiveIntegers[i];
         }
 
-        return doubles;
+        return integers;
     }
 
-    public static double[] toDoubleArrayBigDecimal(Collection<?> bigDecimals) {
-        double[] doubles = new double[bigDecimals.size()];
-        int i = 0;
+    public static Long[] toLongArray(int[] primitiveIntegers) {
+        Long[] longs = new Long[primitiveIntegers.length];
 
-        for (Object object : bigDecimals) {
-            doubles[i] = toDouble((BigDecimal) object);
-            i++;
+        for (int i = 0, length = primitiveIntegers.length; i < length; i++) {
+            longs[i] = toLong(primitiveIntegers[i]);
         }
 
-        return doubles;
+        return longs;
     }
 
-    public static double[] toDoubleArrayFloat(Collection<?> floats) {
-        double[] doubles = new double[floats.size()];
-        int i = 0;
+    public static Byte[] toByteArray(int[] primitiveIntegers) {
+        Byte[] bytes = new Byte[primitiveIntegers.length];
 
-        for (Object object : floats) {
-            Float aFloat = (Float) object;
-            doubles[i] = aFloat;
-            i++;
+        for (int i = 0, length = primitiveIntegers.length; i < length; i++) {
+            bytes[i] = toByte(primitiveIntegers[i]);
         }
 
-        return doubles;
+        return bytes;
     }
 
-    public static double[] toDoubleArray(Double[] doubles) {
-        return Arrays.stream(doubles)
-            .mapToDouble(Double::doubleValue)
-            .toArray();
-    }
+    public static Short[] toShortArray(int[] primitiveIntegers) {
+        Short[] shorts = new Short[primitiveIntegers.length];
 
-    public static double[] toDoubleArrayDouble(Collection<?> doublesCol) {
-        double[] doubles = new double[doublesCol.size()];
-        int i = 0;
-
-        for (Object object : doublesCol) {
-            Double aDouble = (Double) object;
-            doubles[i] = aDouble;
-            i++;
+        for (int i = 0, length = primitiveIntegers.length; i < length; i++) {
+            shorts[i] = toShort(primitiveIntegers[i]);
         }
 
-        return doubles;
+        return shorts;
     }
 
-    public static double toDouble(Float aFloat) {
-        return aFloat.doubleValue();
-    }
+    public static BigDecimal[] toBigDecimalArray(double[] primitiveDoubles) {
+        BigDecimal[] bigDecimals = new BigDecimal[primitiveDoubles.length];
 
-    public static double toDouble(BigDecimal bigDecimal) {
-        return bigDecimal.doubleValue();
-    }
+        for (int i = 0, length = primitiveDoubles.length; i < length; i++) {
+            bigDecimals[i] = toBigDecimal(primitiveDoubles[i]);
+        }
 
-    public static Object box(Object object) {
-        return object;
+        return bigDecimals;
     }
 
     public static boolean isArray(Object object) {
         return object.getClass().isArray();
+    }
+
+    public static <T> Collection<T> toCollection(T[] objects) {
+       return Arrays.stream(objects)
+           .collect(Collectors.toList());
     }
 }

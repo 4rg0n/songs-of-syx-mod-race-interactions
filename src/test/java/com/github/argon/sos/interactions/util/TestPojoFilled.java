@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-public class TestPojo {
+public class TestPojoFilled {
     private String stringValue = "String";
     private BigDecimal bigDecimal = BigDecimal.TEN;
 
@@ -69,9 +69,9 @@ public class TestPojo {
     private TestEnum[] enumArray = new TestEnum[]{TestEnum.TEST1, TestEnum.TEST2, TestEnum.TEST3};
     private List<TestEnum> enumList = Lists.list(enumArray);
 
-    private TestNestedPojo nestedPojo = new TestNestedPojo();
-    private TestNestedPojo[] nestedPojoArray = new TestNestedPojo[]{new TestNestedPojo(), new TestNestedPojo(), new TestNestedPojo()};
-    private List<TestNestedPojo> nestedPojoList = Lists.list(nestedPojoArray);
+    private NestedPojo nestedPojo = new NestedPojo();
+    private NestedPojo[] nestedPojoArray = new NestedPojo[]{new NestedPojo(), new NestedPojo(), new NestedPojo()};
+    private List<NestedPojo> nestedPojoList = Lists.list(nestedPojoArray);
 
     private Map<String, Integer> mapStringInteger = MapUtil.of(
         "Test1", 1,
@@ -85,20 +85,20 @@ public class TestPojo {
         TestEnum.TEST2, 3.3d
     );
 
-    private Map<String, TestNestedPojo> mapStringNestedPojo = MapUtil.of(
-        "Pojo1", new TestNestedPojo(),
-        "Pojo2", new TestNestedPojo(),
-        "Pojo3", new TestNestedPojo()
+    private Map<String, NestedPojo> mapStringNestedPojo = MapUtil.of(
+        "Pojo1", new NestedPojo(),
+        "Pojo2", new NestedPojo(),
+        "Pojo3", new NestedPojo()
     );
 
-    private Map<String, Map<String, List<TestNestedPojo>>> nestedMapNestedPojo =  MapUtil.of(
+    private Map<String, Map<String, List<NestedPojo>>> nestedMapNestedPojo =  MapUtil.of(
         "Pojo1", MapUtil.of("Pojo1.1", nestedPojoList),
         "Pojo2", MapUtil.of("Pojo2.1", nestedPojoList),
         "Pojo3", MapUtil.of("Pojo3.1", nestedPojoList)
     );
 
     @Data
-    public static class TestNestedPojo {
+    public static class NestedPojo {
         private String stringValue = "String";
 
         private Integer integerValue = 1;
@@ -150,9 +150,5 @@ public class TestPojo {
 
         private TestEnum[] enumArray = new TestEnum[]{TestEnum.TEST1, TestEnum.TEST2, TestEnum.TEST3};
         private List<TestEnum> enumList = Lists.list(enumArray);
-    }
-
-    public enum TestEnum {
-        TEST1, TEST2, TEST3
     }
 }
