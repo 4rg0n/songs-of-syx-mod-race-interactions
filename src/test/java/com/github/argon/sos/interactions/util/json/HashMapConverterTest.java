@@ -47,25 +47,18 @@ class HashMapConverterTest {
                     String normalizedContent = hashMapConverter.normalizeGameJsonRegex(originalContent);
 
                     try {
-                        hashMapConverter.normalizeGameJsonParser(originalContent, relative.toString());
+                        hashMapConverter.parseJackson(normalizedContent);
+                        jacksonSuccessCount.addAndGet(1);
                     } catch (Exception e) {
-                        System.out.println(e.getMessage());
+                        brokenJacksonJsons.put(relative.toString(), e);
                     }
 
-
-//                    try {
-//                        hashMapConverter.parseJackson(content);
-//                        jacksonSuccessCount.addAndGet(1);
-//                    } catch (Exception e) {
-//                        brokenJacksonJsons.put(relative.toString(), e);
-//                    }
-//
-//                    try {
-//                        hashMapConverter.parseGson(content);
-//                        gsonSuccessCount.addAndGet(1);
-//                    } catch (Exception e) {
-//                        brokenGsonJsons.put(relative.toString(), e);
-//                    }
+                    try {
+                        hashMapConverter.parseGson(normalizedContent);
+                        gsonSuccessCount.addAndGet(1);
+                    } catch (Exception e) {
+                        brokenGsonJsons.put(relative.toString(), e);
+                    }
                 });
         }
 
