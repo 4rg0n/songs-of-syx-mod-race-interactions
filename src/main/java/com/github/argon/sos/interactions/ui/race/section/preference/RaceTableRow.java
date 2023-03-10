@@ -1,6 +1,7 @@
 package com.github.argon.sos.interactions.ui.race.section.preference;
 
 import com.github.argon.sos.interactions.race.RaceInfo;
+import com.github.argon.sos.interactions.ui.element.Checkbox;
 import com.github.argon.sos.interactions.ui.element.HorizontalLine;
 import com.github.argon.sos.interactions.ui.element.Spacer;
 import com.github.argon.sos.interactions.ui.element.table.TableRow;
@@ -9,6 +10,7 @@ import init.race.RACES;
 import init.race.Race;
 import init.sprite.ICON;
 import init.sprite.SPRITES;
+import lombok.Getter;
 import snake2d.SPRITE_RENDERER;
 import snake2d.util.color.COLOR;
 import snake2d.util.gui.GUI_BOX;
@@ -22,25 +24,38 @@ import util.data.GETTER;
 import util.gui.misc.GBox;
 import util.info.GFORMAT;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 /**
  * Represents a single row in the {@link RaceTableSection}.
  * Contains information about the likings of a race to all other races.
  */
 public class RaceTableRow extends TableRow<RaceInfo> {
 
+    @Getter
+    private final Map<String, Checkbox> raceBoostCheckboxes = new HashMap<>();
+
+    public Optional<Checkbox> getRaceBoostCheckbox(String raceName) {
+        return Optional.ofNullable(raceBoostCheckboxes.get(raceName));
+    }
+
     public RaceTableRow(GETTER<Integer> ier, TableStore<RaceInfo> store) {
         super(ier, store);
 
         GuiSection container = new GuiSection();
-
 
         // race icon
         container.addRightC(0, new Spacer(8, 0));
         container.addRightC(0 ,new RENDEROBJ.Sprite(ICON.MEDIUM.SIZE) {
             @Override
             public void render(SPRITE_RENDERER r, float ds) {
-                hoverInfoSet(getEntry().getRace().info.names);
-                setSprite(getEntry().getRace().appearance().icon);
+                getEntry().ifPresent(raceInfo -> {
+                    hoverInfoSet(raceInfo.getRace().info.names);
+                    setSprite(raceInfo.getRace().appearance().icon);
+                });
+
                 super.render(r, ds);
             }
         });
@@ -50,45 +65,70 @@ public class RaceTableRow extends TableRow<RaceInfo> {
         container.addRightC(8, Spacer.NOTHING);
 
         // row with other race icons and likings
-        LinkedList<RENDEROBJ> ee = new LinkedList<>();
+        LinkedList<RENDEROBJ> columns = new LinkedList<>();
         for (int ri = 0; ri < RACES.all().size(); ri ++) {
             Race otherRace = RACES.all().get(ri);
+            GuiSection column = new GuiSection();
+            Checkbox raceBoostCheckbox = new Checkbox() {
+                @Override
+                public void hoverInfoGet(GUI_BOX text) {
+                    getEntry().ifPresent(raceInfo -> {
+                        GBox b = (GBox) text;
+                        b.title(otherRace.info.names);
+                        b.text("Boost likings to " + raceInfo.getRace().info.names);
+                    });
+                }
+            };
 
-            // liking of a single other race
-            ee.add(new ArrowsGauge(otherRace.appearance().icon) {
+            raceBoostCheckboxes.put(otherRace.key, raceBoostCheckbox);
+            ArrowsGauge arrowsGauge = new ArrowsGauge(otherRace.appearance().icon, 5) {
                 @Override
                 double getValue() {
-                    return Math.abs(getEntry().getRace().pref()
-                        .other(otherRace));
+                    return getEntry().map(raceInfo ->
+                            Math.abs(raceInfo.getRace().pref().other(otherRace)))
+                        .orElse(0d);
                 }
 
                 @Override
                 SPRITE get(double value) {
-                    return getEntry().getRace().pref()
-                        .other(otherRace) < 0 ? SPRITES.icons().s.arrowDown : SPRITES.icons().s.arrowUp;
+                    return getEntry()
+                        .filter(raceInfo -> (!(raceInfo.getRace().pref().other(otherRace) < 0)))
+                        .map(raceInfo -> SPRITES.icons().s.arrowUp)
+                        .orElse(SPRITES.icons().s.arrowDown);
                 }
 
                 @Override
                 COLOR color(double value) {
-                    return getEntry().getRace().pref()
-                        .other(otherRace) < 0 ? GCOLOR.UI().BAD.normal : GCOLOR.UI().GOOD.normal;
+                    return getEntry()
+                        .filter(raceInfo -> !(raceInfo.getRace().pref()
+                        .other(otherRace) < 0))
+                        .map(raceInfo -> GCOLOR.UI().GOOD.normal)
+                        .orElse(GCOLOR.UI().BAD.normal);
                 }
 
                 @Override
                 public void hoverInfoGet(GUI_BOX text) {
-                    GBox b = (GBox) text;
-                    b.title(otherRace.info.names);
-                    b.text("Liking to " + getEntry().getRace().info.names);
-                    b.NL(8);
-                    b.add(GFORMAT.f1(b.text(), getEntry().getRace().pref().other(otherRace)));
-                };
-            });
+                    getEntry().ifPresent(raceInfo -> {
+                        GBox b = (GBox) text;
+                        b.title(otherRace.info.names);
+                        b.text("Liking to " + raceInfo.getRace().info.names);
+                        b.NL(8);
+                        b.add(GFORMAT.f1(b.text(), raceInfo.getRace().pref().other(otherRace)));
+                    });
+                }
+            };
+
+            column.addRightC(0, raceBoostCheckbox);
+            column.addRightC(1, arrowsGauge);
+
+            // liking of a single other race
+            columns.add(column);
         }
 
         // FIXME: 24.02.2023 when one has too many races the width will be too wide at some point
         //        horizontal scrollbar?
-        ee.forEach(renderobj -> {
-            container.addRightC(1, renderobj);
+        columns.forEach(column -> {
+            container.addRightC(1, column);
         });
 
         addDownC(0, new Spacer(container.body().width(), 10));
@@ -110,31 +150,38 @@ public class RaceTableRow extends TableRow<RaceInfo> {
      */
     private static abstract class ArrowsGauge extends HoverableAbs {
 
-        private int max = 5;
-        private final SPRITE icon;
+        private final int maxArrows = 5;
 
-        public ArrowsGauge(SPRITE icon) {
-            this.icon = icon;
-            body().setDim(ICON.BIG.SIZE*3+4, icon.height());
+        private final int arrowWidth = 9;
+
+        private final int raceIconToArrowsMargin = 5;
+
+        private final SPRITE raceIcon;
+
+        public ArrowsGauge(SPRITE raceIcon, int padding) {
+            this.raceIcon = raceIcon;
+            int arrowsWidth = maxArrows * arrowWidth;
+
+            body().setDim( arrowsWidth + raceIcon.width() + padding + raceIconToArrowsMargin + 4, raceIcon.height());
         }
 
         @Override
         protected void render(SPRITE_RENDERER r, float ds, boolean isHovered) {
-            double v = getValue();
-            icon.render(r, body().x1(), body().y1());
+            double gaugeValue = getValue();
+            raceIcon.render(r, body().x1(), body().y1());
 
-            int am = (int) Math.ceil(max*v);
-            if (v > 1) {
-                am = max;
-                am += CLAMP.i((int) (2*v/3.0), 0, 1);
+            int arrowsToDisplay = (int) Math.ceil(maxArrows * gaugeValue);
+            if (gaugeValue > 1) {
+                arrowsToDisplay = maxArrows;
+                arrowsToDisplay += CLAMP.i((int) (2* gaugeValue/3.0), 0, 1);
             }
 
-            int x1 = body().x1() + ICON.BIG.SIZE;
+            int arrowsStartX = body().x1() + raceIcon.width() + raceIconToArrowsMargin;
 
-            color(v).bind();
-            for (int i = 0; i < am; i++) {
-                get(v).renderCY(r, x1, body().cY());
-                x1 += 9;
+            color(gaugeValue).bind();
+            for (int i = 0; i < arrowsToDisplay; i++) {
+                get(gaugeValue).renderCY(r, arrowsStartX, body().cY());
+                arrowsStartX += arrowWidth;
             }
             COLOR.unbind();
         }

@@ -48,7 +48,6 @@ final class Instance implements SCRIPT.SCRIPT_INSTANCE {
 
 	@Override
 	public boolean handleBrokenSavedState() {
-		configStore.setCurrentConfig(configStore.loadJsonOrDefault());
 		return true;
 	}
 

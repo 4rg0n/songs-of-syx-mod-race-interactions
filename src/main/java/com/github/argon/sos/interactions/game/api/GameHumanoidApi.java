@@ -13,6 +13,8 @@ import settlement.stats.STATS;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GameHumanoidApi {
@@ -79,20 +81,42 @@ public class GameHumanoidApi {
     /**
      * @return average race liking between a humanoid and other humanoids
      */
-    public double avgRaceLikings(Humanoid humanoid, List<Humanoid> nearbyHumanoids, boolean ownRace) {
+    public double avgRaceLikings(Humanoid humanoid, List<Humanoid> nearbyHumanoids) {
+       return avgRaceLikings(humanoid, nearbyHumanoids, (humanoid1, humanoid2) -> true);
+    }
+
+    /**
+     * Calculates average likings with filtering by given toggles
+     */
+    public double avgRaceLikings(Humanoid humanoid, List<Humanoid> nearbyHumanoids, Map<String, List<String>> raceBoostingToggles) {
+        return avgRaceLikings(humanoid, nearbyHumanoids, (humanoid1, humanoid2) -> {
+            String raceKey = humanoid.race().key;
+            List<String> enabledRaces = raceBoostingToggles.get(raceKey);
+
+            if (enabledRaces == null) {
+                return false;
+            }
+
+            return enabledRaces.contains(raceKey);
+        });
+    }
+
+    /**
+     * @param filter function for filtering a humanoid from the calculation
+     * @return average race liking between a humanoid and other humanoids
+     */
+    public double avgRaceLikings(Humanoid humanoid, List<Humanoid> nearbyHumanoids, BiFunction<Humanoid, Humanoid, Boolean> filter) {
         double likeScore = 0d;
         Race race = humanoid.race();
 
         for (Humanoid nearbyHumanoid : nearbyHumanoids) {
             Race otherRace = nearbyHumanoid.race();
+            Boolean doAdd = filter.apply(humanoid, nearbyHumanoid);
 
-            // skip own race?
-            if (!ownRace && race.key.equals(otherRace.key)) {
-                continue;
+            if (doAdd) {
+                double liking = race.pref().other(otherRace);
+                likeScore += liking;
             }
-
-            double liking = race.pref().other(otherRace);
-            likeScore += liking;
         }
 
         if (likeScore == 0d) {

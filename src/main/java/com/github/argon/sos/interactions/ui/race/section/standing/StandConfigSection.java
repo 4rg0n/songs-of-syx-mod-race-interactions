@@ -45,7 +45,7 @@ public class StandConfigSection extends GuiSection {
     /**
      * Displays set configuration in the UI
      */
-    public void applyConfig(Map<RaceStandingCategory, Double> standWeightMap, int raceLookRange, boolean raceBoostSelf) {
+    public void applyConfig(Map<RaceStandingCategory, Double> standWeightMap, int raceLookRange) {
         Map<RaceStandingCategory, INT.INTE> sliderValues = standSliderSection.getSliderValues();
 
         sliderValues.forEach((category, value) -> {
@@ -55,7 +55,6 @@ public class StandConfigSection extends GuiSection {
         });
 
         standSliderSection.getRaceLookRangeValue().set(raceLookRange);
-        standSliderSection.getRaceBoostSelfCheck().selectedSet(raceBoostSelf);
     }
 
     public Map<RaceStandingCategory, Double> getWeights() {
@@ -70,9 +69,5 @@ public class StandConfigSection extends GuiSection {
 
     public int getRaceLookRangeValue() {
         return standSliderSection.getRaceLookRangeValue().get();
-    }
-
-    public boolean isRaceBoostSelf() {
-        return standSliderSection.getRaceBoostSelfCheck().selectedIs();
     }
 }

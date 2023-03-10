@@ -115,11 +115,9 @@ public class ConfigStore {
      * @return configuration read from save game
      */
     public Optional<RaceInteractionsConfig> loadSave(FileGetter fileGetter) {
-        Optional<RaceInteractionsConfig> raceInteractionsConfig = configSaveService.load(fileGetter).map(config -> {
+        return configSaveService.load(fileGetter).map(config -> {
             setSaveConfig(config);
             return config;
         });
-
-        return raceInteractionsConfig;
     }
 }

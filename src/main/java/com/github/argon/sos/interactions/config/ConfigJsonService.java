@@ -1,12 +1,13 @@
 package com.github.argon.sos.interactions.config;
 
+import com.github.argon.sos.interactions.config.version.V1ConfigMapper;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
 import init.paths.PATH;
 import init.paths.PATHS;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import snake2d.Errors;
 import snake2d.util.file.Json;
 import snake2d.util.file.JsonE;
@@ -14,17 +15,19 @@ import snake2d.util.file.JsonE;
 import java.nio.file.Path;
 import java.util.Optional;
 
-import static com.github.argon.sos.interactions.config.RaceInteractionsConfig.FILE_NAME;
+import static com.github.argon.sos.interactions.config.RaceInteractionsConfig.Default.FILE_NAME;
 
 /**
  * For saving and loading {@link RaceInteractionsConfig} as json
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConfigJsonService {
     private final static Logger log = Loggers.getLogger(ConfigJsonService.class);
 
+    private final V1ConfigMapper configMapper;
+
     @Getter(lazy = true)
-    private final static ConfigJsonService instance = new ConfigJsonService();
+    private final static ConfigJsonService instance = new ConfigJsonService(V1ConfigMapper.getInstance());
 
     /**
      * Configuration provided by the mod-files
@@ -47,7 +50,7 @@ public class ConfigJsonService {
 
         log.debug("Saving configuration into profile %s", profiePath.get().toString());
         try {
-            JsonE configJson = ConfigMapper.toJson(config);
+            JsonE configJson = configMapper.toJson(config);
 
             // blueprint save file exists?
             Path path;
@@ -87,7 +90,7 @@ public class ConfigJsonService {
         }
 
        try {
-           return Optional.of(ConfigMapper.fromJson(json));
+           return Optional.of(configMapper.fromJson(json));
        } catch (Errors.DataError e) {
            log.warn("Could load config from %s", loadPath.toString(), e);
            return Optional.empty();

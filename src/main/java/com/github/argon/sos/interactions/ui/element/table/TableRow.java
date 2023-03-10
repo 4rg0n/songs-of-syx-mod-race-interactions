@@ -6,6 +6,13 @@ import snake2d.util.color.COLOR;
 import snake2d.util.gui.GuiSection;
 import util.data.GETTER;
 
+import java.util.Optional;
+
+/**
+ * Represents a row in a {@link TableSection}
+ *
+ * @param <T> table entry
+ */
 @Getter
 public class TableRow<T> extends GuiSection {
     private final GETTER<Integer> index;
@@ -20,16 +27,16 @@ public class TableRow<T> extends GuiSection {
     }
 
     /**
-     * @return null when there's no index
+     * @return null when there's no index or entry
      */
-    public T getEntry() {
+    public Optional<T> getEntry() {
         if (index.get() == null) {
-            return null;
+            return Optional.empty();
         }
 
-        return store
+        return Optional.of(store
             .getEntries()
-            .get(index.get());
+            .get(index.get()));
     }
 
     @Override
@@ -40,8 +47,13 @@ public class TableRow<T> extends GuiSection {
         super.render(r, ds);
     }
 
-    public TableRow<T> background(COLOR c) {
-        this.color = c;
+    /**
+     * Change color of the rows background
+     *
+     * @param color of the background
+     */
+    public TableRow<T> background(COLOR color) {
+        this.color = color;
         return this;
     }
 }

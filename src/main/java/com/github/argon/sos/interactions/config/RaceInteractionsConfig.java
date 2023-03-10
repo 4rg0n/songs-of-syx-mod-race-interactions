@@ -20,9 +20,9 @@ import java.util.Map;
 public class RaceInteractionsConfig {
 
     /**
-     * Name of the config file
+     * TODO
      */
-    public final static String FILE_NAME = "RaceInteractions";
+    private final int version;
 
 
     /**
@@ -40,25 +40,25 @@ public class RaceInteractionsConfig {
      * The weight influences how much similarity in a certain {@link RacePrefCategory}
      * should affect the liking between races.
      */
-    private final Map<RacePrefCategory, Double> racePreferenceWeightMap;
+    private final Map<RacePrefCategory, Double> racePreferenceWeights;
 
     /**
      * The range in tiles where citizens look for other races nearby
      */
     private final int raceLookRange;
 
-    /**
-     * Whether races should get boosted {@link RaceStandingCategory}s by their own race
-     */
-    private final boolean raceBoostSelf;
 
     /**
      * For boosting different {@link RaceStandingCategory}s
      * when races are near {@link RaceInteractionsConfig#raceLookRange} other liked races.
      * 0 means disabled.
      */
-    private final Map<RaceStandingCategory, Double> raceStandingWeightMap;
+    private final Map<RaceStandingCategory, Double> raceStandingWeights;
 
+    /**
+     * Which races likings should get boosted between each other
+     */
+    private final Map<String, List<String>> raceBoostingToggles;
 
     /**
      * A list of the vanilla game race names.
@@ -68,6 +68,13 @@ public class RaceInteractionsConfig {
     private final List<String> gameRaces;
 
     public static class Default {
+        public final static int VERSION = 1;
+
+        /**
+         * Name of the config file
+         */
+        public final static String FILE_NAME = "RaceInteractions";
+
         public final static double DEFAULT_MIN_WEIGHT = -2d;
         public final static double DEFAULT_MAX_WEIGHT = 2d;
         public final static double DEFAULT_PREFERENCE_WEIGHT = 1d;
@@ -77,14 +84,15 @@ public class RaceInteractionsConfig {
 
         public static RaceInteractionsConfig getConfig() {
             return RaceInteractionsConfig.builder()
-                    .racePreferenceWeightMap(getPreferencesWeights())
-                    .gameRaces(getGameRaces())
-                    .raceStandingWeightMap(getStandingsWeights())
-                    .raceLookRange(DEFAULT_RACE_LOOK_RANGE)
-                    .honorCustom(true)
-                    .customOnly(true)
-                    .raceBoostSelf(false)
-                    .build();
+                .version(VERSION)
+                .racePreferenceWeights(getPreferencesWeights())
+                .gameRaces(getGameRaces())
+                .raceStandingWeights(getStandingsWeights())
+                .raceLookRange(DEFAULT_RACE_LOOK_RANGE)
+                .raceBoostingToggles(getRaceBoostingToggles())
+                .honorCustom(true)
+                .customOnly(true)
+                .build();
         }
 
         public static Map<RacePrefCategory, Double> getPreferencesWeights() {
@@ -106,6 +114,16 @@ public class RaceInteractionsConfig {
             standingsWeightMap.put(RaceStandingCategory.LOYALTY, DEFAULT_STANDING_WEIGHT);
 
             return standingsWeightMap;
+        }
+
+        public static Map<String, List<String>> getRaceBoostingToggles() {
+            Map<String, List<String>> raceBoostingToggles = new HashMap<>();
+
+            getGameRaces().forEach(raceName -> {
+                raceBoostingToggles.put(raceName, getGameRaces());
+            });
+
+            return raceBoostingToggles;
         }
 
         public static List<String> getGameRaces() {

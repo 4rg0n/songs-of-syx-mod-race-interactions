@@ -19,6 +19,7 @@ import settlement.entity.humanoid.HTYPE;
 import util.info.INFO;
 
 import java.util.Arrays;
+import java.util.logging.Level;
 
 /**
  * Entry point
@@ -55,8 +56,8 @@ public final class RaceInteractionsModScript implements SCRIPT<RaceInteractionsC
 
 	@Override
 	public void initBeforeGameCreated() {
-//		Loggers.setLevels(Level.FINER);
-//		Loggers.setLevels("com.github.argon.sos.interactions.race", Level.INFO);
+		Loggers.setLevels(Level.FINER);
+		Loggers.setLevels("com.github.argon.sos.interactions.race", Level.INFO);
 	}
 
 	@Override
@@ -85,6 +86,7 @@ public final class RaceInteractionsModScript implements SCRIPT<RaceInteractionsC
 
 		// adjust likings when game loaded
 		raceInteractions.manipulateRaceLikings(config);
+		configPanel.applyConfig(config);
 	}
 
 	@Override

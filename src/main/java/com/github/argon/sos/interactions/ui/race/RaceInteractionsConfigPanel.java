@@ -28,7 +28,7 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
     public final static String TITLE = RaceInteractionsModScript.MOD_INFO.name.toString();
 
     private final PrefConfigSection prefConfigSection;
-    private final RaceTableSection overviewSection;
+    private final RaceTableSection raceTableSection;
     private final ButtonSection buttonSection;
     private final StandConfigSection standConfigSection;
 
@@ -44,7 +44,7 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
     public RaceInteractionsConfigPanel(
         RaceInteractions raceInteractions,
         PrefConfigSection prefConfigSection,
-        RaceTableSection overviewSection,
+        RaceTableSection raceTableSection,
         ButtonSection buttonSection,
         StandConfigSection standConfigSection,
         ConfigStore configStore,
@@ -56,7 +56,7 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
 
         this.raceInteractions = raceInteractions;
         this.prefConfigSection = prefConfigSection;
-        this.overviewSection = overviewSection;
+        this.raceTableSection = raceTableSection;
         this.buttonSection = buttonSection;
         this.configStore = configStore;
         this.standConfigSection = standConfigSection;
@@ -68,7 +68,6 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
                     .ifPresent(this::applyConfig);
             }
         );
-
         // Apply button
         buttonSection.getApplyButton().clickActionSet(() -> {
             log.debug("Apply click");
@@ -93,11 +92,17 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         // Load settings from user profile button
         buttonSection.getLoadProfileButton().clickActionSet(() -> {
             log.debug("Load from Profile click");
-                configStore.getProfileConfig().ifPresent(config -> {
-                    applyConfig(config);
-                });
+                configStore.getProfileConfig().ifPresent(this::applyConfig);
             }
         );
+        // Boost: All button
+        standConfigSection.getStandSliderSection().getEnableAllRaceBoostingsButton().clickActionSet(() -> {
+            raceTableSection.toggleAllRaceBoostings(true);
+        });
+        // Boost: None button
+        standConfigSection.getStandSliderSection().getDisableAllRaceBoostingsButton().clickActionSet(() -> {
+            raceTableSection.toggleAllRaceBoostings(false);
+        });
 
         GuiSection container = new GuiSection();
         container.addRight(0, prefConfigSection);
@@ -106,7 +111,7 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
 
         section().addDownC(10, container);
         section().addDownC(10, new HorizontalLine(width, 20, 1, true));
-        section().addDownC(0, overviewSection);
+        section().addDownC(0, raceTableSection);
         section().addDownC(0, new HorizontalLine(width, 20, 1, true));
 
         section().addDownC(0, standConfigSection);
@@ -117,9 +122,9 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
             .gameRaces(configStore.getCurrentConfig()
                 .orElse(configStore.getDefaultConfig()).getGameRaces())
             .raceLookRange(standConfigSection.getRaceLookRangeValue())
-            .raceBoostSelf(standConfigSection.isRaceBoostSelf())
-            .racePreferenceWeightMap(prefConfigSection.getWeights())
-            .raceStandingWeightMap(standConfigSection.getWeights())
+            .racePreferenceWeights(prefConfigSection.getWeights())
+            .raceStandingWeights(standConfigSection.getWeights())
+            .raceBoostingToggles(raceTableSection.getRaceBoostingToggles())
             .honorCustom(prefConfigSection.isHonorCustom())
             .customOnly(prefConfigSection.isOnlyCustom())
             .build();
@@ -130,13 +135,13 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         prefConfigSection.applyConfig(
             config.isCustomOnly(),
             config.isHonorCustom(),
-            config.getRacePreferenceWeightMap()
+            config.getRacePreferenceWeights()
         );
         standConfigSection.applyConfig(
-            config.getRaceStandingWeightMap(),
-            config.getRaceLookRange(),
-            config.isRaceBoostSelf()
+            config.getRaceStandingWeights(),
+            config.getRaceLookRange()
         );
+        raceTableSection.apply(config.getRaceBoostingToggles());
     }
 
     @Override

@@ -45,7 +45,7 @@ public class RaceInteractions {
         boolean honorCustom = config.isHonorCustom();
         List<Race> races = gameRaceApi.getAll();
         List<RaceComparator.Result> compareResults = raceComparator.compare(races);
-        RaceLikingsCalculator raceLikingsCalculator = new RaceLikingsCalculator(config.getRacePreferenceWeightMap());
+        RaceLikingsCalculator raceLikingsCalculator = new RaceLikingsCalculator(config.getRacePreferenceWeights());
 
         log.debug("Manipulating race likings for %s races", races.size());
         for (RaceComparator.Result compareResult : compareResults) {
@@ -79,10 +79,9 @@ public class RaceInteractions {
      */
     public void manipulateRaceStandingsByNearbyRaces(Humanoid humanoid, RaceInteractionsConfig config) {
         int raceLookRange = config.getRaceLookRange();
-        boolean raceBoostSelf = config.isRaceBoostSelf();
 
         List<Humanoid> nearbyHumanoids = gameHumanoidApi.getNearbyHumanoids(humanoid, raceLookRange);
-        double avgRaceLikings = gameHumanoidApi.avgRaceLikings(humanoid, nearbyHumanoids, raceBoostSelf);
+        double avgRaceLikings = gameHumanoidApi.avgRaceLikings(humanoid, nearbyHumanoids, config.getRaceBoostingToggles());
         int friendsCount = gameHumanoidApi.countFriends(humanoid, nearbyHumanoids);
 
         Map<RaceStandingCategory, Double> standingsWeightMap = new HashMap<>();
@@ -100,7 +99,7 @@ public class RaceInteractions {
                 humanoid.title(), raceLookRange, nearbyHumanoids.size(), friendsCount, avgRaceLikings);
 
         Race race = humanoid.race();
-        manipulateRaceStandings(config.getRaceStandingWeightMap(), race, standingsWeightMap);
+        manipulateRaceStandings(config.getRaceStandingWeights(), race, standingsWeightMap);
     }
 
     /**
