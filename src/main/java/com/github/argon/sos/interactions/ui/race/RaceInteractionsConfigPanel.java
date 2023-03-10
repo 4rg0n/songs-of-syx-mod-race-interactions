@@ -79,7 +79,7 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         buttonSection.getResetModButton().clickActionSet(() -> {
             log.debug("Reset click");
             RaceInteractionsConfig modConfig = configStore.getModConfig()
-                .orElse(configStore.getDefaultConfig());
+                .orElse(RaceInteractionsConfig.Default.getConfig());
             applyConfig(modConfig);
             raceInteractions.applyRaceLikings(gameRaceApi.getVanillaLikings());
         });
@@ -97,10 +97,12 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         );
         // Boost: All button
         standConfigSection.getStandSliderSection().getEnableAllRaceBoostingsButton().clickActionSet(() -> {
+            log.debug("Enable all races boosts click");
             raceTableSection.toggleAllRaceBoostings(true);
         });
         // Boost: None button
         standConfigSection.getStandSliderSection().getDisableAllRaceBoostingsButton().clickActionSet(() -> {
+            log.debug("Disable all races boosts click");
             raceTableSection.toggleAllRaceBoostings(false);
         });
 
@@ -120,7 +122,7 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
     public RaceInteractionsConfig getConfig() {
         return RaceInteractionsConfig.builder()
             .gameRaces(configStore.getCurrentConfig()
-                .orElse(configStore.getDefaultConfig()).getGameRaces())
+                .orElse(RaceInteractionsConfig.Default.getConfig()).getGameRaces())
             .raceLookRange(standConfigSection.getRaceLookRangeValue())
             .racePreferenceWeights(prefConfigSection.getWeights())
             .raceStandingWeights(standConfigSection.getWeights())

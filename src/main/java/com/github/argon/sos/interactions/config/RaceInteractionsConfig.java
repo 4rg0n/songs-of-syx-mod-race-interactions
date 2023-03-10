@@ -22,7 +22,8 @@ public class RaceInteractionsConfig {
     /**
      * TODO
      */
-    private final int version;
+    @Builder.Default
+    private final int version = Default.VERSION;
 
 
     /**

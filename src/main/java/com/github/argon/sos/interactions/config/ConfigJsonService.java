@@ -1,6 +1,7 @@
 package com.github.argon.sos.interactions.config;
 
-import com.github.argon.sos.interactions.config.version.V1ConfigMapper;
+import com.github.argon.sos.interactions.config.mapper.ConfigMappers;
+import com.github.argon.sos.interactions.config.mapper.version.ConfigMapper;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
 import init.paths.PATH;
@@ -24,10 +25,10 @@ import static com.github.argon.sos.interactions.config.RaceInteractionsConfig.De
 public class ConfigJsonService {
     private final static Logger log = Loggers.getLogger(ConfigJsonService.class);
 
-    private final V1ConfigMapper configMapper;
+    private final ConfigMapper configMapper;
 
     @Getter(lazy = true)
-    private final static ConfigJsonService instance = new ConfigJsonService(V1ConfigMapper.getInstance());
+    private final static ConfigJsonService instance = new ConfigJsonService(ConfigMappers.getInstance());
 
     /**
      * Configuration provided by the mod-files
@@ -49,6 +50,7 @@ public class ConfigJsonService {
         PATH profiePath = PATHS.local().PROFILE;
 
         log.debug("Saving configuration into profile %s", profiePath.get().toString());
+        log.trace("CONFIG: %s", config);
         try {
             JsonE configJson = configMapper.toJson(config);
 
@@ -72,6 +74,7 @@ public class ConfigJsonService {
     }
 
     public Optional<RaceInteractionsConfig> load(PATH path) {
+        log.debug("Loading json config from %s", path.get());
         if (!path.exists(FILE_NAME)) {
             // do not load what's not there
             log.debug("Configuration %s/%s not present using defaults.", path.get(), FILE_NAME);
@@ -82,7 +85,6 @@ public class ConfigJsonService {
         Path loadPath = path.get(FILE_NAME);
 
         try {
-            log.debug("Loading config %s from %s", FILE_NAME, loadPath.toString());
             json = new Json(loadPath);
         }  catch (Exception e) {
             log.error("Could not load %s config from %s", FILE_NAME, loadPath.toString(), e);
@@ -90,7 +92,9 @@ public class ConfigJsonService {
         }
 
        try {
-           return Optional.of(configMapper.fromJson(json));
+           RaceInteractionsConfig config = configMapper.fromJson(json);
+           log.trace("CONFIG: %s", config);
+           return Optional.of(config);
        } catch (Errors.DataError e) {
            log.warn("Could load config from %s", loadPath.toString(), e);
            return Optional.empty();

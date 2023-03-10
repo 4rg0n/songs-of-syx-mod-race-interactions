@@ -1,5 +1,6 @@
 package com.github.argon.sos.interactions.config;
 
+import com.github.argon.sos.interactions.util.Indexed;
 import lombok.Getter;
 
 /**
@@ -7,7 +8,7 @@ import lombok.Getter;
  * Each category can have a certain weight assigned to it.
  * See {@link RaceInteractionsConfig#getRacePreferenceWeights()}
  */
-public enum RacePrefCategory {
+public enum RacePrefCategory implements Indexed {
     FOOD(0),
     CLIMATE(1),
     BUILDING(2),

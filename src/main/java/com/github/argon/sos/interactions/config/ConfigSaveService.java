@@ -1,6 +1,7 @@
 package com.github.argon.sos.interactions.config;
 
-import com.github.argon.sos.interactions.config.version.V1ConfigMapper;
+import com.github.argon.sos.interactions.config.mapper.ConfigMappers;
+import com.github.argon.sos.interactions.config.mapper.version.ConfigMapper;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
 import lombok.AccessLevel;
@@ -18,10 +19,10 @@ import java.util.Optional;
 public class ConfigSaveService {
     private final static Logger log = Loggers.getLogger(ConfigSaveService.class);
 
-    private final V1ConfigMapper configMapper;
+    private final ConfigMapper configMapper;
 
     @Getter(lazy = true)
-    private final static ConfigSaveService instance = new ConfigSaveService(V1ConfigMapper.getInstance());
+    private final static ConfigSaveService instance = new ConfigSaveService(ConfigMappers.getInstance());
 
     public void save(FilePutter file, RaceInteractionsConfig config) {
         log.debug("Saving RaceInteractionsConfig into save file");

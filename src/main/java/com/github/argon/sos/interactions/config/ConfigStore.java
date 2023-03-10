@@ -27,10 +27,7 @@ public class ConfigStore {
     private final static ConfigStore instance = new ConfigStore();
 
     private RaceInteractionsConfig currentConfig;
-    @Getter
-    private final RaceInteractionsConfig defaultConfig = RaceInteractionsConfig.Default.getConfig();
     private RaceInteractionsConfig modConfig;
-    private RaceInteractionsConfig profileConfig;
 
     @Setter
     private RaceInteractionsConfig saveConfig;
@@ -52,7 +49,7 @@ public class ConfigStore {
     public RaceInteractionsConfig loadJsonOrDefault() {
         return getProfileConfig()
             .orElseGet(() -> getModConfig()
-                .orElseGet(this::getDefaultConfig));
+                .orElse(RaceInteractionsConfig.Default.getConfig()));
     }
 
     public Optional<RaceInteractionsConfig> getCurrentConfig() {
@@ -77,14 +74,7 @@ public class ConfigStore {
      * @return configuration from the games user profile
      */
     public Optional<RaceInteractionsConfig> getProfileConfig() {
-        if (profileConfig != null) {
-            return Optional.of(profileConfig);
-        }
-
-        return configJsonService.loadProfileConfig().map(config -> {
-            profileConfig = config;
-            return config;
-        });
+        return configJsonService.loadProfileConfig();
     }
 
     /**

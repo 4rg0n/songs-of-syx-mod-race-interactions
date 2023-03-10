@@ -1,8 +1,9 @@
 package com.github.argon.sos.interactions.config;
 
+import com.github.argon.sos.interactions.util.Indexed;
 import lombok.Getter;
 
-public enum RaceStandingCategory {
+public enum RaceStandingCategory implements Indexed {
     EXPECTATION(0),
     FULFILLMENT(1),
     HAPPINESS(2),
