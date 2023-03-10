@@ -20,7 +20,8 @@ import java.util.Map;
 public class RaceInteractionsConfig {
 
     /**
-     * TODO
+     * Version identification of the config
+     * Used for migrating older configs into the current version
      */
     @Builder.Default
     private final int version = Default.VERSION;
@@ -32,12 +33,12 @@ public class RaceInteractionsConfig {
     private final boolean customOnly;
 
     /**
-     * When true, will not change any settings already present in custom modded races.
+     * When true, will not change any settings already present in custom modded races
      */
     private final boolean honorCustom;
 
     /**
-     * Contains the weight of each category.
+     * Contains the weight of each preference category.
      * The weight influences how much similarity in a certain {@link RacePrefCategory}
      * should affect the liking between races.
      */
@@ -57,7 +58,7 @@ public class RaceInteractionsConfig {
     private final Map<RaceStandingCategory, Double> raceStandingWeights;
 
     /**
-     * Which races likings should get boosted between each other
+     * Which race should get boosted likings when nearby another race
      */
     private final Map<String, List<String>> raceBoostingToggles;
 

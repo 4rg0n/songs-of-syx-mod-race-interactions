@@ -24,6 +24,8 @@ import static com.github.argon.sos.interactions.config.mapper.ConfigJsonMapper.*
 /**
  * For mapping {@link RaceInteractionsConfig} in and from json as also from and into the save file.
  * Takes care of the different storage formats for the config.
+ *
+ * Used for {@link this#VERSION} configs.
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class V1ConfigMapper implements ConfigMapper {

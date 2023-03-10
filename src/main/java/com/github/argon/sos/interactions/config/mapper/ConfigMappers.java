@@ -18,6 +18,9 @@ import java.util.Optional;
 import java.util.TreeMap;
 
 
+/**
+ * Handles mapping of configs in different versions in json and save file format
+ */
 public class ConfigMappers implements ConfigMapper {
 
     private final static Logger log = Loggers.getLogger(ConfigMappers.class);
