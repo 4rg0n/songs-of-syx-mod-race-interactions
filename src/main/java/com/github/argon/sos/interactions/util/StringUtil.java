@@ -1,6 +1,7 @@
 package com.github.argon.sos.interactions.util;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -48,5 +49,75 @@ public class StringUtil {
         }
 
         return arg.toString();
+    }
+
+    public static Object[] stringifyValues(Object[] args) {
+        Object[] stringArgs = new Object[args.length];
+
+        for (int i = 0; i < args.length; i++) {
+            Object arg = args[i];
+            stringArgs[i] = stringifyValue(arg);
+        }
+
+        return stringArgs;
+    }
+
+    public static String stringifyValue(Object arg) {
+        if (arg instanceof String) {
+            return (String) arg;
+        } if (arg instanceof Double) {
+            return String.format("%1$,.4f", (Double) arg);
+        } else if (arg instanceof Map) {
+            return StringUtil.toString((Map<?, ?>) arg);
+        } else if (arg instanceof Object[]) {
+            return StringUtil.toString((Object[]) arg);
+        } else if (arg.getClass().isArray()) {
+            return StringUtil.toStringPrimitiveArray(arg);
+        } else {
+            return arg.toString();
+        }
+    }
+
+    public static String shortenName(Class<?> clazz) {
+        return shortenPackageName(clazz.getPackage().getName()) + '.' + clazz.getSimpleName();
+    }
+
+    public static String shortenPackageName(String packageName) {
+        return Arrays.stream(packageName.split("\\."))
+            .map(segment -> Character.toString(segment.charAt(0)))
+            .collect(Collectors.joining("."));
+    }
+
+    public static String cutOrFill(String string, int maxLength, boolean cutTail) {
+        if (string.length() == maxLength) {
+            return string;
+        }
+
+        if (!cutTail && string.length() > maxLength) {
+            return string.substring(string.length() - maxLength);
+        } else if (cutTail && string.length() > maxLength) {
+            return string.substring(0,  maxLength);
+        }
+
+        int spaceLength = maxLength - string.length();
+        String spacesString = repeat(' ', spaceLength);
+        return string + spacesString;
+    }
+
+    public static String repeat(char character, int length) {
+        char[] spaces = new char[length];
+        Arrays.fill(spaces, character);
+
+        return new String(spaces);
+    }
+
+    public static List<String> quote(List<String> strings) {
+        return strings.stream()
+            .map(string -> quote(string))
+            .collect(Collectors.toList());
+    }
+
+    public static String quote(String string) {
+        return "\"" + string + "\"";
     }
 }

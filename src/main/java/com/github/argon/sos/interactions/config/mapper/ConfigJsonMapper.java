@@ -4,6 +4,7 @@ import com.github.argon.sos.interactions.config.RacePrefCategory;
 import com.github.argon.sos.interactions.config.RaceStandingCategory;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
+import com.github.argon.sos.interactions.util.StringUtil;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -175,7 +176,8 @@ public class ConfigJsonMapper {
     public JsonE toRaceBoostToggles(Map<String, List<String>> raceBoostToggles) {
         JsonE json = new JsonE();
         raceBoostToggles.forEach((raceName, enabledRaces) -> {
-            json.add(raceName, enabledRaces.toArray(new String[0]));
+            List<String> enabledRacesQuoted = StringUtil.quote(enabledRaces);
+            json.add(raceName, enabledRacesQuoted.toArray(new String[0]));
         });
 
         return json;

@@ -15,16 +15,13 @@ import java.util.logging.Level;
 public class Loggers {
     private final static Map<String, Logger> loggers = new HashMap<>();
 
-    public static Logger getLogger(Class<?> clazz) {
-        return getLogger(clazz.getName());
-    }
 
-    public static Logger getLogger(String name) {
-        if (!loggers.containsKey(name)) {
-            loggers.put(name, new Logger(name));
+    public static Logger getLogger(Class<?> clazz) {
+        if (!loggers.containsKey(clazz.getName())) {
+            loggers.put(clazz.getName(), new Logger(clazz));
         }
 
-        return loggers.get(name);
+        return loggers.get(clazz.getName());
     }
 
 

@@ -5,10 +5,12 @@ import com.github.argon.sos.interactions.RaceInteractionsModScript;
 import com.github.argon.sos.interactions.config.ConfigStore;
 import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
 import com.github.argon.sos.interactions.game.api.GameRaceApi;
+import com.github.argon.sos.interactions.game.api.GameUiApi;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
 import com.github.argon.sos.interactions.ui.element.HorizontalLine;
 import com.github.argon.sos.interactions.ui.element.VerticalLine;
+import com.github.argon.sos.interactions.ui.race.section.preference.ButtonMenuSection;
 import com.github.argon.sos.interactions.ui.race.section.preference.ButtonSection;
 import com.github.argon.sos.interactions.ui.race.section.preference.PrefConfigSection;
 import com.github.argon.sos.interactions.ui.race.section.preference.RaceTableSection;
@@ -30,12 +32,14 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
     private final PrefConfigSection prefConfigSection;
     private final RaceTableSection raceTableSection;
     private final ButtonSection buttonSection;
+    private final ButtonMenuSection buttonMenuSection;
     private final StandConfigSection standConfigSection;
 
     private final RaceInteractions raceInteractions;
     private final ConfigStore configStore;
 
-    private final GameRaceApi gameRaceApi = GameRaceApi.getInstance();
+    private final GameRaceApi gameRaceApi;
+    private final GameUiApi gameUiApi;
 
     private double updateTimerSeconds = 0d;
 
@@ -46,10 +50,13 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         PrefConfigSection prefConfigSection,
         RaceTableSection raceTableSection,
         ButtonSection buttonSection,
-        StandConfigSection standConfigSection,
-        ConfigStore configStore,
+        ButtonMenuSection buttonMenuSection, StandConfigSection standConfigSection,
+        GameRaceApi gameRaceApi, GameUiApi gameUiApi, ConfigStore configStore,
         int width
     ) {
+        this.buttonMenuSection = buttonMenuSection;
+        this.gameRaceApi = gameRaceApi;
+        this.gameUiApi = gameUiApi;
         this.section = new GuiSection();
         titleSet(TITLE);
         section().body().setWidth(width);
@@ -75,14 +82,6 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
             raceInteractions.manipulateRaceLikings(config);
             configStore.setCurrentConfig(config);
         });
-        // Reset to mod configuration button
-        buttonSection.getResetModButton().clickActionSet(() -> {
-            log.debug("Reset click");
-            RaceInteractionsConfig modConfig = configStore.getModConfig()
-                .orElse(RaceInteractionsConfig.Default.getConfig());
-            applyConfig(modConfig);
-            raceInteractions.applyRaceLikings(gameRaceApi.getVanillaLikings());
-        });
         // Save settings to user button
         buttonSection.getSaveProfileButton().clickActionSet(() -> {
             log.debug("Save to Profile click");
@@ -92,9 +91,14 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         // Load settings from user profile button
         buttonSection.getLoadProfileButton().clickActionSet(() -> {
             log.debug("Load from Profile click");
-                configStore.getProfileConfig().ifPresent(this::applyConfig);
-            }
-        );
+            configStore.getProfileConfig().ifPresent(this::applyConfig);
+        });
+        // Menu
+        buttonSection.getMenuButton().clickActionSet(() -> {
+            log.debug("Menu click");
+            gameUiApi.showPopup(buttonMenuSection, buttonSection.getMenuButton());
+        });
+
         // Boost: All button
         standConfigSection.getStandSliderSection().getEnableAllRaceBoostingsButton().clickActionSet(() -> {
             log.debug("Enable all races boosts click");
@@ -104,6 +108,15 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         standConfigSection.getStandSliderSection().getDisableAllRaceBoostingsButton().clickActionSet(() -> {
             log.debug("Disable all races boosts click");
             raceTableSection.toggleAllRaceBoostings(false);
+        });
+
+        // Reset to mod configuration button
+        buttonMenuSection.getResetModButton().clickActionSet(() -> {
+            log.debug("Reset click");
+            RaceInteractionsConfig modConfig = configStore.getModConfig()
+                .orElse(RaceInteractionsConfig.Default.getConfig());
+            applyConfig(modConfig);
+            raceInteractions.applyRaceLikings(this.gameRaceApi.getVanillaLikings());
         });
 
         GuiSection container = new GuiSection();

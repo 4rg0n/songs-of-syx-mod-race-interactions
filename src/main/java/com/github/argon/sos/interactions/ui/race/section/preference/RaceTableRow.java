@@ -75,7 +75,7 @@ public class RaceTableRow extends TableRow<RaceInfo> {
                     getEntry().ifPresent(raceInfo -> {
                         GBox b = (GBox) text;
                         b.title(otherRace.info.names);
-                        b.text("Boost likings to " + raceInfo.getRace().info.names);
+                        b.text("Boost likings when nearby " + raceInfo.getRace().info.names);
                     });
                 }
             };

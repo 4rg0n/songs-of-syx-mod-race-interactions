@@ -1,16 +1,16 @@
 package com.github.argon.sos.interactions.log;
 
 
-import com.github.argon.sos.interactions.util.StringUtil;
 import lombok.Getter;
 import lombok.Setter;
 import snake2d.LOG;
 
 import java.time.LocalTime;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
+
+import static com.github.argon.sos.interactions.util.StringUtil.*;
+import static com.github.argon.sos.interactions.util.StringUtil.cutOrFill;
 
 /**
  * trace {@link Level#FINER}
@@ -21,29 +21,31 @@ import java.util.stream.Collectors;
  */
 public class Logger {
 
-    public static final String PREFIX_MOD = "[MOD.RAI]";
+    public static final String PREFIX_MOD = "RAI";
     private final static Level DEFAULT_LEVEL = Level.INFO;
-    private final static String LOG_MSG_FORMAT = "%s%s%s%s %s";
+    private final static String LOG_MSG_FORMAT = "[%s|%s]%s[%s] %s";
     private final static int NAME_DISPLAY_MAX_LENGTH = 32;
 
     @Getter
     private final String name;
-
     @Getter
     private final String shortName;
+    @Getter
+    private final String displayName;
 
     @Getter
     @Setter
     private Level level;
 
-    public Logger(String name, Level level) {
-        this.name = name;
-        this.shortName = shortenName(name);
-        this.level = level;
+    public Logger(Class<?> clazz) {
+        this(clazz, DEFAULT_LEVEL);
     }
 
-    public Logger(String name) {
-        this(name, DEFAULT_LEVEL);
+    public Logger(Class<?> clazz, Level level) {
+        this.name = clazz.getCanonicalName();
+        this.shortName = shortenName(clazz);
+        this.displayName = cutOrFill(shortName, NAME_DISPLAY_MAX_LENGTH, false);
+        this.level = level;
     }
 
     public boolean isLevel(Level level) {
@@ -51,23 +53,23 @@ public class Logger {
     }
 
     public void info(String formatMsg, Object... args) {
-        log("[INFO]", Level.INFO, formatMsg, args);
+        log("INFO", Level.INFO, formatMsg, args);
     }
 
     public void debug(String formatMsg, Object... args) {
-        log("[DEBUG]", Level.FINE, formatMsg, args);
+        log("DEBUG", Level.FINE, formatMsg, args);
     }
 
     public void trace(String formatMsg, Object... args) {
-        log("[TRACE]", Level.FINER, formatMsg, args);
+        log("TRACE", Level.FINER, formatMsg, args);
     }
 
     public void warn(String formatMsg, Object... args) {
-        log("[WARN]", Level.WARNING, formatMsg, args);
+        log("WARN", Level.WARNING, formatMsg, args);
     }
 
     public void error(String formatMsg, Object... args) {
-        logErr("[ERROR]", Level.SEVERE, formatMsg, args);
+        logErr("ERROR", Level.SEVERE, formatMsg, args);
     }
 
 
@@ -90,11 +92,11 @@ public class Logger {
 
     private void doLog(String msgPrefix, String formatMsg, Object[] args) {
         LOG.ln(String.format(LOG_MSG_FORMAT,
-                PREFIX_MOD,
-                timestamp(),
-                (name.length() > NAME_DISPLAY_MAX_LENGTH) ? shortName : name,
-                msgPrefix,
-                String.format(formatMsg, stringifyValues(args))));
+            PREFIX_MOD,
+            timestamp(),
+            displayName,
+            msgPrefix,
+            String.format(formatMsg, stringifyValues(args))));
     }
 
     private void logErr(String msgPrefix, Level level, String formatMsg, Object... args) {
@@ -115,25 +117,11 @@ public class Logger {
 
     private void doLogErr(String msgPrefix, String formatMsg, Object[] args) {
         LOG.err((String.format(LOG_MSG_FORMAT,
-                PREFIX_MOD,
-                timestamp(),
-                (name.length() > NAME_DISPLAY_MAX_LENGTH) ? shortName : name,
-                msgPrefix,
-                String.format(formatMsg, stringifyValues(args)))));
-    }
-
-    private String shortenName(String name) {
-        String simpleClassName = name.substring(name.lastIndexOf(".") + 1);
-        String packageName = name.substring(0, name.lastIndexOf(".") + 1);
-
-        name = shortenPackageName(packageName) + '.' + simpleClassName;
-        return name;
-    }
-
-    private String shortenPackageName(String packageName) {
-        return Arrays.stream(packageName.split("\\."))
-                .map(segment -> Character.toString(segment.charAt(0)))
-                .collect(Collectors.joining("."));
+            PREFIX_MOD,
+            timestamp(),
+            displayName,
+            msgPrefix,
+            String.format(formatMsg, stringifyValues(args)))));
     }
 
     private void printException(Throwable ex) {
@@ -157,34 +145,7 @@ public class Logger {
         return null;
     }
 
-    private Object[] stringifyValues(Object[] args) {
-        Object[] stringArgs = new Object[args.length];
-
-        for (int i = 0; i < args.length; i++) {
-            Object arg = args[i];
-            stringArgs[i] = stringifyValue(arg);
-        }
-
-        return stringArgs;
-    }
-
-    private String stringifyValue(Object arg) {
-        if (arg instanceof String) {
-            return (String) arg;
-        } if (arg instanceof Double) {
-            return String.format("%1$,.4f", (Double) arg);
-        } else if (arg instanceof Map) {
-            return StringUtil.toString((Map<?, ?>) arg);
-        } else if (arg instanceof Object[]) {
-            return StringUtil.toString((Object[]) arg);
-        } else if (arg.getClass().isArray()) {
-            return StringUtil.toStringPrimitiveArray(arg);
-        } else {
-            return arg.toString();
-        }
-    }
-
     private String timestamp() {
-        return "[" + LocalTime.now() + "]";
+        return LocalTime.now().toString();
     }
 }

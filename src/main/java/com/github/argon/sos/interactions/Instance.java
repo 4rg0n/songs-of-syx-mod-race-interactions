@@ -38,12 +38,8 @@ final class Instance implements SCRIPT.SCRIPT_INSTANCE {
 	public void load(FileGetter file) {
 		log.debug("loading from save file");
 		RaceInteractionsConfig config = configStore.loadSave(file)
-			.orElseGet(configStore::loadJsonOrDefault);
-		configStore.setCurrentConfig(config);
-		script.initGameLoaded(config);
-
-		// todo load configs from other mods... config versioning?!
-		//      make other mods configs applicable via select box
+			.orElse(null);
+		script.initGameSaveLoaded(config);
 	}
 
 	@Override

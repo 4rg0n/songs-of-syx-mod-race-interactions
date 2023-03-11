@@ -11,6 +11,8 @@ import lombok.Setter;
 import snake2d.util.file.FileGetter;
 import snake2d.util.file.FilePutter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -28,6 +30,9 @@ public class ConfigStore {
 
     private RaceInteractionsConfig currentConfig;
     private RaceInteractionsConfig modConfig;
+
+    @Getter
+    private final List<RaceInteractionsConfig> otherModConfigs = new ArrayList<>();
 
     @Setter
     private RaceInteractionsConfig saveConfig;
@@ -65,6 +70,7 @@ public class ConfigStore {
         }
 
         return configJsonService.loadModConfig().map(config -> {
+            log.trace("Setting mod config to: %s", config);
             modConfig = config;
             return config;
         });

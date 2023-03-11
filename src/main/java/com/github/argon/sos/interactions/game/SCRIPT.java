@@ -11,5 +11,8 @@ public interface SCRIPT<T> extends script.SCRIPT {
      */
     void initGamePresent();
 
-    void initGameLoaded(T config);
+    /**
+     * @param config nullable
+     */
+    void initGameSaveLoaded(T config);
 }

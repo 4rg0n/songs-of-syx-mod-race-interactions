@@ -36,13 +36,13 @@ public final class RaceInteractionsModScript implements SCRIPT<RaceInteractionsC
 				Arrays.toString(RaceStandingCategory.values()));
 
 
-	private RaceService raceService;
 	private RaceInteractions raceInteractions;
 
 	private AIModule_Race aiModuleRace;
 
-	RaceInteractionsConfigPanel configPanel;
+	private RaceInteractionsConfigPanel configPanel;
 
+	private ConfigStore configStore;
 
 	@Override
 	public CharSequence name() {
@@ -56,6 +56,8 @@ public final class RaceInteractionsModScript implements SCRIPT<RaceInteractionsC
 
 	@Override
 	public void initBeforeGameCreated() {
+		// todo load configs from other mods... config versioning?!
+		//      make other mods configs applicable via select box
 		Loggers.setLevels(Level.FINER);
 		Loggers.setLevels("com.github.argon.sos.interactions.race", Level.INFO);
 	}
@@ -67,24 +69,17 @@ public final class RaceInteractionsModScript implements SCRIPT<RaceInteractionsC
 	}
 
 	@Override
-	public void initGameLoaded(RaceInteractionsConfig config) {
-		log.debug("Initializing game resources and mod config");
+	public void initGameSaveLoaded(RaceInteractionsConfig config) {
+		log.debug("Apply configuration loaded from save");
+		log.trace("CONFIG: %s", config);
 
-		// "business logic"
-		raceService = new RaceService(config.getGameRaces());
-		raceInteractions = RaceInteractions.Builder.build(raceService);
+		if (config == null) {
+			return;
+		}
 
-		// Race InteractionsAI
-		aiModuleRace = RaceInteractions.Builder.buildAI(raceInteractions);
+		configStore.setCurrentConfig(config);
 
-		// Config UI Panel
-		configPanel = RaceInteractions.Builder.buildConfigUI(
-			config,
-			raceInteractions,
-			raceService.getAllRaceInfo()
-		);
-
-		// adjust likings when game loaded
+		// adjust likings when game loaded from save
 		raceInteractions.manipulateRaceLikings(config);
 		configPanel.applyConfig(config);
 	}
@@ -108,6 +103,30 @@ public final class RaceInteractionsModScript implements SCRIPT<RaceInteractionsC
 
 	@Override
 	public SCRIPT_INSTANCE initAfterGameCreated() {
-		return new Instance(this, ConfigStore.getInstance());
+		configStore = ConfigStore.getInstance();
+		RaceInteractionsConfig config = configStore.loadJsonOrDefault();
+		configStore.setCurrentConfig(config);
+
+		// "business logic"
+		RaceService raceService = new RaceService(config.getGameRaces());
+		raceInteractions = RaceInteractions.Builder.build(raceService);
+
+		// Race InteractionsAI
+		aiModuleRace = RaceInteractions.Builder.buildAI(raceInteractions);
+
+		// Config UI Panel
+		configPanel = RaceInteractions.Builder.buildConfigUI(
+			config,
+			raceInteractions,
+			raceService.getAllRaceInfo()
+		);
+
+		// adjust likings when game loaded from save
+		raceInteractions.manipulateRaceLikings(config);
+		configPanel.applyConfig(config);
+
+		// todo import and export config as compressed base64
+
+		return new Instance(this, configStore);
 	}
 }

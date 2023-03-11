@@ -80,7 +80,7 @@ public class RaceInteractionsConfig {
         public final static double DEFAULT_MIN_WEIGHT = -2d;
         public final static double DEFAULT_MAX_WEIGHT = 2d;
         public final static double DEFAULT_PREFERENCE_WEIGHT = 1d;
-        public final static double DEFAULT_STANDING_WEIGHT = 0d;
+        public final static double DEFAULT_STANDING_WEIGHT = 1d;
         public final static int DEFAULT_RACE_LOOK_RANGE = 20;
         public final static int DEFAULT_RACE_LOOK_MAX_RANGE = 100;
 

@@ -62,10 +62,10 @@ public class RaceTableSection extends GuiSection {
         raceBoostingToggles.forEach((raceName, enabledRaces)->
             getRaceRow(raceName)
                 .ifPresent(raceTableRow ->
-                enabledRaces.forEach(enabledRaceName ->
-                    raceTableRow.getRaceBoostCheckbox(enabledRaceName)
-                        .ifPresent(raceBoostCheckbox ->
-                        raceBoostCheckbox.selectedSet(true)))));
+                    raceTableRow.getRaceBoostCheckboxes().forEach((raceKey, checkbox) -> {
+                        checkbox.selectedSet(enabledRaces.contains(raceKey));
+                    })
+                ));
     }
 
     public Optional<RaceTableRow> getRaceRow(String raceName) {

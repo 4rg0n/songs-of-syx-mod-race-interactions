@@ -8,6 +8,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import snake2d.util.gui.GuiSection;
+import snake2d.util.gui.clickable.CLICKABLE;
+import snake2d.util.gui.renderable.RENDEROBJ;
 import view.interrupter.ISidePanel;
 import view.main.Interrupters;
 import view.main.VIEW;
@@ -82,7 +84,14 @@ public class GameUiApi {
      * Will open up an {@link ISidePanel} on the left side of the games UI
      */
     public void showPanel(ISidePanel panel, boolean closeOthers) {
-        VIEW.s().panels.add(panel, closeOthers);
+        settlement().panels.add(panel, closeOthers);
+    }
+
+    /**
+     * Will open a popup window near the given button
+     */
+    public void showPopup(RENDEROBJ popup, CLICKABLE button) {
+        interrupters().popup.show(popup, button);
     }
 
     /**
@@ -132,8 +141,7 @@ public class GameUiApi {
         return ReflectionUtil.getDeclaredField("m", interrupters().popup)
                 .flatMap(uiManager ->
                     ReflectionUtil.getDeclaredField("inters", uiManager).flatMap(inters ->
-                        extractFromIterable((Iterable<?>) inters, clazz))
-                );
+                        extractFromIterable((Iterable<?>) inters, clazz)));
     }
 
     private <T> Optional<T> extractFromIterable(Iterable<?> iterable, Class<T> clazz) {

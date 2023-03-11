@@ -7,10 +7,12 @@ import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
 import com.github.argon.sos.interactions.config.RaceStandingCategory;
 import com.github.argon.sos.interactions.game.api.GameHumanoidApi;
 import com.github.argon.sos.interactions.game.api.GameRaceApi;
+import com.github.argon.sos.interactions.game.api.GameUiApi;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
 import com.github.argon.sos.interactions.race.*;
 import com.github.argon.sos.interactions.ui.race.RaceInteractionsConfigPanel;
+import com.github.argon.sos.interactions.ui.race.section.preference.ButtonMenuSection;
 import com.github.argon.sos.interactions.ui.race.section.preference.ButtonSection;
 import com.github.argon.sos.interactions.ui.race.section.preference.PrefConfigSection;
 import com.github.argon.sos.interactions.ui.race.section.preference.RaceTableSection;
@@ -165,13 +167,17 @@ public class RaceInteractions {
             RaceTableSection overviewSection = new RaceTableSection(allRaceInfo, width);
             ButtonSection buttonSection = new ButtonSection();
             StandConfigSection standConfigSection = new StandConfigSection(config, width);
+            ButtonMenuSection buttonMenuSection = new ButtonMenuSection();
 
             return new RaceInteractionsConfigPanel(
                 raceInteractions,
                 prefConfigSection,
                 overviewSection,
                 buttonSection,
+                buttonMenuSection,
                 standConfigSection,
+                GameRaceApi.getInstance(),
+                GameUiApi.getInstance(),
                 ConfigStore.getInstance(),
                 width
             );
