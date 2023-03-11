@@ -10,8 +10,8 @@ import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
 import com.github.argon.sos.interactions.ui.element.HorizontalLine;
 import com.github.argon.sos.interactions.ui.element.VerticalLine;
-import com.github.argon.sos.interactions.ui.race.section.preference.ButtonMenuSection;
-import com.github.argon.sos.interactions.ui.race.section.preference.ButtonSection;
+import com.github.argon.sos.interactions.ui.race.section.ButtonMenuSection;
+import com.github.argon.sos.interactions.ui.race.section.ButtonSection;
 import com.github.argon.sos.interactions.ui.race.section.preference.PrefConfigSection;
 import com.github.argon.sos.interactions.ui.race.section.preference.RaceTableSection;
 import com.github.argon.sos.interactions.ui.race.section.standing.StandConfigSection;
@@ -118,6 +118,22 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
             applyConfig(modConfig);
             raceInteractions.applyRaceLikings(this.gameRaceApi.getVanillaLikings());
         });
+        // Export button
+        buttonMenuSection.getExportButton().clickActionSet(() -> {
+            log.debug("Export click");
+            RaceInteractionsConfig config = getConfig();
+            configStore.toClipboard(config);
+        });
+        // Export button
+        buttonMenuSection.getImportButton().clickActionSet(() -> {
+            log.debug("Import click");
+            configStore.fromClipboard()
+                .ifPresent(config -> {
+                    log.debug("Applying config from clipboard");
+                    applyConfig(config);
+                });
+        });
+
 
         GuiSection container = new GuiSection();
         container.addRight(0, prefConfigSection);

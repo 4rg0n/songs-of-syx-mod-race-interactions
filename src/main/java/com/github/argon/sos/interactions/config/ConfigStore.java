@@ -4,10 +4,8 @@ import com.github.argon.sos.interactions.ai.PlanRaceInteract;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
 import com.github.argon.sos.interactions.ui.race.RaceInteractionsConfigPanel;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.github.argon.sos.interactions.util.ClipboardUtil;
+import lombok.*;
 import snake2d.util.file.FileGetter;
 import snake2d.util.file.FilePutter;
 
@@ -21,12 +19,16 @@ import java.util.Optional;
  * Holds the {@link ConfigStore#currentConfig}, which is used by {@link RaceInteractionsConfigPanel}
  * and the {@link PlanRaceInteract} classes. It serves as storage of the current used configuration.
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConfigStore {
     private final static Logger log = Loggers.getLogger(ConfigStore.class);
 
     @Getter(lazy = true)
-    private final static ConfigStore instance = new ConfigStore();
+    private final static ConfigStore instance = new ConfigStore(
+        ConfigJsonService.getInstance(),
+        ConfigSaveService.getInstance(),
+        ConfigDecoderEncoder.getInstance()
+    );
 
     private RaceInteractionsConfig currentConfig;
     private RaceInteractionsConfig modConfig;
@@ -37,8 +39,10 @@ public class ConfigStore {
     @Setter
     private RaceInteractionsConfig saveConfig;
 
-    private final ConfigJsonService configJsonService = ConfigJsonService.getInstance();
-    private final ConfigSaveService configSaveService = ConfigSaveService.getInstance();
+    private final ConfigJsonService configJsonService;
+    private final ConfigSaveService configSaveService;
+
+    private final ConfigDecoderEncoder configDecoderEncoder;
 
     /**
      * Used by the mod as current configuration to apply and use
@@ -115,5 +119,18 @@ public class ConfigStore {
             setSaveConfig(config);
             return config;
         });
+    }
+
+    public void toClipboard(RaceInteractionsConfig config) {
+        log.debug("Writing config to clipboard");
+        log.trace("CONFIG: %s", config);
+        configDecoderEncoder.encode(config)
+            .ifPresent(ClipboardUtil::write);
+    }
+
+    public Optional<RaceInteractionsConfig> fromClipboard() {
+        log.debug("Reading config from clipboard");
+       return ClipboardUtil.read()
+           .flatMap(configDecoderEncoder::decode);
     }
 }

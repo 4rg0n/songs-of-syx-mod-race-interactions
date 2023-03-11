@@ -1,4 +1,4 @@
-package com.github.argon.sos.interactions.ui.race.section.preference;
+package com.github.argon.sos.interactions.ui.race.section;
 
 import lombok.Getter;
 import snake2d.util.gui.GuiSection;
@@ -13,12 +13,12 @@ public class ButtonMenuSection extends GuiSection {
         this.resetModButton = new GButt.ButtPanel("Reset");
         resetModButton.hoverInfoSet("Restores vanilla likings and default mod settings.");
 
-        this.exportButton = new GButt.ButtPanel("Export");
-        exportButton.hoverInfoSet("COMING SOON: Export settings for sharing.");
+        this.exportButton = new GButt.ButtPanel("Export to clipboard");
+        exportButton.hoverInfoSet("Export settings for sharing into clipboard.");
 
-        this.importButton = new GButt.ButtPanel("Import");
-        importButton.hoverInfoSet("COMING SOON: Import exported settings.");
-        setButtonsWidth(exportButton.body.width() + 8);
+        this.importButton = new GButt.ButtPanel("Import from clipboard");
+        importButton.hoverInfoSet("Import exported settings from clipboard.");
+        setButtonsWidth(importButton.body.width() + 8);
 
         addDownC(0, exportButton);
         addDownC(0, importButton);
