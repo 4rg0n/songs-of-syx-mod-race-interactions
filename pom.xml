@@ -19,7 +19,7 @@
         <mod.name>Race Interactions</mod.name>
         <mod.description>
             Manipulates the likings of races to each other based on their equality in preferences.
-            Races nearby other liked can get boosted in standings.
+            Races nearby other liked races can get boosted in standings.
         </mod.description>
         <mod.author>4rg0n</mod.author>
         <mod.info>One day I know what to write here...</mod.info>
