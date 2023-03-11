@@ -3,7 +3,9 @@ package com.github.argon.sos.interactions.ui.race;
 import com.github.argon.sos.interactions.RaceInteractions;
 import com.github.argon.sos.interactions.RaceInteractionsModScript;
 import com.github.argon.sos.interactions.config.ConfigStore;
+import com.github.argon.sos.interactions.config.OtherModInfo;
 import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
+import com.github.argon.sos.interactions.game.api.GameModApi;
 import com.github.argon.sos.interactions.game.api.GameRaceApi;
 import com.github.argon.sos.interactions.game.api.GameUiApi;
 import com.github.argon.sos.interactions.log.Logger;
@@ -13,6 +15,7 @@ import com.github.argon.sos.interactions.ui.element.HorizontalLine;
 import com.github.argon.sos.interactions.ui.element.VerticalLine;
 import com.github.argon.sos.interactions.ui.race.section.ButtonMenuSection;
 import com.github.argon.sos.interactions.ui.race.section.ButtonSection;
+import com.github.argon.sos.interactions.ui.race.section.ImportOtherModSection;
 import com.github.argon.sos.interactions.ui.race.section.preference.PrefConfigSection;
 import com.github.argon.sos.interactions.ui.race.section.preference.RaceTableSection;
 import com.github.argon.sos.interactions.ui.race.section.standing.StandConfigSection;
@@ -20,6 +23,7 @@ import lombok.Getter;
 import snake2d.util.gui.GuiSection;
 import view.interrupter.ISidePanel;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -37,12 +41,13 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
     private final ButtonSection buttonSection;
     private final ButtonMenuSection buttonMenuSection;
     private final StandConfigSection standConfigSection;
-
     private final RaceInteractions raceInteractions;
     private final ConfigStore configStore;
 
     private final GameRaceApi gameRaceApi;
     private final GameUiApi gameUiApi;
+    private final GameModApi gameModApi;
+
 
     private double updateTimerSeconds = 0d;
 
@@ -53,13 +58,14 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         PrefConfigSection prefConfigSection,
         RaceTableSection raceTableSection,
         ButtonSection buttonSection,
-        ButtonMenuSection buttonMenuSection, StandConfigSection standConfigSection,
-        GameRaceApi gameRaceApi, GameUiApi gameUiApi, ConfigStore configStore,
+        ButtonMenuSection buttonMenuSection,
+        StandConfigSection standConfigSection,
+        GameRaceApi gameRaceApi,
+        GameUiApi gameUiApi,
+        GameModApi gameModApi,
+        ConfigStore configStore,
         int width
     ) {
-        this.buttonMenuSection = buttonMenuSection;
-        this.gameRaceApi = gameRaceApi;
-        this.gameUiApi = gameUiApi;
         this.section = new GuiSection();
         titleSet(TITLE);
         section().body().setWidth(width);
@@ -70,6 +76,10 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         this.buttonSection = buttonSection;
         this.configStore = configStore;
         this.standConfigSection = standConfigSection;
+        this.buttonMenuSection = buttonMenuSection;
+        this.gameRaceApi = gameRaceApi;
+        this.gameUiApi = gameUiApi;
+        this.gameModApi = gameModApi;
 
         // Undo button
         buttonSection.getUndoButton().clickActionSet(() -> {
@@ -107,10 +117,11 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
             applyConfig(optionalConfig.get());
             loadProfileButton.markSuccess(true);
         });
-        // Menu
-        buttonSection.getMenuButton().clickActionSet(() -> {
-            log.debug("Menu click");
-            gameUiApi.showPopup(buttonMenuSection, buttonSection.getMenuButton());
+        // More / Menu
+        Button menuButton = buttonSection.getMenuButton();
+        menuButton.clickActionSet(() -> {
+            log.debug("More click");
+            gameUiApi.showPopup(buttonMenuSection, menuButton);
         });
 
         // Boost: All button
@@ -159,7 +170,21 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
             boolean success = applyConfig(optionalConfig.get());
             importButton.markSuccess(success);
         });
+        // Import from other mods button
+        Button importOtherModsButton = buttonMenuSection.getImportOtherModsButton();
+        importOtherModsButton.clickActionSet(() -> {
+            log.debug("Import other mods click");
+            List<OtherModInfo> otherMods = gameModApi.findOtherModsWithConfig();
+            ImportOtherModSection importOtherModSection = new ImportOtherModSection(otherMods, this, configStore);
 
+            // selection with other mods containing race interactions config
+            gameUiApi.showPopup(
+                importOtherModSection,
+                // position popup right next to button
+                importOtherModsButton.body().x2() + importOtherModsButton.body().width() / 2,
+                importOtherModsButton.body().y1() - importOtherModsButton.body().height() * 2
+            );
+        });
 
         GuiSection container = new GuiSection();
         container.addRight(0, prefConfigSection);

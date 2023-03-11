@@ -77,6 +77,10 @@ public class RaceInteractionsConfig {
          */
         public final static String FILE_NAME = "RaceInteractions";
 
+        public final static String FILE_RELATIVE_PATH = "assets/init/config";
+
+        public final static String MOD_FILE_PATH = FILE_RELATIVE_PATH + "/" + FILE_NAME + ".txt";
+
         public final static double DEFAULT_MIN_WEIGHT = -2d;
         public final static double DEFAULT_MAX_WEIGHT = 2d;
         public final static double DEFAULT_PREFERENCE_WEIGHT = 1d;

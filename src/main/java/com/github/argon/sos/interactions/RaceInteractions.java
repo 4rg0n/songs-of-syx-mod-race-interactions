@@ -6,6 +6,7 @@ import com.github.argon.sos.interactions.config.ConfigStore;
 import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
 import com.github.argon.sos.interactions.config.RaceStandingCategory;
 import com.github.argon.sos.interactions.game.api.GameHumanoidApi;
+import com.github.argon.sos.interactions.game.api.GameModApi;
 import com.github.argon.sos.interactions.game.api.GameRaceApi;
 import com.github.argon.sos.interactions.game.api.GameUiApi;
 import com.github.argon.sos.interactions.log.Logger;
@@ -49,7 +50,7 @@ public class RaceInteractions {
         List<RaceComparator.Result> compareResults = raceComparator.compare(races);
         RaceLikingsCalculator raceLikingsCalculator = new RaceLikingsCalculator(config.getRacePreferenceWeights());
 
-        log.debug("Manipulating race likings for %s races", races.size());
+        log.debug("Manipulating race likings");
         for (RaceComparator.Result compareResult : compareResults) {
             String race = compareResult.getRace();
             String otherRace = compareResult.getOtherRace();
@@ -178,6 +179,7 @@ public class RaceInteractions {
                 standConfigSection,
                 GameRaceApi.getInstance(),
                 GameUiApi.getInstance(),
+                GameModApi.getInstance(),
                 ConfigStore.getInstance(),
                 width
             );

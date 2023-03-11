@@ -9,6 +9,7 @@ public class ButtonMenuSection extends GuiSection {
     private final Button resetModButton;
     private final Button exportButton;
     private final Button importButton;
+    private final Button importOtherModsButton;
     public ButtonMenuSection() {
         this.resetModButton = new Button("Reset");
         resetModButton.hoverInfoSet("Restores vanilla likings and default mod settings.");
@@ -18,10 +19,14 @@ public class ButtonMenuSection extends GuiSection {
 
         this.importButton = new Button("Import from clipboard");
         importButton.hoverInfoSet("Import exported settings from clipboard.");
-        setButtonsWidth(importButton.body.width() + 8);
+
+        this.importOtherModsButton = new Button("Import from other mods");
+        importOtherModsButton.hoverInfoSet("TODO");
+        setButtonsWidth(importOtherModsButton.body.width() + 8);
 
         addDownC(0, exportButton);
         addDownC(0, importButton);
+        addDownC(0, importOtherModsButton);
         addDownC(0, resetModButton);
     }
 
@@ -29,5 +34,6 @@ public class ButtonMenuSection extends GuiSection {
         resetModButton.body.setWidth(width);
         exportButton.body.setWidth(width);
         importButton.body.setWidth(width);
+        importOtherModsButton.body.setWidth(width);
     }
 }

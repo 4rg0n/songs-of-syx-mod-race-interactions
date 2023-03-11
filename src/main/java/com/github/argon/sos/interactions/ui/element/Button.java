@@ -53,12 +53,12 @@ public class Button extends GButt.ButtPanel {
 
         // clear error or success mark after duration
         if (markError || markSuccess) {
-            markUpdateTimerSeconds += seconds;
-
             if (markUpdateTimerSeconds >= MARK_DURATION_SECONDS) {
                 markUpdateTimerSeconds = 0d;
                 bgClear();
             }
+
+            markUpdateTimerSeconds += seconds;
         }
     }
 
@@ -67,10 +67,10 @@ public class Button extends GButt.ButtPanel {
      */
     public ButtPanel markSuccess(boolean success) {
         if (success) {
-            bg(COLOR.GREEN2GREEN);
+            bg(COLOR.GREEN40);
             markSuccess = true;
         } else {
-            bg(COLOR.RED2RED);
+            bg(COLOR.RED50);
             markError = true;
         }
 

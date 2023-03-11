@@ -5,12 +5,14 @@ import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
 import com.github.argon.sos.interactions.ui.race.RaceInteractionsConfigPanel;
 import com.github.argon.sos.interactions.util.ClipboardUtil;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import snake2d.util.file.FileGetter;
 import snake2d.util.file.FilePutter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.file.Path;
 import java.util.Optional;
 
 /**
@@ -33,9 +35,6 @@ public class ConfigStore {
     private RaceInteractionsConfig currentConfig;
     private RaceInteractionsConfig modConfig;
 
-    @Getter
-    private final List<RaceInteractionsConfig> otherModConfigs = new ArrayList<>();
-
     @Setter
     private RaceInteractionsConfig saveConfig;
 
@@ -43,6 +42,7 @@ public class ConfigStore {
     private final ConfigSaveService configSaveService;
 
     private final ConfigDecoderEncoder configDecoderEncoder;
+
 
     /**
      * Used by the mod as current configuration to apply and use
@@ -121,6 +121,16 @@ public class ConfigStore {
         });
     }
 
+    public Optional<RaceInteractionsConfig> loadJson(Path path) {
+        return configJsonService.load(path);
+    }
+
+    /**
+     * Saves {@link RaceInteractionsConfig} encoded into the system clipboard.
+     * See {@link ConfigDecoderEncoder#encode(RaceInteractionsConfig)}
+     *
+     * @return success
+     */
     public boolean toClipboard(RaceInteractionsConfig config) {
         log.debug("Writing config to clipboard");
         log.trace("CONFIG: %s", config);
@@ -130,6 +140,10 @@ public class ConfigStore {
             .orElse(false);
     }
 
+    /**
+     * Reads encoded {@link RaceInteractionsConfig} from system clipboard.
+     * See {@link ConfigDecoderEncoder#decode(String)}
+     */
     public Optional<RaceInteractionsConfig> fromClipboard() {
         log.debug("Reading config from clipboard");
         return ClipboardUtil.read()

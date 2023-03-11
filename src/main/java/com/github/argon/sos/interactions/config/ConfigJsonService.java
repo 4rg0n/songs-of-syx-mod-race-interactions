@@ -85,23 +85,27 @@ public class ConfigJsonService {
             return Optional.empty();
         }
 
-        Json json;
         Path loadPath = path.get(FILE_NAME);
+        return load(loadPath);
+    }
+
+    public Optional<RaceInteractionsConfig> load(Path path) {
+        Json json;
 
         try {
-            json = new Json(loadPath);
+            json = new Json(path);
         }  catch (Exception e) {
-            log.error("Could not load %s config from %s", FILE_NAME, loadPath.toString(), e);
+            log.info("Could not load json config from %s", path.toString(), e);
             return Optional.empty();
         }
 
-       try {
-           RaceInteractionsConfig config = configMapper.fromJson(json);
-           log.trace("CONFIG: %s", config);
-           return Optional.of(config);
-       } catch (Errors.DataError e) {
-           log.warn("Could load config from %s", loadPath.toString(), e);
-           return Optional.empty();
-       }
+        try {
+            RaceInteractionsConfig config = configMapper.fromJson(json);
+            log.trace("CONFIG: %s", config);
+            return Optional.of(config);
+        } catch (Errors.DataError e) {
+            log.info("Could not load json config from %s", path.toString(), e);
+            return Optional.empty();
+        }
     }
 }

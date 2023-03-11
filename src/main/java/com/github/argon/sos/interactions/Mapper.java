@@ -2,7 +2,6 @@ package com.github.argon.sos.interactions;
 
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
-import init.race.Race;
 import snake2d.util.sets.LIST;
 
 import java.util.*;
@@ -35,10 +34,10 @@ public class Mapper {
                 LinkedHashMap::new));
     }
 
-    public static List<Race> toJavaList(LIST<Race> raceLIST) {
-        List<Race> races = new ArrayList<>();
+    public static <T> List<T> toJavaList(LIST<T> gameLIST) {
+        List<T> races = new ArrayList<>();
 
-        for (Race race : raceLIST) {
+        for (T race : gameLIST) {
             races.add(race);
         }
 
