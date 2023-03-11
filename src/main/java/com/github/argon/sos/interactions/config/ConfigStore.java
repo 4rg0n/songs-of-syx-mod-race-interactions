@@ -97,8 +97,8 @@ public class ConfigStore {
     /**
      * Save into games user profile
      */
-    public void saveProfileConfig(RaceInteractionsConfig config) {
-        configJsonService.saveProfileConfig(config);
+    public boolean saveProfileConfig(RaceInteractionsConfig config) {
+        return configJsonService.saveProfileConfig(config);
     }
 
     /**
@@ -121,16 +121,18 @@ public class ConfigStore {
         });
     }
 
-    public void toClipboard(RaceInteractionsConfig config) {
+    public boolean toClipboard(RaceInteractionsConfig config) {
         log.debug("Writing config to clipboard");
         log.trace("CONFIG: %s", config);
-        configDecoderEncoder.encode(config)
-            .ifPresent(ClipboardUtil::write);
+
+        return configDecoderEncoder.encode(config)
+            .map(ClipboardUtil::write)
+            .orElse(false);
     }
 
     public Optional<RaceInteractionsConfig> fromClipboard() {
         log.debug("Reading config from clipboard");
-       return ClipboardUtil.read()
+        return ClipboardUtil.read()
            .flatMap(configDecoderEncoder::decode);
     }
 }

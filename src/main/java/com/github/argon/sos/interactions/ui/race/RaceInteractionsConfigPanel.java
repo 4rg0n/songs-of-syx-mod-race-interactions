@@ -8,6 +8,7 @@ import com.github.argon.sos.interactions.game.api.GameRaceApi;
 import com.github.argon.sos.interactions.game.api.GameUiApi;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
+import com.github.argon.sos.interactions.ui.element.Button;
 import com.github.argon.sos.interactions.ui.element.HorizontalLine;
 import com.github.argon.sos.interactions.ui.element.VerticalLine;
 import com.github.argon.sos.interactions.ui.race.section.ButtonMenuSection;
@@ -18,6 +19,8 @@ import com.github.argon.sos.interactions.ui.race.section.standing.StandConfigSec
 import lombok.Getter;
 import snake2d.util.gui.GuiSection;
 import view.interrupter.ISidePanel;
+
+import java.util.Optional;
 
 /**
  * Contains all the ui elements for the configuration.
@@ -83,15 +86,26 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
             configStore.setCurrentConfig(config);
         });
         // Save settings to user button
-        buttonSection.getSaveProfileButton().clickActionSet(() -> {
+        Button saveProfileButton = buttonSection.getSaveProfileButton();
+        saveProfileButton.clickActionSet(() -> {
             log.debug("Save to Profile click");
             RaceInteractionsConfig config = getConfig();
-            configStore.saveProfileConfig(config);
+            boolean success = configStore.saveProfileConfig(config);
+            saveProfileButton.markSuccess(success);
         });
         // Load settings from user profile button
-        buttonSection.getLoadProfileButton().clickActionSet(() -> {
+        Button loadProfileButton = buttonSection.getLoadProfileButton();
+        loadProfileButton.clickActionSet(() -> {
             log.debug("Load from Profile click");
-            configStore.getProfileConfig().ifPresent(this::applyConfig);
+            Optional<RaceInteractionsConfig> optionalConfig = configStore.getProfileConfig();
+
+            if (!optionalConfig.isPresent()) {
+                loadProfileButton.markSuccess(false);
+                return;
+            }
+
+            applyConfig(optionalConfig.get());
+            loadProfileButton.markSuccess(true);
         });
         // Menu
         buttonSection.getMenuButton().clickActionSet(() -> {
@@ -111,27 +125,39 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         });
 
         // Reset to mod configuration button
-        buttonMenuSection.getResetModButton().clickActionSet(() -> {
+        Button resetModButton = buttonMenuSection.getResetModButton();
+        resetModButton.clickActionSet(() -> {
             log.debug("Reset click");
             RaceInteractionsConfig modConfig = configStore.getModConfig()
                 .orElse(RaceInteractionsConfig.Default.getConfig());
-            applyConfig(modConfig);
-            raceInteractions.applyRaceLikings(this.gameRaceApi.getVanillaLikings());
+            boolean success = applyConfig(modConfig);
+            resetModButton.markSuccess(success);
+
+            if (success) {
+                raceInteractions.applyRaceLikings(this.gameRaceApi.getVanillaLikings());
+            }
         });
         // Export button
-        buttonMenuSection.getExportButton().clickActionSet(() -> {
+        Button exportButton = buttonMenuSection.getExportButton();
+        exportButton.clickActionSet(() -> {
             log.debug("Export click");
             RaceInteractionsConfig config = getConfig();
-            configStore.toClipboard(config);
+            boolean success = configStore.toClipboard(config);
+            exportButton.markSuccess(success);
         });
-        // Export button
-        buttonMenuSection.getImportButton().clickActionSet(() -> {
+        // Import button
+        Button importButton = buttonMenuSection.getImportButton();
+        importButton.clickActionSet(() -> {
             log.debug("Import click");
-            configStore.fromClipboard()
-                .ifPresent(config -> {
-                    log.debug("Applying config from clipboard");
-                    applyConfig(config);
-                });
+            Optional<RaceInteractionsConfig> optionalConfig = configStore.fromClipboard();
+
+            if (!optionalConfig.isPresent()) {
+                importButton.markSuccess(false);
+                return;
+            }
+            log.debug("Applying config from clipboard");
+            boolean success = applyConfig(optionalConfig.get());
+            importButton.markSuccess(success);
         });
 
 
@@ -161,18 +187,26 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
             .build();
     }
 
-    public void applyConfig(RaceInteractionsConfig config) {
+    public boolean applyConfig(RaceInteractionsConfig config) {
         log.debug("Applying config to ui panel: %s", config);
-        prefConfigSection.applyConfig(
-            config.isCustomOnly(),
-            config.isHonorCustom(),
-            config.getRacePreferenceWeights()
-        );
-        standConfigSection.applyConfig(
-            config.getRaceStandingWeights(),
-            config.getRaceLookRange()
-        );
-        raceTableSection.apply(config.getRaceBoostingToggles());
+        try {
+            prefConfigSection.applyConfig(
+                config.isCustomOnly(),
+                config.isHonorCustom(),
+                config.getRacePreferenceWeights()
+            );
+            standConfigSection.applyConfig(
+                config.getRaceStandingWeights(),
+                config.getRaceLookRange()
+            );
+            raceTableSection.apply(config.getRaceBoostingToggles());
+        } catch (Exception e) {
+            log.info("Could not apply configuration to panel: %s", e.getMessage());
+            log.trace("", e);
+            return false;
+        }
+
+        return true;
     }
 
     @Override

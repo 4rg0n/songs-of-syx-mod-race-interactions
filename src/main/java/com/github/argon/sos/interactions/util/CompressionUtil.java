@@ -15,7 +15,7 @@ public class CompressionUtil {
     public final static Charset CHARSET = StandardCharsets.UTF_8;
 
     public static Optional<String> base64Encode(String string) {
-        if (string == null) {
+        if (string == null || string.length() == 0) {
             return Optional.empty();
         }
 
@@ -31,7 +31,7 @@ public class CompressionUtil {
     }
 
     public static Optional<String> base64Decode(String string) {
-        if (string == null) {
+        if (string == null || string.length() == 0) {
             return Optional.empty();
         }
 
@@ -46,7 +46,7 @@ public class CompressionUtil {
     }
 
     public static Optional<String> compress(String string) {
-        if (string == null) {
+        if (string == null || string.length() == 0) {
             return Optional.empty();
         }
 
@@ -66,6 +66,10 @@ public class CompressionUtil {
     }
 
     public static Optional<String> decompress(String string) {
+        if (string == null || string.length() == 0) {
+            return Optional.empty();
+        }
+
         Inflater decompressor = new Inflater(true);
 
         try (

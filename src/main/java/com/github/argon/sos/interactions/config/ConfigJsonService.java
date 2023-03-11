@@ -46,7 +46,7 @@ public class ConfigJsonService {
         return load(profiePath);
     }
 
-    public void saveProfileConfig(RaceInteractionsConfig config) {
+    public boolean saveProfileConfig(RaceInteractionsConfig config) {
         PATH profiePath = PATHS.local().PROFILE;
 
         log.debug("Saving configuration into profile %s", profiePath.get().toString());
@@ -66,11 +66,15 @@ public class ConfigJsonService {
             boolean success = configJson.save(path);
 
             log.debug("Saving to %s was successful? %s", path, success);
+
+            return success;
         } catch (Errors.DataError e) {
             log.warn("Could not save configuration into profile: %s", e.getMessage());
         } catch (Exception e) {
             log.error("Could not save configuration into profile", e);
         }
+
+        return false;
     }
 
     public Optional<RaceInteractionsConfig> load(PATH path) {

@@ -1,38 +1,36 @@
 package com.github.argon.sos.interactions.ui.race.section;
 
+import com.github.argon.sos.interactions.ui.element.Button;
 import lombok.Getter;
 import snake2d.util.color.COLOR;
 import snake2d.util.gui.GuiSection;
-import util.gui.misc.GButt;
 
 /**
  * Contains the buttons for applying and resetting the config
  */
 @Getter
 public class ButtonSection extends GuiSection {
-    private final GButt.ButtPanel menuButton;
-    private final GButt.ButtPanel undoButton;
-    private final GButt.ButtPanel applyButton;
-    private final GButt.ButtPanel saveProfileButton;
-    private final GButt.ButtPanel loadProfileButton;
+    private final Button menuButton;
+    private final Button undoButton;
+    private final Button applyButton;
+    private final Button saveProfileButton;
+    private final Button loadProfileButton;
 
     public ButtonSection() {
-        this.menuButton = new GButt.ButtPanel("More");
+        this.menuButton = new Button("More");
         menuButton.hoverInfoSet("Additional functions");
 
-        this.undoButton = new GButt.ButtPanel("Undo");
+        this.undoButton = new Button("Undo", COLOR.WHITE25);
         undoButton.hoverInfoSet("Reset current made settings");
-        undoButton.bg(COLOR.WHITE25);
 
-        this.applyButton = new GButt.ButtPanel("Apply");
+        this.applyButton = new Button("Apply", COLOR.WHITE15);
         applyButton.hoverInfoSet("Manipulates race likings according to settings.");
-        applyButton.bg(COLOR.WHITE15);
 
 
-        this.saveProfileButton = new GButt.ButtPanel("Save to profile");
+        this.saveProfileButton = new Button("Save to profile");
         saveProfileButton.hoverInfoSet("Saves settings to user profile. So it can be used in another save.");
 
-        this.loadProfileButton = new GButt.ButtPanel("Load from profile");
+        this.loadProfileButton = new Button("Load from profile");
         loadProfileButton.hoverInfoSet("Loads settings from user profile.");
 
         setButtonsWidth(loadProfileButton.body.width() + 8);
@@ -53,10 +51,10 @@ public class ButtonSection extends GuiSection {
     }
 
     public void markUnApplied() {
-        applyButton.bg(COLOR.WHITE15WHITE50);
+        applyButton.markApplied(false);
     }
 
     public void markApplied() {
-        applyButton.bg(COLOR.WHITE15);
+        applyButton.markApplied(true);
     }
 }
