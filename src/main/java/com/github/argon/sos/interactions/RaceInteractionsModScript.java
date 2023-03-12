@@ -19,7 +19,6 @@ import settlement.entity.humanoid.HTYPE;
 import util.info.INFO;
 
 import java.util.Arrays;
-import java.util.logging.Level;
 
 /**
  * Entry point
@@ -34,7 +33,6 @@ public final class RaceInteractionsModScript implements SCRIPT<RaceInteractionsC
 				Arrays.toString(RacePrefCategory.values()) + ". " +
 				"Races nearby other liked races can get boosted standings: " +
 				Arrays.toString(RaceStandingCategory.values()));
-
 
 	private RaceInteractions raceInteractions;
 
@@ -56,10 +54,8 @@ public final class RaceInteractionsModScript implements SCRIPT<RaceInteractionsC
 
 	@Override
 	public void initBeforeGameCreated() {
-		// todo load configs from other mods... config versioning?!
-		//      make other mods configs applicable via select box
-		Loggers.setLevels(Level.FINER);
-		Loggers.setLevels("com.github.argon.sos.interactions.race", Level.INFO);
+//		Loggers.setLevels(Level.FINER);
+//		Loggers.setLevels("com.github.argon.sos.interactions.race", Level.INFO);
 	}
 
 	@Override
@@ -73,6 +69,7 @@ public final class RaceInteractionsModScript implements SCRIPT<RaceInteractionsC
 		log.debug("Apply configuration loaded from save");
 		log.trace("CONFIG: %s", config);
 
+		// no config from save file?
 		if (config == null) {
 			return;
 		}
@@ -124,8 +121,6 @@ public final class RaceInteractionsModScript implements SCRIPT<RaceInteractionsC
 		// adjust likings when game loaded from save
 		raceInteractions.manipulateRaceLikings(config);
 		configPanel.applyConfig(config);
-
-		// todo import and export config as compressed base64
 
 		return new Instance(this, configStore);
 	}

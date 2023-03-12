@@ -31,8 +31,51 @@ There you can set the different weights and see the results:
 
 ![Config Panel](doc/img/config_panel.png)
 
-The configuration is saved into the games save file. 
-It can also be saved and loaded from the games user profile for reusing it in another save.
+### Change likings between races
+
+* **Only custom races:** whether the configuration should affect any vanilla game races.
+* **Honor custom races likings:** whether, the mod shall manipulate already set likings to other races in custom modded races.
+* **Sliders:** (FOOD, CLIMATE, BUILDING, RELIGION) will affect how much the similarity in a certain category should influence the likings between races.
+
+### Boost standings for liked races nearby
+
+* **Race toggles:** in front of each race icon is a toggle. There you can define whether a race should get boosted when near the other race.
+* **Range:** affects the distance where citizens look for other races.
+* **Boost:** toggle boost for all races on or off.
+* **Sliders:** (EXPECTATION, FULFILLMENT, HAPPINESS, LOYALTY) adjusts boosting of different standings when races are nearby other liked races.
+
+### Saving, reusing and sharing config
+
+The current configuration is stored into the games save file.
+It can also be saved into the games **profile folder** for reusing it in another save:
+
+```
+%USERPROFILE%\AppData\Roaming\songsofsyx\saves\profile
+```
+
+* **Load from profile:** load a saved configuration from the games profile folder
+* **Save to profile:** save current configuration to the games profile folder
+
+#### More Button
+
+![More Menu](doc/img/more_menu.png)
+
+* **Export to clipboard:** will export the current configuration as base64 string into your clipboard. You can paste it from the clipboard with `CTRL + V`.
+* **Import from clipboard:** will import a base64 encoded configuration from your clipboard. You can copy it into the clipboard with `CTRL + C`.
+* **Reset:** will restore the vanilla likings of the races and set the configuration to default settings.
+* **Import from other mods:** will open up a selection of configurations found in other active mods to import
+
+![Import from mods](doc/img/import_from_mods.png)
+
+### For race mod authors
+
+The mod will scan for configuration provided by other active mods. 
+So you can provide your own configuration bundled with your race mod.
+You have to put it into the following directory of your mod to work:
+
+```
+assets/init/config/RaceInteractions.txt
+```
 
 # Getting started
 
