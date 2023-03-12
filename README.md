@@ -15,6 +15,12 @@ This will make the assignment of who likes who more dynamic.
 With version **v2.0.0** citizens became a new AI. They will now look for other races nearby. 
 The standings "Happiness", "Loyalty", "Expectations" and "Fulfillment" will get boosted for liked races.
 
+## v2.2.0
+
+Since version **v2.2.0** there are finer settings for which race gets boosted when nearby another one.
+And also sharing of configuration with others via export and import, and loading configuration from other active mods is possible now.
+So you can provide your own configuration bundled into your mod! 
+
 
 ## But why?!
 
@@ -61,11 +67,29 @@ It can also be saved into the games **profile folder** for reusing it in another
 ![More Menu](doc/img/more_menu.png)
 
 * **Export to clipboard:** will export the current configuration as base64 string into your clipboard. You can paste it from the clipboard with `CTRL + V`.
+  ```
+  U1RBTkRJTkdfV0VJR0hUUzogew0KCUVYUEVDVEFUSU9OOiAxLjAsDQoJRlVMRklMTE1FTlQ6IDEuMCwNCglMT1lBTFRZOiAxLjAsDQoJSEFQUElORVNTO
+  iAxLjAsDQoJfSwNClZBTklMTEFfUkFDRVM6IFsNCgkiQVJHT05PU0giLA0KCSJDQU5UT1IiLA0KCSJDUkVUT05JQU4iLA0KCSJET05ET1JJQU4iLA0KCS
+  JHQVJUSElNSSIsDQoJIkhVTUFOIiwNCgkiVElMQVBJIiwNCgldLA0KUkFDRV9MT09LX1JBTkdFOiAyMCwNClZFUlNJT046IDEsDQpIT05PUl9DVVNUT01
+  fUkFDRV9MSUtJTkdTOiB0cnVlLA0KUkFDRV9CT09TVF9UT0dHTEVTOiB7DQoJSFVNQU46IFsNCgkJIkNSRVRPTklBTiIsDQoJCSJDQU5UT1IiLA0KCQki
+  RE9ORE9SSUFOIiwNCgkJIlRJTEFQSSIsDQoJCSJBUkdPTk9TSCIsDQoJCSJHQVJUSElNSSIsDQoJCV0sDQoJQ1JFVE9OSUFOOiBbDQoJCSJIVU1BTiIsD
+  QoJCSJDQU5UT1IiLA0KCQkiRE9ORE9SSUFOIiwNCgkJIlRJTEFQSSIsDQoJCSJBUkdPTk9TSCIsDQoJCSJHQVJUSElNSSIsDQoJCV0sDQoJQ0FOVE9SOi
+  BbDQoJCSJIVU1BTiIsDQoJCSJDUkVUT05JQU4iLA0KCQkiRE9ORE9SSUFOIiwNCgkJIlRJTEFQSSIsDQoJCSJBUkdPTk9TSCIsDQoJCSJHQVJUSElNSSI
+  sDQoJCV0sDQoJRE9ORE9SSUFOOiBbDQoJCSJIVU1BTiIsDQoJCSJDUkVUT05JQU4iLA0KCQkiQ0FOVE9SIiwNCgkJIlRJTEFQSSIsDQoJCSJBUkdPTk9T
+  SCIsDQoJCSJHQVJUSElNSSIsDQoJCV0sDQoJVElMQVBJOiBbDQoJCSJIVU1BTiIsDQoJCSJDUkVUT05JQU4iLA0KCQkiQ0FOVE9SIiwNCgkJIkRPTkRPU
+  klBTiIsDQoJCSJBUkdPTk9TSCIsDQoJCSJHQVJUSElNSSIsDQoJCV0sDQoJQVJHT05PU0g6IFsNCgkJIkhVTUFOIiwNCgkJIkNSRVRPTklBTiIsDQoJCS
+  JDQU5UT1IiLA0KCQkiRE9ORE9SSUFOIiwNCgkJIlRJTEFQSSIsDQoJCSJHQVJUSElNSSIsDQoJCV0sDQoJR0FSVEhJTUk6IFsNCgkJIkhVTUFOIiwNCgk
+  JIkNSRVRPTklBTiIsDQoJCSJDQU5UT1IiLA0KCQkiRE9ORE9SSUFOIiwNCgkJIlRJTEFQSSIsDQoJCSJBUkdPTk9TSCIsDQoJCV0sDQoJfSwNClBSRUZF
+  UkVOQ0VfV0VJR0hUUzogew0KCUJVSUxESU5HOiAxLjAsDQoJUkVMSUdJT046IDEuMCwNCglXT1JLOiAxLjAsDQoJRk9PRDogMS4wLA0KCUNMSU1BVEU6I
+  DEuMCwNCgl9LA0KQ1VTVE9NX1JBQ0VfT05MWTogdHJ1ZSwNCg==
+  ```
 * **Import from clipboard:** will import a base64 encoded configuration from your clipboard. You can copy it into the clipboard with `CTRL + C`.
-* **Reset:** will restore the vanilla likings of the races and set the configuration to default settings.
 * **Import from other mods:** will open up a selection of configurations found in other active mods to import
 
-![Import from mods](doc/img/import_from_mods.png)
+  ![Import from mods](doc/img/import_from_mods.png)
+
+* **Reset:** will restore the vanilla likings of the races and set the configuration to default settings.
+
 
 ### For race mod authors
 
