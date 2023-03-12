@@ -101,6 +101,8 @@ You have to put it into the following directory of your mod to work:
 assets/init/config/RaceInteractions.txt
 ```
 
+See mods [RaceInteractions.txt](src/main/resources/mod-files/assets/init/config/RaceInteractions.txt)
+
 # Getting started
 
 [Maven](https://maven.apache.org/) is required to compile, package and install the mod.
