@@ -56,7 +56,7 @@ The current configuration is stored into the games save file.
 It can also be saved into the games **profile folder** for reusing it in another save:
 
 ```
-%USERPROFILE%\AppData\Roaming\songsofsyx\saves\profile
+%USERPROFILE%\AppData\Roaming\songsofsyx\saves\profile\RaceInteractions.txt
 ```
 
 * **Load from profile:** load a saved configuration from the games profile folder

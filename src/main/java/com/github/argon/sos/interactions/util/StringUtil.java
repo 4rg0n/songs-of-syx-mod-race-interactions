@@ -120,4 +120,16 @@ public class StringUtil {
     public static String quote(String string) {
         return "\"" + string + "\"";
     }
+
+    public static String unquote(String string) {
+        if (string == null || string.length() == 0) {
+            return string;
+        }
+
+        if (string.charAt(0) == '"' && string.charAt(string.length() - 1) == '"') {
+            string = string.substring(1, string.length() - 2);
+        }
+
+        return string;
+    }
 }
