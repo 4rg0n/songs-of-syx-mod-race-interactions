@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @EqualsAndHashCode
 @RequiredArgsConstructor
-public class JsonDouble extends JsonElement {
+public class JsonDouble implements JsonElement {
     private final Double value;
 
     @Override

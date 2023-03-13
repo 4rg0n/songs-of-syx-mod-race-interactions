@@ -1,7 +1,7 @@
 package com.github.argon.sos.interactions.game.json.element;
 
 /**
- * See implementations
+ * Represents a parsed json value
  */
-public abstract class JsonElement {
+public interface JsonElement {
 }

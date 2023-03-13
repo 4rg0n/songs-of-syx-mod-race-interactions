@@ -1,10 +1,10 @@
-package com.github.argon.sos.interactions.game.json.mapper.legacy;
+package com.github.argon.sos.interactions.game.json.mapper.jsone;
 
 import com.github.argon.sos.interactions.game.json.element.JsonLong;
 import com.github.argon.sos.interactions.util.ClassUtil;
 import snake2d.util.file.JsonE;
 
-public class LegacyLongMapper extends LegacyMapper<JsonLong> {
+public class JsonELongMapper extends JsonEMapper<JsonLong> {
 
     @Override
     public JsonE map(JsonE json, String key, JsonLong jsonElement) {

@@ -1,10 +1,10 @@
-package com.github.argon.sos.interactions.game.json.mapper.legacy;
+package com.github.argon.sos.interactions.game.json.mapper.jsone;
 
 import com.github.argon.sos.interactions.game.json.element.JsonBoolean;
 import com.github.argon.sos.interactions.util.ClassUtil;
 import snake2d.util.file.JsonE;
 
-public class LegacyBooleanMapper extends LegacyMapper<JsonBoolean> {
+public class JsonEBooleanMapper extends JsonEMapper<JsonBoolean> {
 
     @Override
     public JsonE map(JsonE json, String key, JsonBoolean jsonElement) {

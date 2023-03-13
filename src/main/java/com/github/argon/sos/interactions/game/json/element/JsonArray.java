@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @EqualsAndHashCode
-public class JsonArray extends JsonElement {
+public class JsonArray implements JsonElement {
     private final List<JsonElement> elements = new ArrayList<>();
 
     public JsonElement get(int index) {

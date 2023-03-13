@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @EqualsAndHashCode
-public class JsonObject extends JsonElement {
+public class JsonObject implements JsonElement {
 
     @Getter
     private boolean quoteKeys = false;

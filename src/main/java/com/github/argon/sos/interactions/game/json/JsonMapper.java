@@ -7,51 +7,54 @@ import com.github.argon.sos.interactions.game.json.mapper.JsonMapperException;
 import com.github.argon.sos.interactions.game.json.mapper.Mapper;
 import com.github.argon.sos.interactions.game.json.mapper.Mappers;
 import com.github.argon.sos.interactions.game.json.mapper.TypeInfo;
-import com.github.argon.sos.interactions.game.json.mapper.legacy.LegacyMapper;
-import com.github.argon.sos.interactions.game.json.mapper.legacy.LegacyMappers;
+import com.github.argon.sos.interactions.game.json.mapper.jsone.JsonEMapper;
+import com.github.argon.sos.interactions.game.json.mapper.jsone.JsonEMappers;
 import snake2d.util.file.JsonE;
 
 /**
  * For mapping objects into and from a {@link JsonElement}.
- *
- * <pre>
- *     // TO {@link JsonElement} from pojo with getter methods
- *     MyPojo pojo = new MyPojo();
- *     // ... set stuff into pojo
- *     JsonObject jsonObject = (JsonObject) JsonMapper.mapObject(pojo);
- *
- *     // TO {@link JsonElement} from object
- *     Map<String, List<String>> map = new HashMap();
- *     // ... put stuff into map
- *     // you will need a {@link TypeInfo} with the type info as generic
- *     JsonObject jsonObject = (JsonObject) JsonMapper.mapObject(map, new TypeToken<Map<String, List<String>>>(){});
- *
- *     // TO pojo with setter methods from {@link JsonElement}
- *     MyPojo pojo = JsonMapper.mapJson(jsonObject, MyPojo.class);
- *
- *     // TO object from {@link JsonElement}
- *     JsonArray jsonArray = new JsonArray();
- *     jsonArray.add(new JsonLong(1L));
- *     jsonArray.add(new JsonLong(2L));
- *     jsonArray.add(new JsonLong(3L));
- *     List<Integer> integerList = JsonMapper.mapJson(jsonArray, new TypeToken<List<Integer>>(){});
- *
- *     // TO games {@link JsonE} from {@link JsonElement}
- *     JsonObject jsonObject = new JsonObject();
- *     jsonObject.put("1", new JsonLong(1L));
- *     jsonObject.put("2", new JsonLong(2L));
- *     jsonObject.put("3", new JsonLong(3L));
- *     JsonE jsonE = JsonMapper.mapLegacy(jsonObject);
- * </pre>
+ * Also supports mapping {@link JsonElement} into the games {@link JsonE}.
+ * See {@link this#mapJsonE(JsonObject)}
  */
 public class JsonMapper {
 
     private final static Mappers mappers = Mappers.getDefault();
-    private final static LegacyMappers legacyMappers = LegacyMappers.getDefault();
+    private final static JsonEMappers JSON_E_MAPPERS = JsonEMappers.getDefault();
 
+    /**
+     * Maps a {@link JsonElement} to a given class containing data from the json.
+     * The class has to have setter methods.
+     *
+     * <pre>
+     *     MyPojo pojo = JsonMapper.mapJson(jsonObject, MyPojo.class);
+     * </pre>
+     *
+     * @param json to map
+     * @param clazz of the mapped result
+     * @return instance of the desired class with inserted values from json
+     * @param <T> type of the mapped result
+     */
     public static <T> T mapJson(JsonElement json, Class<T> clazz) {
         return mapJson(json, TypeInfo.get(clazz));
     }
+
+    /**
+     * Maps {@link JsonElement} to a given class via {@link TypeInfo} containing data from the json.
+     *
+     * <pre>
+     *     JsonArray jsonArray = new JsonArray();
+     *     jsonArray.add(new JsonLong(1L));
+     *     jsonArray.add(new JsonLong(2L));
+     *     jsonArray.add(new JsonLong(3L));
+     *     // you will need a {@link TypeInfo} with the type info as generic
+     *     List<Integer> integerList = JsonMapper.mapJson(jsonArray, new TypeToken<List<Integer>>(){});
+     * </pre>
+     *
+     * @param json to map
+     * @param typeInfo containing type information from the class to map
+     * @return instance of the desired class with inserted values from json
+     * @param <T> type of the mapped result
+     */
     public static <T> T mapJson(JsonElement json, TypeInfo<T> typeInfo) {
         Class<? super T> typeClass = typeInfo.getTypeClass();
 
@@ -69,6 +72,18 @@ public class JsonMapper {
         }
     }
 
+    /**
+     * Maps an object to a {@link JsonElement} containing data from the object.
+     * <pre>
+     *     MyPojo pojo = new MyPojo();
+     *     pojo.setName("name");
+     *     pojo.setAmount(1);
+     *     JsonObject jsonObject = (JsonObject) JsonMapper.mapObject(pojo);
+     * </pre>
+     *
+     * @param object to map
+     * @return json element containing data from given object
+     */
     public static JsonElement mapObject(Object object) {
         if (object == null) {
             return new JsonNull();
@@ -78,10 +93,24 @@ public class JsonMapper {
         try {
             return mapObject(object, typeInfo);
         } catch (RuntimeException e) {
-            throw new JsonMapperException("Could not map " + object.getClass().getTypeName() + " to JsonElement", e);
+            throw new JsonMapperException("Could not map " + object.getClass().getTypeName() + " to " + JsonElement.class.getSimpleName(), e);
         }
     }
 
+    /**
+     * Maps an object to a {@link JsonElement} containing data from the object.
+     *
+     * <pre>
+     *     Map<String, List<String>> map = new HashMap();
+     *     map.put("test", Arrays.asList("test", "test"));
+     *     // you will need a {@link TypeInfo} with the type info as generic
+     *     JsonObject jsonObject = (JsonObject) JsonMapper.mapObject(map, new TypeToken<Map<String, List<String>>>(){});
+     * </pre>
+     *
+     * @param object to map
+     * @param typeInfo containing type information from the class to map
+     * @return json element containing data from given object
+     */
     public static JsonElement mapObject(Object object, TypeInfo<?> typeInfo) {
         if (object == null || typeInfo == null) {
             return new JsonNull();
@@ -100,30 +129,52 @@ public class JsonMapper {
         }
     }
 
-    public static JsonE mapLegacy(JsonObject jsonObject) {
+    /**
+     * Maps a {@link JsonObject} to the games {@link JsonE}.
+     *
+     * <pre>
+     *     JsonObject jsonObject = new JsonObject();
+     *     jsonObject.put("1", new JsonLong(1L));
+     *     jsonObject.put("2", new JsonLong(2L));
+     *     jsonObject.put("3", new JsonLong(3L));
+     *     JsonE jsonE = JsonMapper.mapJsonE(jsonObject);
+     * </pre>
+     *
+     * @param jsonObject to map
+     * @return games json format
+     */
+    public static JsonE mapJsonE(JsonObject jsonObject) {
         JsonE json = new JsonE();
 
         jsonObject.getMap().forEach((key, jsonElement) -> {
-            JsonMapper.mapLegacy(json, key, jsonElement);
+            JsonMapper.mapJsonE(json, key, jsonElement);
         });
 
         return json;
     }
 
-    public static JsonE mapLegacy(JsonE json, String key, JsonElement jsonElement) {
+    /**
+     * Maps and inserts a {@link JsonElement} into a {@link JsonE}.
+     *
+     * @param json to set the mapped {@link JsonElement} into
+     * @param key where to set
+     * @param jsonElement to set into given games json
+     * @return games json with mapped and inserted value
+     */
+    public static JsonE mapJsonE(JsonE json, String key, JsonElement jsonElement) {
         Class<? extends JsonElement> jsonElementClass = jsonElement.getClass();
 
         @SuppressWarnings("rawtypes")
-        LegacyMapper legacyMapper = legacyMappers.findOne(jsonElementClass)
+        JsonEMapper jsonEMapper = JSON_E_MAPPERS.findOne(jsonElementClass)
             .orElseThrow(() -> new JsonMapperException("No mapper found for json element " + jsonElementClass.getSimpleName()));
 
         try {
             //noinspection unchecked
-            return legacyMapper.map(json, key, jsonElement);
+            return jsonEMapper.map(json, key, jsonElement);
         } catch (RuntimeException e) {
             throw new JsonMapperException(
                 "Could not map " + jsonElementClass.getSimpleName() +
-                    " to JsonE with mapper " + legacyMapper.getClass().getSimpleName(), e);
+                    " to JsonE with mapper " + jsonEMapper.getClass().getSimpleName(), e);
         }
     }
 }

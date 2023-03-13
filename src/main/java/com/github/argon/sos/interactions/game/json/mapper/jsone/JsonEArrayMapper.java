@@ -1,4 +1,4 @@
-package com.github.argon.sos.interactions.game.json.mapper.legacy;
+package com.github.argon.sos.interactions.game.json.mapper.jsone;
 
 import com.github.argon.sos.interactions.game.json.JsonMapper;
 import com.github.argon.sos.interactions.game.json.element.*;
@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class LegacyArrayMapper extends LegacyMapper<JsonArray> {
+public class JsonEArrayMapper extends JsonEMapper<JsonArray> {
 
     @Override
     public JsonE map(JsonE json, String key, JsonArray jsonArray) {
@@ -52,11 +52,11 @@ public class LegacyArrayMapper extends LegacyMapper<JsonArray> {
                 .map(JsonString::getValue).toArray(String[]::new);
             json.addStrings(key, strings);
         } else if (jsonElement instanceof JsonArray) {
-            throw new JsonMapperException("An array in an array is not supported in legacy json");
+            throw new JsonMapperException("An array in an array is not supported in JsonE");
         } else if (jsonElement instanceof JsonObject) {
             JsonE[] jsons = elements.stream()
                 .map(JsonObject.class::cast)
-                .map(JsonMapper::mapLegacy).toArray(JsonE[]::new);
+                .map(JsonMapper::mapJsonE).toArray(JsonE[]::new);
             json.add(key, jsons);
         }
 

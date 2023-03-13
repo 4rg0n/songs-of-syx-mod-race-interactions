@@ -8,7 +8,7 @@ import com.github.argon.sos.interactions.game.json.parser.*;
  */
 public class JsonParser {
     /**
-     * Delegates to responsible parser for given character
+     * Delegates to responsible parser when at character
      */
     public static JsonElement parse(Json json){
         char c = json.currentChar();

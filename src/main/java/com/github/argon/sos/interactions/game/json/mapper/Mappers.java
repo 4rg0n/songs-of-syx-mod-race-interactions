@@ -1,5 +1,6 @@
 package com.github.argon.sos.interactions.game.json.mapper;
 
+import com.github.argon.sos.interactions.game.json.element.JsonElement;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
@@ -7,6 +8,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Contains all mappers for mapping {@link JsonElement}s into and from objects
+ */
 @RequiredArgsConstructor
 public class Mappers {
     private final List<Mapper<?>> mappers;

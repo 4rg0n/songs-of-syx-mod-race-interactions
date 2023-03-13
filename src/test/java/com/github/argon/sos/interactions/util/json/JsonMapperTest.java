@@ -470,7 +470,7 @@ class JsonMapperTest {
         jsonNullArray.add(new JsonNull());
         complexJsonObject.put("TEST_ARRAY_NULL", jsonNullArray);
 
-        JsonE jsonE = JsonMapper.mapLegacy(complexJsonObject);
+        JsonE jsonE = JsonMapper.mapJsonE(complexJsonObject);
         String expectedJsonE = FileService.getInstance().readResource("json/JsonE.txt");
 
         // compare without whitespaces
