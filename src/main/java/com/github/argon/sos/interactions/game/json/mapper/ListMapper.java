@@ -5,10 +5,7 @@ import com.github.argon.sos.interactions.game.json.element.JsonArray;
 import com.github.argon.sos.interactions.util.ClassUtil;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.github.argon.sos.interactions.util.TypeUtil.isAssignableFrom;
@@ -37,19 +34,16 @@ public class ListMapper extends Mapper<JsonArray> {
 
         if (isAssignableFrom(type, List.class) || isAssignableFrom(type, Collection.class) || isAssignableFrom(type, ArrayList.class)) {
             return json.getElements().stream()
-                .map(jsonElement -> {
-                    return JsonMapper.mapJson(jsonElement, elementType);
-                }).collect(Collectors.toList());
-        } else if (isAssignableFrom(type, List.class)) {
+                .map(jsonElement ->  JsonMapper.mapJson(jsonElement, elementType))
+                .collect(Collectors.toList());
+        } else if (isAssignableFrom(type, Set.class)) {
             return json.getElements().stream()
-                .map(jsonElement -> {
-                    return JsonMapper.mapJson(jsonElement, elementType);
-                }).collect(Collectors.toSet());
+                .map(jsonElement -> JsonMapper.mapJson(jsonElement, elementType))
+                .collect(Collectors.toSet());
         } else if (isAssignableFrom(type, LinkedList.class)) {
             return json.getElements().stream()
-                .map(jsonElement -> {
-                    return JsonMapper.mapJson(jsonElement, elementType);
-                }).distinct()
+                .map(jsonElement -> JsonMapper.mapJson(jsonElement, elementType))
+                .distinct()
                 .collect(Collectors.toCollection(LinkedList::new));
         } else {
             throw new JsonMapperException("Can not map " + JsonArray.class.getSimpleName() + " to type " + type.getTypeName());
