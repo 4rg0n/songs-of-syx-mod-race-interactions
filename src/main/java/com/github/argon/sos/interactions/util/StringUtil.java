@@ -122,11 +122,15 @@ public class StringUtil {
     }
 
     public static String unquote(String string) {
+        return unwrap(string, '"', '"');
+    }
+
+    public static String unwrap(String string, char prefix, char suffix) {
         if (string == null || string.length() == 0) {
             return string;
         }
 
-        if (string.charAt(0) == '"' && string.charAt(string.length() - 1) == '"') {
+        if (string.charAt(0) == prefix && string.charAt(string.length() - 1) == suffix) {
             string = string.substring(1, string.length() - 2);
         }
 

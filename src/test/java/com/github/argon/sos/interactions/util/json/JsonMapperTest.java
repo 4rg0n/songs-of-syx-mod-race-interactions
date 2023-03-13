@@ -418,7 +418,7 @@ class JsonMapperTest {
     }
 
     @Test
-    void mapLegacy_object() throws IOException {
+    void mapJsonE_object() throws IOException {
         JsonObject simpleJsonObject = new JsonObject();
         simpleJsonObject.put("TEST_LONG", new JsonLong(1L));
         simpleJsonObject.put("TEST_DOUBLE", new JsonDouble(1.1D));

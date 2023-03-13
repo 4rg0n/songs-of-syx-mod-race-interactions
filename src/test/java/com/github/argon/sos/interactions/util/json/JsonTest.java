@@ -2,6 +2,9 @@ package com.github.argon.sos.interactions.util.json;
 
 import com.github.argon.sos.interactions.FileService;
 import com.github.argon.sos.interactions.game.json.Json;
+import com.github.argon.sos.interactions.game.json.JsonWriter;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -14,10 +17,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 class JsonTest {
-    @Test
-    void test() throws IOException {
 
-        FileService fileService = FileService.getInstance();
+    private FileService fileService = FileService.getInstance();
+    @Test
+    @Disabled
+    void parse_gameJsonFiles() throws IOException {
+
+
         Path dataPath = fileService.getResourcePath("data/").orElseThrow(AssertionError::new);
         AtomicInteger processedCount = new AtomicInteger(0);
         AtomicInteger successCount = new AtomicInteger(0);
@@ -57,5 +63,17 @@ class JsonTest {
 
         System.out.println("Broken files:\n");
         brokenFiles.forEach(System.out::println);
+    }
+
+    @Test
+    void parseAndProduceJsonE() throws IOException {
+        String jsonString = fileService.readResource("json/JsonE.txt");
+        Json json = new Json(jsonString, JsonWriter.getJsonE());
+
+        String parsedJsonString = json.toString();
+
+        // compare without whitespaces
+        Assertions.assertThat(jsonString.replaceAll("\\s+",""))
+            .isEqualTo(parsedJsonString.replaceAll("\\s+",""));
     }
 }
