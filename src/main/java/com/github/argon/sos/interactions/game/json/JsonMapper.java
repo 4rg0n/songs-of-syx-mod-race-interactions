@@ -151,7 +151,7 @@ public class JsonMapper {
         JsonE json = new JsonE();
 
         jsonObject.getMap().forEach((key, jsonElement) -> {
-            JsonMapper.mapJsonE(json, key, jsonElement);
+            JsonMapper.mapIntoJsonE(json, key, jsonElement);
         });
 
         return json;
@@ -163,9 +163,8 @@ public class JsonMapper {
      * @param json to set the mapped {@link JsonElement} into
      * @param key where to set
      * @param jsonElement to set into given games json
-     * @return games json with mapped and inserted value
      */
-    public static JsonE mapJsonE(JsonE json, String key, JsonElement jsonElement) {
+    public static void mapIntoJsonE(JsonE json, String key, JsonElement jsonElement) {
         Class<? extends JsonElement> jsonElementClass = jsonElement.getClass();
 
         @SuppressWarnings("rawtypes")
@@ -174,11 +173,11 @@ public class JsonMapper {
 
         try {
             //noinspection unchecked
-            return jsonEMapper.map(json, key, jsonElement);
+            jsonEMapper.map(json, key, jsonElement);
         } catch (RuntimeException e) {
             throw new JsonMapperException(
                 "Could not map " + jsonElementClass.getSimpleName() +
-                    " to JsonE with mapper " + jsonEMapper.getClass().getSimpleName(), e);
+                    " to " + JsonE.class.getSimpleName() + " with mapper " + jsonEMapper.getClass().getSimpleName(), e);
         }
     }
 }

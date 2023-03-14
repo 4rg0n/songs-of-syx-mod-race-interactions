@@ -14,8 +14,6 @@ import java.util.stream.Collectors;
 
 /**
  * For printing {@link JsonElement}s as string
- *
- * todo trailing commas
  */
 public class JsonWriter {
 
@@ -170,5 +168,4 @@ public class JsonWriter {
             .map(this::toJsonString)
             .collect(Collectors.joining(", ", "[", suffix));
     }
-
 }

@@ -5,8 +5,8 @@ import com.github.argon.sos.interactions.game.json.element.JsonObject;
 import lombok.Getter;
 
 /**
- * Can process the games json format and produce valid json.
- * Controls parsing of the games json format.
+ * Can process and produce the games json format.
+ * Can also process and produce standard json.
  *
  * <pre>
  *     // standard JSON
@@ -34,6 +34,9 @@ public class Json {
     @Getter
     private final JsonObject root;
 
+    /**
+     * For writing the {@link JsonElement}s to a json string
+     */
     @Getter
     private final JsonWriter writer;
 
