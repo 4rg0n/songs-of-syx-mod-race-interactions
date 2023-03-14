@@ -21,6 +21,10 @@ public class JsonMapper {
     private final static Mappers mappers = Mappers.getDefault();
     private final static JsonEMappers JSON_E_MAPPERS = JsonEMappers.getDefault();
 
+    public static <T> T mapJson(Json json, Class<T> clazz) {
+        return mapJson(json.getRoot(), TypeInfo.get(clazz));
+    }
+
     /**
      * Maps a {@link JsonElement} to a given class containing data from the json.
      * The class has to have setter methods.

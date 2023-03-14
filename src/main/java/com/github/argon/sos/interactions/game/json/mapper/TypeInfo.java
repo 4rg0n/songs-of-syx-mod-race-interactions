@@ -9,6 +9,18 @@ import java.lang.reflect.Type;
 
 /**
  * Holds type the information of an object such as e.g. List<String>
+ * Usage:
+ * <pre>
+ *     // for simple classes
+ *     TypeInfo.get(String.class);
+ *
+ *     // for types coming from e.g. a java.lang.reflect.Field definition
+ *     Type type = field.getGenericType();
+ *     TypeInfo.get(type)
+ *
+ *     // for providing the information manually
+ *     new TypeInfo<List<String>>(){};
+ * </pre>
  *
  * @param <T> type information
  */
@@ -46,6 +58,11 @@ public class TypeInfo<T> {
         return new TypeInfo<>(type);
     }
 
+    /**
+     * Used when instantiating via <pre>new TypeInfo<List<String>>(){}</pre> to get the tye information from between <...>
+     *
+     * @return the type information provided via the generic
+     */
     private Type getOwnTypeArgument() {
         Type superclass = getClass().getGenericSuperclass();
         if (superclass instanceof ParameterizedType) {
@@ -56,7 +73,7 @@ public class TypeInfo<T> {
         }
         else if (superclass == TypeInfo.class) {
             throw new IllegalStateException(
-                "You have to create the TypeInfo with type information e.g.: new TypeInfo<List<String>>(){}");
+                "You have to create the TypeInfo with type information e.g.: TypeInfo<List<String>>(){}");
         }
 
         throw new IllegalStateException(

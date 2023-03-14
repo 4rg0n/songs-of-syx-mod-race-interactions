@@ -74,10 +74,12 @@ public class JsonWriter {
         String jsonString = toJsonString(json);
         printDepth = 0;
 
+        // remove braces to be compliant with game json format?
         if (!rootBraces) {
             jsonString = StringUtil.unwrap(jsonString, '{', '}');
         }
 
+        // add trailing comma?
         if (trailingComma) {
             jsonString += ",";
         }
@@ -131,6 +133,7 @@ public class JsonWriter {
             String indent = StringUtil.repeat(' ', Math.max(0, printDepth));
             sb.append(indent);
 
+            // quote keys?
             if (quoteKeys) {
                 sb.append("\"").append(key).append("\"").append(": ");
             } else {
@@ -143,6 +146,8 @@ public class JsonWriter {
         sb.append('\n');
         String indent = StringUtil.repeat(' ', Math.max(0, printDepth - 2));
         sb.append(indent);
+
+        // add trailing comma?
         if (trailingComma) {
             sb.append(",");
         }
@@ -155,6 +160,8 @@ public class JsonWriter {
     private String print(JsonArray jsonArray) {
         List<JsonElement> elements = jsonArray.getElements();
         String suffix = "]";
+
+        // add trailing comma?
         if (trailingComma) {
             suffix = ",]";
         }
