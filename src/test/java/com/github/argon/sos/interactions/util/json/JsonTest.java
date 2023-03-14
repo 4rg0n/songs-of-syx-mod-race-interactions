@@ -1,6 +1,7 @@
 package com.github.argon.sos.interactions.util.json;
 
 import com.github.argon.sos.interactions.FileService;
+import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
 import com.github.argon.sos.interactions.game.json.Json;
 import com.github.argon.sos.interactions.game.json.JsonMapper;
 import com.github.argon.sos.interactions.game.json.JsonWriter;
@@ -117,6 +118,15 @@ class JsonTest {
 
         String parsedJsonString = json.toString();
         assertEqualsWithoutWhitespace(jsonString, parsedJsonString);
+    }
+
+    @Test
+    void parse_JsonEAndProduceRaceInteractionsConfig() throws IOException {
+        String raceInteractionsJsonEString = fileService.readResource("json/RaceInteractions.txt");
+        Json json = new Json(raceInteractionsJsonEString);
+
+        RaceInteractionsConfig raceInteractionsConfig = JsonMapper.mapJson(json.getRoot(), RaceInteractionsConfig.class);
+        assertEqualsContent(raceInteractionsConfig.toString(), RaceInteractionsConfig.Default.getConfig().toString());
     }
 
     private void assertEqualsWithoutWhitespace(String actual, String expected) {

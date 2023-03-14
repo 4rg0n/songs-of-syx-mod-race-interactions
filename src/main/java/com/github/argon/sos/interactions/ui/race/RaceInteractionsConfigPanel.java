@@ -201,14 +201,14 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
 
     public RaceInteractionsConfig getConfig() {
         return RaceInteractionsConfig.builder()
-            .gameRaces(configStore.getCurrentConfig()
-                .orElse(RaceInteractionsConfig.Default.getConfig()).getGameRaces())
+            .vanillaRaces(configStore.getCurrentConfig()
+                .orElse(RaceInteractionsConfig.Default.getConfig()).getVanillaRaces())
             .raceLookRange(standConfigSection.getRaceLookRangeValue())
-            .racePreferenceWeights(prefConfigSection.getWeights())
-            .raceStandingWeights(standConfigSection.getWeights())
-            .raceBoostingToggles(raceTableSection.getRaceBoostingToggles())
-            .honorCustom(prefConfigSection.isHonorCustom())
-            .customOnly(prefConfigSection.isOnlyCustom())
+            .preferenceWeights(prefConfigSection.getWeights())
+            .standingWeights(standConfigSection.getWeights())
+            .raceBoostToggles(raceTableSection.getRaceBoostingToggles())
+            .honorCustomRaceLikings(prefConfigSection.isHonorCustom())
+            .customRaceOnly(prefConfigSection.isOnlyCustom())
             .build();
     }
 
@@ -216,15 +216,15 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
         log.debug("Applying config to ui panel: %s", config);
         try {
             prefConfigSection.applyConfig(
-                config.isCustomOnly(),
-                config.isHonorCustom(),
-                config.getRacePreferenceWeights()
+                config.isCustomRaceOnly(),
+                config.isHonorCustomRaceLikings(),
+                config.getPreferenceWeights()
             );
             standConfigSection.applyConfig(
-                config.getRaceStandingWeights(),
+                config.getStandingWeights(),
                 config.getRaceLookRange()
             );
-            raceTableSection.apply(config.getRaceBoostingToggles());
+            raceTableSection.apply(config.getRaceBoostToggles());
         } catch (Exception e) {
             log.info("Could not apply configuration to panel: %s", e.getMessage());
             log.trace("", e);

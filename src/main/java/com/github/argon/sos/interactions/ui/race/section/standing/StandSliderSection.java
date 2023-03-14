@@ -121,7 +121,7 @@ public class StandSliderSection extends GuiSection {
 
         Map<RaceStandingCategory, Slider> sliders = new HashMap<>(RaceStandingCategory.values().length);
         Map<RaceStandingCategory, INT.INTE> sliderValues = new HashMap<>(RaceStandingCategory.values().length);
-        Map<RaceStandingCategory, Double> orderedMap = config.getRaceStandingWeights();
+        Map<RaceStandingCategory, Double> orderedMap = config.getStandingWeights();
 
         orderedMap.forEach((category, weight) -> {
             INT.INTE value = new SimpleInt(fromWeightToSlider(weight), toSliderRange(DEFAULT_MIN_WEIGHT), toSliderRange(DEFAULT_MAX_WEIGHT));

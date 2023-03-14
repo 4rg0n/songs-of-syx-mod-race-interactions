@@ -6,17 +6,17 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Represents the mods configuration
  *
  * TODO split into multiple objects for cleaner method APIs?
  */
-@ToString
-@EqualsAndHashCode
-@Getter
+@Data
 @Builder
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class RaceInteractionsConfig {
 
     /**
@@ -24,30 +24,30 @@ public class RaceInteractionsConfig {
      * Used for migrating older configs into the current version
      */
     @Builder.Default
-    private final int version = Default.VERSION;
+    private int version = Default.VERSION;
 
 
     /**
      * When true, will not affect any vanilla races, but only custom modded ones
      */
-    private final boolean customOnly;
+    private boolean customRaceOnly;
 
     /**
      * When true, will not change any settings already present in custom modded races
      */
-    private final boolean honorCustom;
+    private boolean honorCustomRaceLikings;
 
     /**
      * Contains the weight of each preference category.
      * The weight influences how much similarity in a certain {@link RacePrefCategory}
      * should affect the liking between races.
      */
-    private final Map<RacePrefCategory, Double> racePreferenceWeights;
+    private Map<RacePrefCategory, Double> preferenceWeights;
 
     /**
      * The range in tiles where citizens look for other races nearby
      */
-    private final int raceLookRange;
+    private int raceLookRange;
 
 
     /**
@@ -55,19 +55,19 @@ public class RaceInteractionsConfig {
      * when races are near {@link RaceInteractionsConfig#raceLookRange} other liked races.
      * 0 means disabled.
      */
-    private final Map<RaceStandingCategory, Double> raceStandingWeights;
+    private Map<RaceStandingCategory, Double> standingWeights;
 
     /**
      * Which race should get boosted likings when nearby another race
      */
-    private final Map<String, List<String>> raceBoostingToggles;
+    private Map<String, List<String>> raceBoostToggles;
 
     /**
      * A list of the vanilla game race names.
      * This tells the mod which races are the custom modded ones for
-     * {@link RaceInteractionsConfig#customOnly} and {@link RaceInteractionsConfig#honorCustom}
+     * {@link RaceInteractionsConfig#customRaceOnly} and {@link RaceInteractionsConfig#honorCustomRaceLikings}
      */
-    private final List<String> gameRaces;
+    private List<String> vanillaRaces;
 
     public static class Default {
         public final static int VERSION = 1;
@@ -91,13 +91,13 @@ public class RaceInteractionsConfig {
         public static RaceInteractionsConfig getConfig() {
             return RaceInteractionsConfig.builder()
                 .version(VERSION)
-                .racePreferenceWeights(getPreferencesWeights())
-                .gameRaces(getGameRaces())
-                .raceStandingWeights(getStandingsWeights())
+                .preferenceWeights(getPreferencesWeights())
+                .vanillaRaces(getVanillaRaces())
+                .standingWeights(getStandingsWeights())
                 .raceLookRange(DEFAULT_RACE_LOOK_RANGE)
-                .raceBoostingToggles(getRaceBoostingToggles())
-                .honorCustom(true)
-                .customOnly(true)
+                .raceBoostToggles(getRaceBoostToggles())
+                .honorCustomRaceLikings(true)
+                .customRaceOnly(true)
                 .build();
         }
 
@@ -122,17 +122,19 @@ public class RaceInteractionsConfig {
             return standingsWeightMap;
         }
 
-        public static Map<String, List<String>> getRaceBoostingToggles() {
+        public static Map<String, List<String>> getRaceBoostToggles() {
             Map<String, List<String>> raceBoostingToggles = new HashMap<>();
 
-            getGameRaces().forEach(raceName -> {
-                raceBoostingToggles.put(raceName, getGameRaces());
+            getVanillaRaces().forEach(raceName -> {
+                raceBoostingToggles.put(raceName, getVanillaRaces().stream()
+                    .filter(s -> !s.equals(raceName)) // don't use own race
+                    .collect(Collectors.toList()));
             });
 
             return raceBoostingToggles;
         }
 
-        public static List<String> getGameRaces() {
+        public static List<String> getVanillaRaces() {
             return Arrays.asList("ARGONOSH", "CANTOR", "CRETONIAN", "DONDORIAN", "GARTHIMI", "HUMAN", "TILAPI");
         }
     }

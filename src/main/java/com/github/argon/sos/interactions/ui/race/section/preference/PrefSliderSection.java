@@ -52,7 +52,7 @@ public class PrefSliderSection extends GuiSection {
 
         Map<RacePrefCategory, Slider> sliders = new HashMap<>(RacePrefCategory.values().length);
         Map<RacePrefCategory, INT.INTE> sliderValues = new HashMap<>(RacePrefCategory.values().length);
-        Map<RacePrefCategory, Double> orderedPrefMap = config.getRacePreferenceWeights();
+        Map<RacePrefCategory, Double> orderedPrefMap = config.getPreferenceWeights();
 
         orderedPrefMap.forEach((racePrefCategory, weight) -> {
             INT.INTE value = new SimpleInt(fromWeightToSlider(weight), toSliderRange(DEFAULT_MIN_WEIGHT), toSliderRange(DEFAULT_MAX_WEIGHT));

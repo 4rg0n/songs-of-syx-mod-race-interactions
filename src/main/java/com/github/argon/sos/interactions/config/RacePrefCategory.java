@@ -6,7 +6,7 @@ import lombok.Getter;
 /**
  * Represents races preference category.
  * Each category can have a certain weight assigned to it.
- * See {@link RaceInteractionsConfig#getRacePreferenceWeights()}
+ * See {@link RaceInteractionsConfig#getPreferenceWeights()}
  */
 public enum RacePrefCategory implements Indexed {
     FOOD(0),

@@ -25,11 +25,11 @@ public class PrefConfigSection extends GuiSection {
     public PrefConfigSection(RaceInteractionsConfig config) {
         this.onlyCustomRaces = new CheckboxTitle("Only custom races");
         onlyCustomRaces.hoverInfoSet("Will not manipulate any vanilla game races when checked");
-        onlyCustomRaces.selectedSet(config.isCustomOnly());
+        onlyCustomRaces.selectedSet(config.isCustomRaceOnly());
 
         this.honorCustomRaces = new CheckboxTitle("Honor custom races likings");
         honorCustomRaces.hoverInfoSet("Will not manipulate custom mod races likings to vanilla races when checked");
-        honorCustomRaces.selectedSet(config.isHonorCustom());
+        honorCustomRaces.selectedSet(config.isHonorCustomRaceLikings());
 
         this.prefSliderSection = PrefSliderSection.build(config);
 

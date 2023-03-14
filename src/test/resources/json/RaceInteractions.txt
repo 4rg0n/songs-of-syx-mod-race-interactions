@@ -1,0 +1,102 @@
+** Version identification of the config
+** Used for migrating older configs into the current version
+VERSION: 1,
+
+** When true, will not affect any vanilla races, but only custom modded ones
+CUSTOM_RACE_ONLY: true,
+
+** When true, will not change any settings already present in custom modded races
+HONOR_CUSTOM_RACE_LIKINGS: true,
+
+** Contains the weight of each preference category
+** The weight influences how much similarity in a certain category should affect the liking between races
+PREFERENCE_WEIGHTS: {
+    FOOD: 1.0,
+    CLIMATE: 1.0,
+    BUILDING: 1.0,
+    RELIGION: 1.0,
+    WORK: 1.0,
+},
+
+** The range in tiles where citizens look for other races nearby
+RACE_LOOK_RANGE: 20,
+
+** For boosting different standing categories when races are near other liked races
+** 0 means disabled
+STANDING_WEIGHTS: {
+    EXPECTATION: 1.0,
+    FULFILLMENT: 1.0,
+    HAPPINESS: 1.0,
+    LOYALTY: 1.0,
+},
+
+** Which race should get boosted likings when nearby another race
+RACE_BOOST_TOGGLES: {
+	HUMAN: [
+		"CRETONIAN",
+		"CANTOR",
+		"DONDORIAN",
+		"TILAPI",
+		"ARGONOSH",
+		"GARTHIMI",
+		],
+	CRETONIAN: [
+		"HUMAN",
+		"CANTOR",
+		"DONDORIAN",
+		"TILAPI",
+		"ARGONOSH",
+		"GARTHIMI",
+		],
+	CANTOR: [
+		"HUMAN",
+		"CRETONIAN",
+		"DONDORIAN",
+		"TILAPI",
+		"ARGONOSH",
+		"GARTHIMI",
+		],
+	DONDORIAN: [
+		"HUMAN",
+		"CRETONIAN",
+		"CANTOR",
+		"TILAPI",
+		"ARGONOSH",
+		"GARTHIMI",
+		],
+	TILAPI: [
+		"HUMAN",
+		"CRETONIAN",
+		"CANTOR",
+		"DONDORIAN",
+		"ARGONOSH",
+		"GARTHIMI",
+		],
+	ARGONOSH: [
+		"HUMAN",
+		"CRETONIAN",
+		"CANTOR",
+		"DONDORIAN",
+		"TILAPI",
+		"GARTHIMI",
+		],
+	GARTHIMI: [
+		"HUMAN",
+		"CRETONIAN",
+		"CANTOR",
+		"DONDORIAN",
+		"TILAPI",
+		"ARGONOSH",
+		],
+},
+
+** This tells the mod which races are the custom modded ones
+VANILLA_RACES: [
+    "ARGONOSH",
+    "CANTOR",
+    "CRETONIAN",
+    "DONDORIAN",
+    "GARTHIMI",
+    "HUMAN",
+    "TILAPI",
+],

@@ -105,7 +105,7 @@ public final class RaceInteractionsModScript implements SCRIPT<RaceInteractionsC
 		configStore.setCurrentConfig(config);
 
 		// "business logic"
-		RaceService raceService = new RaceService(config.getGameRaces());
+		RaceService raceService = new RaceService(config.getVanillaRaces());
 		raceInteractions = RaceInteractions.Builder.build(raceService);
 
 		// Race InteractionsAI

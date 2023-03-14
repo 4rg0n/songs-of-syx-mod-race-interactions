@@ -47,17 +47,17 @@ public class V1ConfigMapper implements ConfigMapper {
 
     public FilePutter toSaveGame(FilePutter file, RaceInteractionsConfig config) {
         versionMapper.injectVersion(file, VERSION);
-        file.bool(config.isCustomOnly());
-        file.bool(config.isHonorCustom());
+        file.bool(config.isCustomRaceOnly());
+        file.bool(config.isHonorCustomRaceLikings());
         file.i(config.getRaceLookRange());
 
-        double[] preferenceWeightsIndexed = configSaveMapper.toDoubleIndexed(config.getRacePreferenceWeights());
+        double[] preferenceWeightsIndexed = configSaveMapper.toDoubleIndexed(config.getPreferenceWeights());
         file.ds(preferenceWeightsIndexed);
 
-        double[] standingWeightsIndexed = configSaveMapper.toDoubleIndexed(config.getRaceStandingWeights());
+        double[] standingWeightsIndexed = configSaveMapper.toDoubleIndexed(config.getStandingWeights());
         file.ds(standingWeightsIndexed);
 
-        String raceBoostToggles = configSaveMapper.fromRaceBoostToggles(config.getRaceBoostingToggles());
+        String raceBoostToggles = configSaveMapper.fromRaceBoostToggles(config.getRaceBoostToggles());
         file.chars(raceBoostToggles);
 
         return file;
@@ -81,15 +81,15 @@ public class V1ConfigMapper implements ConfigMapper {
 
         RaceInteractionsConfig raceInteractionsConfig = RaceInteractionsConfig.builder()
             .version(VERSION)
-            .customOnly(customOnly)
-            .honorCustom(honorCustom)
+            .customRaceOnly(customOnly)
+            .honorCustomRaceLikings(honorCustom)
             .raceLookRange(raceLookRange)
-            .gameRaces(ConfigStore.getInstance().getCurrentConfig()
+            .vanillaRaces(ConfigStore.getInstance().getCurrentConfig()
                 .orElse(RaceInteractionsConfig.Default.getConfig())
-                .getGameRaces())
-            .racePreferenceWeights(preferenceWeightsMap)
-            .raceStandingWeights(standingWeightsMap)
-            .raceBoostingToggles(raceBoostToggles)
+                .getVanillaRaces())
+            .preferenceWeights(preferenceWeightsMap)
+            .standingWeights(standingWeightsMap)
+            .raceBoostToggles(raceBoostToggles)
             .build();
 
         log.trace("From save file %s", raceInteractionsConfig.toString());
@@ -111,21 +111,21 @@ public class V1ConfigMapper implements ConfigMapper {
 
         // VANILLA_RACES
         List<String> gameRaces = configJsonMapper.toGameRaces(
-            configJson, RaceInteractionsConfig.Default.getGameRaces());
+            configJson, RaceInteractionsConfig.Default.getVanillaRaces());
 
         // RACE_BOOST_TOGGLES
         Map<String, List<String>> raceBoostToggles = configJsonMapper.toRaceBoostToggles(
-            configJson, RaceInteractionsConfig.Default.getRaceBoostingToggles());
+            configJson, RaceInteractionsConfig.Default.getRaceBoostToggles());
 
         RaceInteractionsConfig raceInteractionsConfig = RaceInteractionsConfig.builder()
             .version(VERSION)
-            .racePreferenceWeights(preferencesWeightMap)
-            .raceStandingWeights(standingsWeightMap)
-            .raceBoostingToggles(raceBoostToggles)
+            .preferenceWeights(preferencesWeightMap)
+            .standingWeights(standingsWeightMap)
+            .raceBoostToggles(raceBoostToggles)
             .raceLookRange(raceLookRange)
-            .gameRaces(gameRaces)
-            .honorCustom(honorCustom)
-            .customOnly(customOnly)
+            .vanillaRaces(gameRaces)
+            .honorCustomRaceLikings(honorCustom)
+            .customRaceOnly(customOnly)
             .build();
 
         log.trace("From json %s", raceInteractionsConfig.toString());
@@ -138,23 +138,23 @@ public class V1ConfigMapper implements ConfigMapper {
         log.trace("Config: %s", config.toString());
 
         // PREFERENCE_WEIGHTS
-        JsonE preferenceWeights = configJsonMapper.toPreferenceWeights(config.getRacePreferenceWeights());
+        JsonE preferenceWeights = configJsonMapper.toPreferenceWeights(config.getPreferenceWeights());
 
         // STANDING_WEIGHTS
-        JsonE standingWeights = configJsonMapper.toStandingWeights(config.getRaceStandingWeights());
+        JsonE standingWeights = configJsonMapper.toStandingWeights(config.getStandingWeights());
 
         // RACE_BOOST_TOGGLES
-        JsonE raceBoostToggles = configJsonMapper.toRaceBoostToggles(config.getRaceBoostingToggles());
+        JsonE raceBoostToggles = configJsonMapper.toRaceBoostToggles(config.getRaceBoostToggles());
 
         versionMapper.injectVersion(json, VERSION);
         json.add(KEY_PREFERENCE_WEIGHTS, preferenceWeights);
         json.add(KEY_STANDING_WEIGHTS, standingWeights);
         json.add(KEY_RACE_BOOST_TOGGLES, raceBoostToggles);
 
-        json.add(KEY_CUSTOM_RACE_ONLY, config.isCustomOnly());
-        json.add(KEY_HONOR_CUSTOM_RACE_LIKINGS, config.isHonorCustom());
+        json.add(KEY_CUSTOM_RACE_ONLY, config.isCustomRaceOnly());
+        json.add(KEY_HONOR_CUSTOM_RACE_LIKINGS, config.isHonorCustomRaceLikings());
         json.add(KEY_RACE_LOOK_RANGE, config.getRaceLookRange());
-        json.addStrings(KEY_VANILLA_RACES, config.getGameRaces().toArray(new String[0]));
+        json.addStrings(KEY_VANILLA_RACES, config.getVanillaRaces().toArray(new String[0]));
 
         return json;
     }
