@@ -10,7 +10,7 @@ import java.lang.reflect.Type;
 /**
  * Holds type the information of an object such as e.g. List<String>
  * Usage:
- * <pre>
+ * <pre>{@code
  *     // for simple classes
  *     TypeInfo.get(String.class);
  *
@@ -20,7 +20,7 @@ import java.lang.reflect.Type;
  *
  *     // for providing the information manually
  *     new TypeInfo<List<String>>(){};
- * </pre>
+ * }</pre>
  *
  * @param <T> type information
  */
@@ -59,7 +59,7 @@ public class TypeInfo<T> {
     }
 
     /**
-     * Used when instantiating via <pre>new TypeInfo<List<String>>(){}</pre> to get the tye information from between <...>
+     * Used when instantiating via {@code new TypeInfo<List<String>>(){}}to get the tye information from between <...>
      *
      * @return the type information provided via the generic
      */

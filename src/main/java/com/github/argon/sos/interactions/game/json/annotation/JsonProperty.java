@@ -5,6 +5,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * For mapping a field to a json key
+ *
+ * <pre>{@code
+ *   @JsonProperty(key = "RACE_NAME");
+ *   private String name;
+ * }</pre>
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
 public @interface JsonProperty {

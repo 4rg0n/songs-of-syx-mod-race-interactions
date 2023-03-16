@@ -8,7 +8,7 @@ import lombok.Getter;
  * Can process and produce the games json format.
  * Can also process and produce standard json.
  *
- * <pre>
+ * <pre>{@code
  *     // standard JSON
  *     String jsonString = "{\"TEST\": 1}";
  *     JsonObject jsonObject = new Json(jsonString).getRoot();
@@ -16,7 +16,7 @@ import lombok.Getter;
  *     // game JSON
  *     String jsonString = "TEST: 1,";
  *     JsonObject jsonObject = new Json(jsonString).getRoot();
- * </pre>
+ * }</pre>
  */
 public class Json {
     private final String rawJson;

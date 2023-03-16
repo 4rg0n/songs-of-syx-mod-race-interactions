@@ -29,9 +29,9 @@ public class JsonMapper {
      * Maps a {@link JsonElement} to a given class containing data from the json.
      * The class has to have setter methods.
      *
-     * <pre>
+     * <pre>{@code
      *     MyPojo pojo = JsonMapper.mapJson(jsonObject, MyPojo.class);
-     * </pre>
+     * }</pre>
      *
      * @param json to map
      * @param clazz of the mapped result
@@ -45,14 +45,14 @@ public class JsonMapper {
     /**
      * Maps {@link JsonElement} to a given class via {@link TypeInfo} containing data from the json.
      *
-     * <pre>
+     * <pre>{@code
      *     JsonArray jsonArray = new JsonArray();
      *     jsonArray.add(new JsonLong(1L));
      *     jsonArray.add(new JsonLong(2L));
      *     jsonArray.add(new JsonLong(3L));
      *     // you will need a {@link TypeInfo} with the type info as generic
      *     List<Integer> integerList = JsonMapper.mapJson(jsonArray, new TypeToken<List<Integer>>(){});
-     * </pre>
+     * }</pre>
      *
      * @param json to map
      * @param typeInfo containing type information from the class to map
@@ -78,12 +78,12 @@ public class JsonMapper {
 
     /**
      * Maps an object to a {@link JsonElement} containing data from the object.
-     * <pre>
+     * <pre>{@code
      *     MyPojo pojo = new MyPojo();
      *     pojo.setName("name");
      *     pojo.setAmount(1);
      *     JsonObject jsonObject = (JsonObject) JsonMapper.mapObject(pojo);
-     * </pre>
+     * }</pre>
      *
      * @param object to map
      * @return json element containing data from given object
@@ -104,12 +104,12 @@ public class JsonMapper {
     /**
      * Maps an object to a {@link JsonElement} containing data from the object.
      *
-     * <pre>
+     * <pre>{@code
      *     Map<String, List<String>> map = new HashMap();
      *     map.put("test", Arrays.asList("test", "test"));
      *     // you will need a {@link TypeInfo} with the type info as generic
      *     JsonObject jsonObject = (JsonObject) JsonMapper.mapObject(map, new TypeToken<Map<String, List<String>>>(){});
-     * </pre>
+     * }</pre>
      *
      * @param object to map
      * @param typeInfo containing type information from the class to map
@@ -136,13 +136,13 @@ public class JsonMapper {
     /**
      * Maps a {@link JsonObject} to the games {@link JsonE}.
      *
-     * <pre>
+     * <pre>{@code
      *     JsonObject jsonObject = new JsonObject();
      *     jsonObject.put("1", new JsonLong(1L));
      *     jsonObject.put("2", new JsonLong(2L));
      *     jsonObject.put("3", new JsonLong(3L));
      *     JsonE jsonE = JsonMapper.mapJsonE(jsonObject);
-     * </pre>
+     * }</pre>
      *
      * @param jsonObject to map
      * @return games json format
