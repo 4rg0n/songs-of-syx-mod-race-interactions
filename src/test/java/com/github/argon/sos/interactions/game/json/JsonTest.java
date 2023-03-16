@@ -1,10 +1,7 @@
-package com.github.argon.sos.interactions.util.json;
+package com.github.argon.sos.interactions.game.json;
 
 import com.github.argon.sos.interactions.FileService;
 import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
-import com.github.argon.sos.interactions.game.json.Json;
-import com.github.argon.sos.interactions.game.json.JsonMapper;
-import com.github.argon.sos.interactions.game.json.JsonWriter;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

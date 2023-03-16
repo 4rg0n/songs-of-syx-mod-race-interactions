@@ -1,12 +1,11 @@
-package com.github.argon.sos.interactions.util.json;
+package com.github.argon.sos.interactions.game.json;
 
 import com.github.argon.sos.interactions.FileService;
-import com.github.argon.sos.interactions.game.json.JsonMapper;
+import com.github.argon.sos.interactions.game.json.annotation.JsonProperty;
 import com.github.argon.sos.interactions.game.json.element.*;
 import com.github.argon.sos.interactions.game.json.mapper.TypeInfo;
 import com.github.argon.sos.interactions.util.MapUtil;
 import lombok.Data;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import snake2d.util.file.JsonE;
 
@@ -17,6 +16,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 class JsonMapperTest {
 
     @Test
@@ -24,49 +25,49 @@ class JsonMapperTest {
         // String
         JsonString jsonString = new JsonString("TEST1");
         String mappedString = JsonMapper.mapJson(jsonString, TypeInfo.get(String.class));
-        Assertions.assertThat(mappedString).isEqualTo("TEST1");
+        assertThat(mappedString).isEqualTo("TEST1");
 
         // Enum
         TestEnum mappedEnum = JsonMapper.mapJson(jsonString, TypeInfo.get(TestEnum.class));
-        Assertions.assertThat(mappedEnum).isEqualTo(TestEnum.TEST1);
+        assertThat(mappedEnum).isEqualTo(TestEnum.TEST1);
 
         // Long
         JsonLong jsonLong = new JsonLong(1L);
         Long mappedLong = JsonMapper.mapJson(jsonLong, TypeInfo.get(Long.class));
-        Assertions.assertThat(mappedLong).isEqualTo(1L);
+        assertThat(mappedLong).isEqualTo(1L);
 
         Integer mappedInteger = JsonMapper.mapJson(jsonLong, TypeInfo.get(Integer.class));
-        Assertions.assertThat(mappedInteger).isEqualTo(1);
+        assertThat(mappedInteger).isEqualTo(1);
 
         Byte mappedByte = JsonMapper.mapJson(jsonLong, TypeInfo.get(Byte.class));
-        Assertions.assertThat(mappedByte).isEqualTo(Integer.valueOf(1).byteValue());
+        assertThat(mappedByte).isEqualTo(Integer.valueOf(1).byteValue());
 
         Short mappedShort = JsonMapper.mapJson(jsonLong, TypeInfo.get(Short.class));
-        Assertions.assertThat(mappedShort).isEqualTo(Integer.valueOf(1).shortValue());
+        assertThat(mappedShort).isEqualTo(Integer.valueOf(1).shortValue());
 
         BigInteger mappedBigInteger = JsonMapper.mapJson(jsonLong, TypeInfo.get(BigInteger.class));
-        Assertions.assertThat(mappedBigInteger).isEqualTo(BigInteger.valueOf(1L));
+        assertThat(mappedBigInteger).isEqualTo(BigInteger.valueOf(1L));
 
         // Double
         JsonDouble jsonDouble = new JsonDouble(1.1d);
         Double mappedDouble = JsonMapper.mapJson(jsonDouble, TypeInfo.get(Double.class));
-        Assertions.assertThat(mappedDouble).isEqualTo(1.1d);
+        assertThat(mappedDouble).isEqualTo(1.1d);
 
         Float mappedFloat = JsonMapper.mapJson(jsonDouble, TypeInfo.get(Float.class));
-        Assertions.assertThat(mappedFloat).isEqualTo(1.1f);
+        assertThat(mappedFloat).isEqualTo(1.1f);
 
         BigDecimal mappedBigDecimal = JsonMapper.mapJson(jsonDouble, TypeInfo.get(BigDecimal.class));
-        Assertions.assertThat(mappedBigDecimal).isEqualTo(BigDecimal.valueOf(1.1d));
+        assertThat(mappedBigDecimal).isEqualTo(BigDecimal.valueOf(1.1d));
 
         // null
         JsonNull jsonNull = new JsonNull();
         Object mappedNull = JsonMapper.mapJson(jsonNull, Void.class);
-        Assertions.assertThat(mappedNull).isNull();
+        assertThat(mappedNull).isNull();
 
         // Boolean
         JsonBoolean jsonBoolean = new JsonBoolean(true);
         Boolean mappedBoolean = JsonMapper.mapJson(jsonBoolean, TypeInfo.get(Boolean.class));
-        Assertions.assertThat(mappedBoolean).isTrue();
+        assertThat(mappedBoolean).isTrue();
     }
 
     @Test
@@ -78,7 +79,7 @@ class JsonMapperTest {
         jsonArray.add(new JsonLong(3L));
 
         List<Long> mappedLongList = JsonMapper.mapJson(jsonArray, new TypeInfo<List<Long>>(){});
-        Assertions.assertThat(mappedLongList).isEqualTo(Arrays.asList(1L, 2L, 3L));
+        assertThat(mappedLongList).isEqualTo(Arrays.asList(1L, 2L, 3L));
 
         // Array in Array
         JsonArray jsonArrayArray = new JsonArray();
@@ -87,7 +88,7 @@ class JsonMapperTest {
         jsonArrayArray.add(jsonArray);
 
         List<List<Long>> mappedLongListList = JsonMapper.mapJson(jsonArrayArray, new TypeInfo<List<List<Long>>>(){});
-        Assertions.assertThat(mappedLongListList).isEqualTo(Arrays.asList(
+        assertThat(mappedLongListList).isEqualTo(Arrays.asList(
             Arrays.asList(1L, 2L, 3L),
             Arrays.asList(1L, 2L, 3L),
             Arrays.asList(1L, 2L, 3L)));
@@ -102,7 +103,7 @@ class JsonMapperTest {
         jsonStringKeyObject.put("3", new JsonLong(3L));
 
         Map<String, Long> mappedJsonObject = JsonMapper.mapJson(jsonStringKeyObject, new TypeInfo<Map<String, Long>>(){});
-        Assertions.assertThat(mappedJsonObject).isEqualTo(MapUtil.of(
+        assertThat(mappedJsonObject).isEqualTo(MapUtil.of(
             "1", 1L,
             "2", 2L,
             "3", 3L
@@ -115,7 +116,7 @@ class JsonMapperTest {
         jsonEnumKeyObject.put(TestEnum.TEST3, new JsonLong(3L));
 
         Map<TestEnum, Long> mappedJsonEnumKeyObject = JsonMapper.mapJson(jsonEnumKeyObject, new TypeInfo<Map<TestEnum, Long>>(){});
-        Assertions.assertThat(mappedJsonEnumKeyObject).isEqualTo(MapUtil.of(
+        assertThat(mappedJsonEnumKeyObject).isEqualTo(MapUtil.of(
             TestEnum.TEST1, 1L,
             TestEnum.TEST2, 2L,
             TestEnum.TEST3, 3L
@@ -131,7 +132,7 @@ class JsonMapperTest {
             jsonObjectObject,
             new TypeInfo<Map<String, Map<String, Long>>>(){});
 
-        Assertions.assertThat(mappedJsonObjectObject).isEqualTo(MapUtil.of(
+        assertThat(mappedJsonObjectObject).isEqualTo(MapUtil.of(
             "1", MapUtil.of(
                 "1", 1L,
                 "2", 2L,
@@ -168,7 +169,7 @@ class JsonMapperTest {
         simplePojo.setTestNull(null);
 
         SimplePojo mappedSimplePojo = JsonMapper.mapJson(jsonObjectSimple, SimplePojo.class);
-        Assertions.assertThat(mappedSimplePojo).isEqualTo(simplePojo);
+        assertThat(mappedSimplePojo).isEqualTo(simplePojo);
 
         // Complex
         JsonArray jsonArray = new JsonArray();
@@ -192,87 +193,87 @@ class JsonMapperTest {
         complexPojo.setTestSimplePojoMap(MapUtil.of("1", simplePojo, "2", simplePojo, "3", simplePojo));
 
         ComplexPojo mappedComplexPojo = JsonMapper.mapJson(jsonObjectComplex, ComplexPojo.class);
-        Assertions.assertThat(mappedComplexPojo).isEqualTo(complexPojo);
+        assertThat(mappedComplexPojo).isEqualTo(complexPojo);
     }
 
     @Test
     void mapObject_simpleTypes() {
         // String
         JsonElement jsonElementString = JsonMapper.mapObject("TEST1");
-        Assertions.assertThat(jsonElementString).isInstanceOf(JsonString.class);
+        assertThat(jsonElementString).isInstanceOf(JsonString.class);
         JsonString jsonString = (JsonString) jsonElementString;
-        Assertions.assertThat(jsonString.getValue()).isEqualTo("TEST1");
+        assertThat(jsonString.getValue()).isEqualTo("TEST1");
 
         // Enum
         jsonElementString = JsonMapper.mapObject(TestEnum.TEST1);
-        Assertions.assertThat(jsonElementString).isInstanceOf(JsonString.class);
+        assertThat(jsonElementString).isInstanceOf(JsonString.class);
         JsonString jsonEnumString = (JsonString) jsonElementString;
-        Assertions.assertThat(jsonEnumString.getValue()).isEqualTo("TEST1");
+        assertThat(jsonEnumString.getValue()).isEqualTo("TEST1");
 
         // Long < Long
         JsonElement jsonElementLong = JsonMapper.mapObject(1L);
-        Assertions.assertThat(jsonElementLong).isInstanceOf(JsonLong.class);
+        assertThat(jsonElementLong).isInstanceOf(JsonLong.class);
         JsonLong jsonLong = (JsonLong) jsonElementLong;
-        Assertions.assertThat(jsonLong.getValue()).isEqualTo(1L);
+        assertThat(jsonLong.getValue()).isEqualTo(1L);
 
         // Long < Integer
         jsonElementLong = JsonMapper.mapObject(1);
-        Assertions.assertThat(jsonElementLong).isInstanceOf(JsonLong.class);
+        assertThat(jsonElementLong).isInstanceOf(JsonLong.class);
         jsonLong = (JsonLong) jsonElementLong;
-        Assertions.assertThat(jsonLong.getValue()).isEqualTo(1L);
+        assertThat(jsonLong.getValue()).isEqualTo(1L);
 
         // Long < Byte
         jsonElementLong = JsonMapper.mapObject(Integer.valueOf(1).byteValue());
-        Assertions.assertThat(jsonElementLong).isInstanceOf(JsonLong.class);
+        assertThat(jsonElementLong).isInstanceOf(JsonLong.class);
         jsonLong = (JsonLong) jsonElementLong;
-        Assertions.assertThat(jsonLong.getValue()).isEqualTo(1L);
+        assertThat(jsonLong.getValue()).isEqualTo(1L);
 
         // Long < Short
         jsonElementLong = JsonMapper.mapObject(Integer.valueOf(1).shortValue());
-        Assertions.assertThat(jsonElementLong).isInstanceOf(JsonLong.class);
+        assertThat(jsonElementLong).isInstanceOf(JsonLong.class);
         jsonLong = (JsonLong) jsonElementLong;
-        Assertions.assertThat(jsonLong.getValue()).isEqualTo(1L);
+        assertThat(jsonLong.getValue()).isEqualTo(1L);
 
         // Long < BigInteger
         jsonElementLong = JsonMapper.mapObject(BigInteger.valueOf(1L));
-        Assertions.assertThat(jsonElementLong).isInstanceOf(JsonLong.class);
+        assertThat(jsonElementLong).isInstanceOf(JsonLong.class);
         jsonLong = (JsonLong) jsonElementLong;
-        Assertions.assertThat(jsonLong.getValue()).isEqualTo(1L);
+        assertThat(jsonLong.getValue()).isEqualTo(1L);
 
         // Double < Double
         JsonElement jsonElementDouble = JsonMapper.mapObject(1.1d);
-        Assertions.assertThat(jsonElementDouble).isInstanceOf(JsonDouble.class);
+        assertThat(jsonElementDouble).isInstanceOf(JsonDouble.class);
         JsonDouble jsonDouble = (JsonDouble) jsonElementDouble;
-        Assertions.assertThat(jsonDouble.getValue()).isEqualTo(1.1d);
+        assertThat(jsonDouble.getValue()).isEqualTo(1.1d);
 
         // Double < Float
         jsonElementDouble = JsonMapper.mapObject(1.1f);
-        Assertions.assertThat(jsonElementDouble).isInstanceOf(JsonDouble.class);
+        assertThat(jsonElementDouble).isInstanceOf(JsonDouble.class);
         jsonDouble = (JsonDouble) jsonElementDouble;
-        Assertions.assertThat(jsonDouble.getValue()).isEqualTo(Double.valueOf(1.1d).floatValue());
+        assertThat(jsonDouble.getValue()).isEqualTo(Double.valueOf(1.1d).floatValue());
 
         // Double < BigDecimal
         jsonElementDouble = JsonMapper.mapObject(BigDecimal.valueOf(1.1d));
-        Assertions.assertThat(jsonElementDouble).isInstanceOf(JsonDouble.class);
+        assertThat(jsonElementDouble).isInstanceOf(JsonDouble.class);
         jsonDouble = (JsonDouble) jsonElementDouble;
-        Assertions.assertThat(jsonDouble.getValue()).isEqualTo(1.1d);
+        assertThat(jsonDouble.getValue()).isEqualTo(1.1d);
 
         // null
         JsonElement jsonElementNull = JsonMapper.mapObject(null);
-        Assertions.assertThat(jsonElementNull).isInstanceOf(JsonNull.class);
+        assertThat(jsonElementNull).isInstanceOf(JsonNull.class);
 
         // Boolean
         JsonElement jsonElementBoolean = JsonMapper.mapObject(true);
-        Assertions.assertThat(jsonElementBoolean).isInstanceOf(JsonBoolean.class);
+        assertThat(jsonElementBoolean).isInstanceOf(JsonBoolean.class);
         JsonBoolean jsonBoolean = (JsonBoolean) jsonElementBoolean;
-        Assertions.assertThat(jsonBoolean.getValue()).isTrue();
+        assertThat(jsonBoolean.getValue()).isTrue();
     }
 
     @Test
     void mapObject_listTypes() {
         // List
         JsonElement jsonElementArray = JsonMapper.mapObject(Arrays.asList(1, 2, 3), new TypeInfo<List<Integer>>(){});
-        Assertions.assertThat(jsonElementArray).isInstanceOf(JsonArray.class);
+        assertThat(jsonElementArray).isInstanceOf(JsonArray.class);
         JsonArray jsonArray = (JsonArray) jsonElementArray;
 
         JsonArray jsonArrayExpected = new JsonArray();
@@ -280,7 +281,7 @@ class JsonMapperTest {
         jsonArrayExpected.add(new JsonLong(2L));
         jsonArrayExpected.add(new JsonLong(3L));
 
-        Assertions.assertThat(jsonArray).isEqualTo(jsonArrayExpected);
+        assertThat(jsonArray).isEqualTo(jsonArrayExpected);
 
         // List in List
         JsonElement jsonElementArrayArray = JsonMapper.mapObject(Arrays.asList(
@@ -289,7 +290,7 @@ class JsonMapperTest {
             Arrays.asList(1, 2, 3)),
             new TypeInfo<List<List<Integer>>>(){}
         );
-        Assertions.assertThat(jsonElementArrayArray).isInstanceOf(JsonArray.class);
+        assertThat(jsonElementArrayArray).isInstanceOf(JsonArray.class);
         JsonArray jsonArrayArray = (JsonArray) jsonElementArrayArray;
 
         JsonArray jsonArrayArrayExpected = new JsonArray();
@@ -297,7 +298,7 @@ class JsonMapperTest {
         jsonArrayArrayExpected.add(jsonArrayExpected);
         jsonArrayArrayExpected.add(jsonArrayExpected);
 
-        Assertions.assertThat(jsonArrayArray).isEqualTo(jsonArrayArrayExpected);
+        assertThat(jsonArrayArray).isEqualTo(jsonArrayArrayExpected);
     }
 
     @Test
@@ -310,7 +311,7 @@ class JsonMapperTest {
             new TypeInfo<Map<String, Integer>>() {
             }
         );
-        Assertions.assertThat(jsonElementObject).isInstanceOf(JsonObject.class);
+        assertThat(jsonElementObject).isInstanceOf(JsonObject.class);
         JsonObject jsonObject = (JsonObject) jsonElementObject;
 
         JsonObject jsonObjectExpected = new JsonObject();
@@ -318,7 +319,7 @@ class JsonMapperTest {
         jsonObjectExpected.put("2", new JsonLong(2L));
         jsonObjectExpected.put("3", new JsonLong(3L));
 
-        Assertions.assertThat(jsonObject).isEqualTo(jsonObjectExpected);
+        assertThat(jsonObject).isEqualTo(jsonObjectExpected);
 
         // Enum key Map
         jsonElementObject = JsonMapper.mapObject(MapUtil.of(
@@ -328,7 +329,7 @@ class JsonMapperTest {
             new TypeInfo<Map<String, Integer>>() {
             }
         );
-        Assertions.assertThat(jsonElementObject).isInstanceOf(JsonObject.class);
+        assertThat(jsonElementObject).isInstanceOf(JsonObject.class);
         jsonObject = (JsonObject) jsonElementObject;
 
         JsonObject jsonObjectEnumExpected = new JsonObject();
@@ -336,7 +337,7 @@ class JsonMapperTest {
         jsonObjectEnumExpected.put(TestEnum.TEST2, new JsonLong(2L));
         jsonObjectEnumExpected.put(TestEnum.TEST3, new JsonLong(3L));
 
-        Assertions.assertThat(jsonObject).isEqualTo(jsonObjectEnumExpected);
+        assertThat(jsonObject).isEqualTo(jsonObjectEnumExpected);
 
         // Map in Map
         jsonElementObject = JsonMapper.mapObject(MapUtil.of(
@@ -355,7 +356,7 @@ class JsonMapperTest {
             new TypeInfo<Map<String, Map<String, Integer>>>() {
             }
         );
-        Assertions.assertThat(jsonElementObject).isInstanceOf(JsonObject.class);
+        assertThat(jsonElementObject).isInstanceOf(JsonObject.class);
         jsonObject = (JsonObject) jsonElementObject;
 
         JsonObject jsonObjectObjectExpected = new JsonObject();
@@ -363,7 +364,7 @@ class JsonMapperTest {
         jsonObjectObjectExpected.put("2", jsonObjectExpected);
         jsonObjectObjectExpected.put("3", jsonObjectExpected);
 
-        Assertions.assertThat(jsonObject).isEqualTo(jsonObjectObjectExpected);
+        assertThat(jsonObject).isEqualTo(jsonObjectObjectExpected);
     }
 
     @Test
@@ -377,7 +378,7 @@ class JsonMapperTest {
         simplePojo.setTestNull(null);
 
         JsonElement jsonElementObject = JsonMapper.mapObject(simplePojo);
-        Assertions.assertThat(jsonElementObject).isInstanceOf(JsonObject.class);
+        assertThat(jsonElementObject).isInstanceOf(JsonObject.class);
         JsonObject jsonObject = (JsonObject) jsonElementObject;
 
         JsonObject jsonObjectExpected = new JsonObject();
@@ -387,7 +388,7 @@ class JsonMapperTest {
         jsonObjectExpected.put("TEST_BOOLEAN", new JsonBoolean(false));
         jsonObjectExpected.put("TEST_NULL", new JsonNull());
 
-        Assertions.assertThat(jsonObject).isEqualTo(jsonObjectExpected);
+        assertThat(jsonObject).isEqualTo(jsonObjectExpected);
 
         // Complex
         ComplexPojo complexPojo = new ComplexPojo();
@@ -396,7 +397,7 @@ class JsonMapperTest {
         complexPojo.setTestSimplePojoMap(MapUtil.of("1", simplePojo, "2", simplePojo, "3", simplePojo));
 
         jsonElementObject = JsonMapper.mapObject(complexPojo);
-        Assertions.assertThat(jsonElementObject).isInstanceOf(JsonObject.class);
+        assertThat(jsonElementObject).isInstanceOf(JsonObject.class);
         jsonObject = (JsonObject) jsonElementObject;
 
         JsonArray jsonArray = new JsonArray();
@@ -414,7 +415,7 @@ class JsonMapperTest {
         jsonObjectObjectExpected.put("TEST_SIMPLE_POJO_LIST", jsonArray);
         jsonObjectObjectExpected.put("TEST_SIMPLE_POJO_MAP", jsonObjectMap);
 
-        Assertions.assertThat(jsonObject).isEqualTo(jsonObjectObjectExpected);
+        assertThat(jsonObject).isEqualTo(jsonObjectObjectExpected);
     }
 
     @Test
@@ -474,12 +475,39 @@ class JsonMapperTest {
         String expectedJsonE = FileService.getInstance().readResource("json/JsonE.txt");
 
         // compare without whitespaces
-        Assertions.assertThat(jsonE.toString().replaceAll("\\s+",""))
+        assertThat(jsonE.toString().replaceAll("\\s+",""))
             .isEqualTo(expectedJsonE.replaceAll("\\s+",""));
     }
 
+    @Test
+    void mapObject_withJsonPropertyAnnotation() {
+        AnnotationPojo annotationPojo = new AnnotationPojo();
+        annotationPojo.setTestLong(1L);
+        annotationPojo.setTestDouble(1.1D);
+        annotationPojo.setTestString("test");
+        annotationPojo.setTestBoolean(false);
+        annotationPojo.setTestNull(null);
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.put("annotationTestLong", new JsonLong(1L));
+        jsonObject.put("annotationTestDouble", new JsonDouble(1.1D));
+        jsonObject.put("annotationTestString", new JsonString("test"));
+        jsonObject.put("annotationTestBoolean", new JsonBoolean(false));
+        jsonObject.put("annotationTestNull", new JsonNull());
+
+        // check map to json
+        JsonElement jsonElement = JsonMapper.mapObject(annotationPojo);
+        assertThat(jsonElement).isInstanceOf(JsonObject.class);
+        JsonObject mappedJsonObject = (JsonObject) jsonElement;
+        assertThat(mappedJsonObject).isEqualTo(jsonObject);
+
+        // check map to pojo
+        AnnotationPojo mappedAnnotationPojo = JsonMapper.mapJson(jsonObject, AnnotationPojo.class);
+        assertThat(mappedAnnotationPojo).isEqualTo(annotationPojo);
+    }
+
     @Data
-    private static class SimplePojo {
+    public static class SimplePojo {
         private Long testLong;
         private Double testDouble;
         private String testString;
@@ -488,15 +516,29 @@ class JsonMapperTest {
     }
 
     @Data
-    private static class ComplexPojo {
+    public static class ComplexPojo {
         private List<SimplePojo> testSimplePojoList;
         private Map<String, SimplePojo> testSimplePojoMap;
         private SimplePojo testSimplePojo;
     }
 
-    private static enum TestEnum {
+    public enum TestEnum {
         TEST1,
         TEST2,
         TEST3
+    }
+
+    @Data
+    public static class AnnotationPojo {
+        @JsonProperty(key = "annotationTestLong")
+        private Long testLong;
+        @JsonProperty(key = "annotationTestDouble")
+        private Double testDouble;
+        @JsonProperty(key = "annotationTestString")
+        private String testString;
+        @JsonProperty(key = "annotationTestBoolean")
+        private Boolean testBoolean;
+        @JsonProperty(key = "annotationTestNull")
+        private Void testNull;
     }
 }

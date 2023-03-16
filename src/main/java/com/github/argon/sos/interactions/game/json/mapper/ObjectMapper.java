@@ -1,8 +1,11 @@
 package com.github.argon.sos.interactions.game.json.mapper;
 
 import com.github.argon.sos.interactions.game.json.JsonMapper;
+import com.github.argon.sos.interactions.game.json.annotation.JsonProperty;
 import com.github.argon.sos.interactions.game.json.element.JsonElement;
 import com.github.argon.sos.interactions.game.json.element.JsonObject;
+import com.github.argon.sos.interactions.log.Logger;
+import com.github.argon.sos.interactions.log.Loggers;
 import com.github.argon.sos.interactions.util.ClassUtil;
 import com.github.argon.sos.interactions.util.ReflectionUtil;
 
@@ -20,9 +23,10 @@ import static com.github.argon.sos.interactions.util.ReflectionUtil.invokeMethod
 
 public class ObjectMapper extends Mapper<JsonObject> {
 
+    private final static Logger log = Loggers.getLogger(ObjectMapper.class);
+
     @Override
     public boolean supports(Class<?> clazz) {
-        // todo I don't like this
         return clazz != null
             && !clazz.isEnum()
             && !clazz.isArray()
@@ -51,7 +55,7 @@ public class ObjectMapper extends Mapper<JsonObject> {
     }
 
     @Override
-    public Object mapJson(JsonObject json, TypeInfo<?> typeInfo) {
+    public Object mapJson(JsonObject jsonObject, TypeInfo<?> typeInfo) {
         Class<?> clazz = typeInfo.getTypeClass();
 
         if (!ReflectionUtil.hasNoArgsConstructor(clazz)) {
@@ -70,19 +74,26 @@ public class ObjectMapper extends Mapper<JsonObject> {
                 continue;
             }
 
-            String jsonKey = toJsonKey(method);
-            if (!json.getMap().containsKey(jsonKey)) {
-                continue;
-            }
-
+            // get field for setter
             String fieldName = extractSetterGetterFieldName(method);
             Field field = ReflectionUtil.getDeclaredField(fieldName, clazz)
                 .orElseThrow(() -> new JsonMapperException(
                     "No field for setter method " + method.getName() + " in " + clazz.getCanonicalName()
                 ));
+
+            // read json key from annotation or generate from method name
+            String jsonKey = getAnnotation(field, JsonProperty.class)
+                .map(JsonProperty::key)
+                .orElse(toJsonKey(method));
+
+            if (!jsonObject.getMap().containsKey(jsonKey)) {
+                log.debug("Json does not contain key %s for %s", jsonKey, method.getName());
+                continue;
+            }
+
             Type fieldType = field.getGenericType();
             TypeInfo<?> fieldTypeInfo = TypeInfo.get(fieldType);
-            JsonElement jsonElement = json.getMap().get(jsonKey);
+            JsonElement jsonElement = jsonObject.getMap().get(jsonKey);
 
             Object mappedObject = JsonMapper.mapJson(jsonElement, fieldTypeInfo);
             // call setter method
@@ -102,12 +113,18 @@ public class ObjectMapper extends Mapper<JsonObject> {
                 continue;
             }
 
-            String jsonKey = toJsonKey(method);
+            // get field for getter
             String fieldName = extractSetterGetterFieldName(method);
             Field field = ReflectionUtil.getDeclaredField(fieldName, clazz)
                 .orElseThrow(() -> new JsonMapperException(
                     "No field for setter method " + method.getName() + " in " + clazz.getCanonicalName()
                 ));
+
+            // read json key from annotation or generate from method name
+            String jsonKey = getAnnotation(field, JsonProperty.class)
+                .map(JsonProperty::key)
+                .orElse(toJsonKey(method));
+
             Type fieldType = field.getGenericType();
             TypeInfo<?> fieldTypeInfo = TypeInfo.get(fieldType);
 

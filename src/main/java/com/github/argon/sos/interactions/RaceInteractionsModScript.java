@@ -60,7 +60,7 @@ public final class RaceInteractionsModScript implements SCRIPT<RaceInteractionsC
 
 	@Override
 	public void initGameRunning() {
-		// store vanilla likings for reset
+		// store vanilla likings for possible reset via button click
 		GameRaceApi.getInstance().initVanillaLikings();
 	}
 
@@ -111,14 +111,14 @@ public final class RaceInteractionsModScript implements SCRIPT<RaceInteractionsC
 		// Race InteractionsAI
 		aiModuleRace = RaceInteractions.Builder.buildAI(raceInteractions);
 
-		// Config UI Panel
+		// Config UI Panel with all it's buttons and stuff
 		configPanel = RaceInteractions.Builder.buildConfigUI(
 			config,
 			raceInteractions,
 			raceService.getAllRaceInfo()
 		);
 
-		// adjust likings when game loaded from save
+		// adjust likings when game created
 		raceInteractions.manipulateRaceLikings(config);
 		configPanel.applyConfig(config);
 
