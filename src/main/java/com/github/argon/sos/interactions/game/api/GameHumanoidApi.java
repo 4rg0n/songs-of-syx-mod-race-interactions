@@ -22,10 +22,10 @@ public class GameHumanoidApi {
     private final static GameHumanoidApi instance = new GameHumanoidApi();
 
     /**
-     * @return list of humanoids in radius nearby given humanoid
+     * @return list of humanoids in radius of tiles nearby given humanoid
      */
-    public List<Humanoid> getNearbyHumanoids(Humanoid humanoid, int radius) {
-        SComponent settlementComponent = SETT.PATH().finders().otherHumanoid.findComp(humanoid, radius);
+    public List<Humanoid> getNearbyHumanoids(Humanoid humanoid, int tileRadius) {
+        SComponent settlementComponent = SETT.PATH().finders().otherHumanoid.findComp(humanoid, tileRadius);
         if (settlementComponent == null) {
             return Collections.emptyList();
         }

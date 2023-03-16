@@ -19,6 +19,14 @@ public class GameAiApi {
     @Getter(lazy = true)
     private final static GameAiApi instance = new GameAiApi();
 
+    /**
+     * Will inject an AI module into the game. For adding additional behavior.
+     * Each module has to be assigned to a type of humanoid.
+     * See {@link HTYPE} for the different types.
+     *
+     * @param module to inject
+     * @param humanoidTypes to assign the ai module to
+     */
     public static void injectAIModule(AIModule module, HTYPE... humanoidTypes) {
         ReflectionUtil.getDeclaredField("modules", AI.modules())
             .map(o -> (AIModule[][]) o)

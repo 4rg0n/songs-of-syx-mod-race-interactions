@@ -12,6 +12,9 @@ import snake2d.util.file.JsonE;
 
 import java.util.Optional;
 
+/**
+ * Used for importing anf exporting {@link RaceInteractionsConfig} as sharable string
+ */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConfigDecoderEncoder {
     private final static Logger log = Loggers.getLogger(ConfigDecoderEncoder.class);

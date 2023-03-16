@@ -4,6 +4,9 @@ import lombok.*;
 
 import java.nio.file.Path;
 
+/**
+ * Used as information for loading {@link RaceInteractionsConfig} from other mods
+ */
 @ToString
 @EqualsAndHashCode
 @Getter

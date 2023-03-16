@@ -1,9 +1,6 @@
 package com.github.argon.sos.interactions.util;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Optional;
 
 public class MethodUtil {
     public static boolean isGetterMethod(Method method) {
@@ -60,23 +57,6 @@ public class MethodUtil {
         }
 
         return false;
-    }
-
-    public static String toJsonKey(Method method) {
-        String methodName = method.getName();
-        String name = stripSetterGetterMethodPrefix(methodName);
-
-        return StringUtil.toScreamingSnakeCase(name);
-    }
-
-    public static <T extends Annotation> Optional<T> getAnnotation(Field field, Class<T> annotationClass) {
-        field.setAccessible(true);
-
-        if (!field.isAnnotationPresent(annotationClass)) {
-            return Optional.empty();
-        }
-
-        return Optional.of(field.getAnnotation(annotationClass));
     }
 
     public static String extractSetterGetterFieldName(Method method) {

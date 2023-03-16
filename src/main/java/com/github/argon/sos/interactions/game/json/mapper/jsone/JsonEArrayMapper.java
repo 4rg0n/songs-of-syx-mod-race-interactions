@@ -45,7 +45,7 @@ public class JsonEArrayMapper extends JsonEMapper<JsonArray> {
         } else if (jsonElement instanceof JsonNull) {
             String[] nulls = Collections.nCopies(elements.size(), "null")
                 .toArray(new String[0]);
-            json.addStrings(key, nulls);
+            json.add(key, nulls);
         } else if (jsonElement instanceof JsonString) {
             String[] strings = elements.stream()
                 .map(JsonString.class::cast)

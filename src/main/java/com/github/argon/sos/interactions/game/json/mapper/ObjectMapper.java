@@ -18,7 +18,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
+import static com.github.argon.sos.interactions.game.json.util.JsonUtil.toJsonKey;
 import static com.github.argon.sos.interactions.util.MethodUtil.*;
+import static com.github.argon.sos.interactions.util.ReflectionUtil.getAnnotation;
 import static com.github.argon.sos.interactions.util.ReflectionUtil.invokeMethodOneArgument;
 
 public class ObjectMapper extends Mapper<JsonObject> {

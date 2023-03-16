@@ -2,6 +2,7 @@ package com.github.argon.sos.interactions.game.json;
 
 import com.github.argon.sos.interactions.game.json.element.JsonElement;
 import com.github.argon.sos.interactions.game.json.element.JsonObject;
+import com.github.argon.sos.interactions.game.json.util.JsonUtil;
 import lombok.Getter;
 
 /**
@@ -55,7 +56,7 @@ public class Json {
     }
 
     public Json(String rawJson, JsonWriter writer) {
-        this.rawJson = JsonStringNormalizer.normalize(rawJson.trim());
+        this.rawJson = JsonUtil.normalizeJson(rawJson.trim());
         this.writer = writer;
         this.index = 0;
         this.root = (JsonObject) JsonParser.parse(this);

@@ -1,5 +1,8 @@
 package com.github.argon.sos.interactions.game;
 
+/**
+ * Certain game UI elements are only available when the game is already created
+ */
 public class GameUiNotAvailableException extends RuntimeException {
     public GameUiNotAvailableException() {
     }

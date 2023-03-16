@@ -3,6 +3,7 @@ package com.github.argon.sos.interactions.util;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -73,6 +74,16 @@ public class ReflectionUtil {
             log.warn("Can not access field %s in %s.", fieldName, clazz.getSimpleName(), e);
             return Optional.empty();
         }
+    }
+
+    public static <T extends Annotation> Optional<T> getAnnotation(Field field, Class<T> annotationClass) {
+        field.setAccessible(true);
+
+        if (!field.isAnnotationPresent(annotationClass)) {
+            return Optional.empty();
+        }
+
+        return Optional.of(field.getAnnotation(annotationClass));
     }
 
 
