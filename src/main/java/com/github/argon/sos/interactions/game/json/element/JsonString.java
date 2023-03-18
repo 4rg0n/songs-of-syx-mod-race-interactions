@@ -1,5 +1,6 @@
 package com.github.argon.sos.interactions.game.json.element;
 
+import com.github.argon.sos.interactions.util.StringUtil;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,6 @@ public class JsonString implements JsonElement {
 
     @Override
     public String toString() {
-        return "\"" + value + "\"";
+        return StringUtil.quote(value);
     }
 }

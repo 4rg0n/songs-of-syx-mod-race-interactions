@@ -4,10 +4,10 @@ import com.github.argon.sos.interactions.game.json.element.JsonNull;
 import com.github.argon.sos.interactions.util.ClassUtil;
 import snake2d.util.file.JsonE;
 
-public class JsonENullMapper extends JsonEMapper<JsonNull> {
+public class JsonENullMapper implements JsonEMapper<JsonNull> {
 
     @Override
-    public JsonE map(JsonE json, String key, JsonNull jsonElement) {
+    public JsonE mapJsonE(JsonE json, String key, JsonNull jsonElement) {
         json.add(key, "null");
         return json;
     }

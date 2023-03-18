@@ -37,7 +37,7 @@ public class ClipboardUtil {
         }
 
         try {
-            String text = (String) transfer.getTransferData( DataFlavor.stringFlavor );
+            String text = (String) transfer.getTransferData(DataFlavor.stringFlavor);
             return Optional.of(text);
         } catch (Exception e) {
             log.info("Could not read from system clipboard: %s", e.getMessage());

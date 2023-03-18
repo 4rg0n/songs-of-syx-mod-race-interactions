@@ -4,7 +4,7 @@ import com.github.argon.sos.interactions.game.json.element.JsonString;
 
 import static com.github.argon.sos.interactions.util.ClassCastUtil.toEnum;
 
-public class EnumMapper extends Mapper<JsonString> {
+public class EnumMapper implements Mapper<JsonString> {
     @Override
     public boolean supports(Class<?> clazz) {
         if (clazz == null) {

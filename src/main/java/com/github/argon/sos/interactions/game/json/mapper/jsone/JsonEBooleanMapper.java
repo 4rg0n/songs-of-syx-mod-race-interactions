@@ -4,10 +4,10 @@ import com.github.argon.sos.interactions.game.json.element.JsonBoolean;
 import com.github.argon.sos.interactions.util.ClassUtil;
 import snake2d.util.file.JsonE;
 
-public class JsonEBooleanMapper extends JsonEMapper<JsonBoolean> {
+public class JsonEBooleanMapper implements JsonEMapper<JsonBoolean> {
 
     @Override
-    public JsonE map(JsonE json, String key, JsonBoolean jsonElement) {
+    public JsonE mapJsonE(JsonE json, String key, JsonBoolean jsonElement) {
         json.add(key, jsonElement.getValue());
 
         return json;

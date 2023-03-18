@@ -4,10 +4,10 @@ import com.github.argon.sos.interactions.game.json.element.JsonLong;
 import com.github.argon.sos.interactions.util.ClassUtil;
 import snake2d.util.file.JsonE;
 
-public class JsonELongMapper extends JsonEMapper<JsonLong> {
+public class JsonELongMapper implements JsonEMapper<JsonLong> {
 
     @Override
-    public JsonE map(JsonE json, String key, JsonLong jsonElement) {
+    public JsonE mapJsonE(JsonE json, String key, JsonLong jsonElement) {
         json.add(key,  jsonElement.getValue().intValue());
 
         return json;

@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 import static com.github.argon.sos.interactions.util.TypeUtil.isAssignableFrom;
 
-public class DoubleMapper extends Mapper<JsonDouble> {
+public class DoubleMapper implements Mapper<JsonDouble> {
     @Override
     public boolean supports(Class<?> clazz) {
         return Arrays.asList(Double.class, Float.class, BigDecimal.class, double.class, float.class)

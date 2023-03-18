@@ -2,7 +2,7 @@ package com.github.argon.sos.interactions.game.json.mapper;
 
 import com.github.argon.sos.interactions.game.json.element.JsonNull;
 
-public class NullMapper extends Mapper<JsonNull> {
+public class NullMapper implements Mapper<JsonNull> {
     @Override
     public boolean supports(Class<?> clazz) {
         return clazz == null || clazz == Void.class;

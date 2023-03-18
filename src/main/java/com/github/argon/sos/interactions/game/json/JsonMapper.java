@@ -173,7 +173,7 @@ public class JsonMapper {
 
         try {
             //noinspection unchecked
-            jsonEMapper.map(json, key, jsonElement);
+            jsonEMapper.mapJsonE(json, key, jsonElement);
         } catch (RuntimeException e) {
             throw new JsonMapperException(
                 "Could not map " + jsonElementClass.getSimpleName() +

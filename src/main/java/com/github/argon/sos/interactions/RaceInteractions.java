@@ -148,11 +148,11 @@ public class RaceInteractions {
     public static class Builder {
         public static RaceInteractions build(RaceService raceService) {
             log.debug("Setting up service elements");
-            return  new RaceInteractions(
-                    RaceComparator.getInstance(),
-                    RacePreferenceSimilarityCalculator.getInstance(),
-                    raceService,
-                    RaceStandingsService.getInstance()
+            return new RaceInteractions(
+                RaceComparator.getInstance(),
+                RacePreferenceSimilarityCalculator.getInstance(),
+                raceService,
+                RaceStandingsService.getInstance()
             );
         }
 

@@ -7,14 +7,11 @@ import com.github.argon.sos.interactions.game.json.element.JsonElement;
  *
  * @param <T> mapping result
  */
-public abstract class Mapper<T extends JsonElement> {
-    public Mapper() {
-    }
-
+public interface Mapper<T extends JsonElement> {
     /**
      * @param clazz nullable
      */
-    public abstract boolean supports(Class<?> clazz);
-    public abstract Object mapJson(T json, TypeInfo<?> typeInfo);
-    public abstract T mapObject(Object object, TypeInfo<?> typeInfo);
+    boolean supports(Class<?> clazz);
+    Object mapJson(T json, TypeInfo<?> typeInfo);
+    T mapObject(Object object, TypeInfo<?> typeInfo);
 }

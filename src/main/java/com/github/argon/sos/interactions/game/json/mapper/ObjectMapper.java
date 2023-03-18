@@ -23,7 +23,7 @@ import static com.github.argon.sos.interactions.util.MethodUtil.*;
 import static com.github.argon.sos.interactions.util.ReflectionUtil.getAnnotation;
 import static com.github.argon.sos.interactions.util.ReflectionUtil.invokeMethodOneArgument;
 
-public class ObjectMapper extends Mapper<JsonObject> {
+public class ObjectMapper implements Mapper<JsonObject> {
 
     private final static Logger log = Loggers.getLogger(ObjectMapper.class);
 

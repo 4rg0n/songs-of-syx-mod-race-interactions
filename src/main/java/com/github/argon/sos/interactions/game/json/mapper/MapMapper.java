@@ -12,7 +12,7 @@ import java.util.Map;
 import static com.github.argon.sos.interactions.util.TypeUtil.getRawType;
 import static com.github.argon.sos.interactions.util.TypeUtil.isAssignableFrom;
 
-public class MapMapper extends Mapper<JsonObject> {
+public class MapMapper implements Mapper<JsonObject> {
     @Override
     public boolean supports(Class<?> clazz) {
         return ClassUtil.instanceOf(clazz, Map.class);

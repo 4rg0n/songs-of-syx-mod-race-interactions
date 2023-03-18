@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 import static com.github.argon.sos.interactions.util.TypeUtil.isAssignableFrom;
 
-public class ListMapper extends Mapper<JsonArray> {
+public class ListMapper implements Mapper<JsonArray> {
     @Override
     public boolean supports(Class<?> clazz) {
         if (clazz == null || clazz.isArray()) {

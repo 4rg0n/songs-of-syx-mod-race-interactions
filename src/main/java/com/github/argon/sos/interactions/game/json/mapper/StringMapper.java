@@ -4,7 +4,7 @@ import com.github.argon.sos.interactions.game.json.element.JsonString;
 
 import static com.github.argon.sos.interactions.util.ClassUtil.instanceOf;
 
-public class StringMapper extends Mapper<JsonString> {
+public class StringMapper implements Mapper<JsonString> {
 
     @Override
     public boolean supports(Class<?> clazz) {

@@ -11,10 +11,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class JsonEArrayMapper extends JsonEMapper<JsonArray> {
+public class JsonEArrayMapper implements JsonEMapper<JsonArray> {
 
     @Override
-    public JsonE map(JsonE json, String key, JsonArray jsonArray) {
+    public JsonE mapJsonE(JsonE json, String key, JsonArray jsonArray) {
         List<JsonElement> elements = jsonArray.getElements();
 
         if (elements.isEmpty()) {

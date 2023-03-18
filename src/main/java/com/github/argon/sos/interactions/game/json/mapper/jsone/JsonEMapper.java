@@ -8,8 +8,7 @@ import snake2d.util.file.JsonE;
  *
  * @param <T> {@link JsonElement} to map from
  */
-public abstract class JsonEMapper<T extends JsonElement> {
-    public abstract JsonE map(JsonE json, String key, T jsonElement);
-
-    public abstract boolean supports(Class<?> clazz);
+public interface JsonEMapper<T extends JsonElement> {
+    JsonE mapJsonE(JsonE json, String key, T jsonElement);
+    boolean supports(Class<?> clazz);
 }

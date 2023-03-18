@@ -4,10 +4,10 @@ import com.github.argon.sos.interactions.game.json.element.JsonDouble;
 import com.github.argon.sos.interactions.util.ClassUtil;
 import snake2d.util.file.JsonE;
 
-public class JsonEDoubleMapper extends JsonEMapper<JsonDouble> {
+public class JsonEDoubleMapper implements JsonEMapper<JsonDouble> {
 
     @Override
-    public JsonE map(JsonE json, String key, JsonDouble jsonElement) {
+    public JsonE mapJsonE(JsonE json, String key, JsonDouble jsonElement) {
         json.add(key, jsonElement.getValue());
 
         return json;

@@ -46,6 +46,13 @@ public class JsonWriter {
     @Getter @Setter
     private boolean rootBraces = true;
 
+    /**
+     * @return writer that prints json the same as the games {@link JsonE}
+     */
+    public static JsonWriter getJsonE() {
+        return new JsonWriter(false, true, true, false);
+    }
+
     public JsonWriter() {
     }
 
@@ -54,13 +61,6 @@ public class JsonWriter {
         this.prettyPrint = prettyPrint;
         this.trailingComma = trailingComma;
         this.rootBraces = rootBraces;
-    }
-
-    /**
-     * @return writer that prints json the same as the games {@link JsonE}
-     */
-    public static JsonWriter getJsonE() {
-        return new JsonWriter(false, true, true, false);
     }
 
     /**

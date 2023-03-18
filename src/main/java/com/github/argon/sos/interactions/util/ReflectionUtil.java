@@ -86,6 +86,14 @@ public class ReflectionUtil {
         return Optional.of(field.getAnnotation(annotationClass));
     }
 
+    public static <T extends Annotation> Optional<T> getAnnotation(Class<?> clazz, Class<T> annotationClass) {
+        if (!clazz.isAnnotationPresent(annotationClass)) {
+            return Optional.empty();
+        }
+
+        return Optional.of(clazz.getAnnotation(annotationClass));
+    }
+
 
     public static Object invokeMethod(Method method, Object target) {
         return invokeMethod(method, target, EMPTY_OBJECT_ARRAY);

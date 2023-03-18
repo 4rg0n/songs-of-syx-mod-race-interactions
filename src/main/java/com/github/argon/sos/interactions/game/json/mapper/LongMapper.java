@@ -11,7 +11,7 @@ import java.util.Arrays;
 
 import static com.github.argon.sos.interactions.util.TypeUtil.isAssignableFrom;
 
-public class LongMapper extends Mapper<JsonLong> {
+public class LongMapper implements Mapper<JsonLong> {
     @Override
     public boolean supports(Class<?> clazz) {
         return Arrays.asList(

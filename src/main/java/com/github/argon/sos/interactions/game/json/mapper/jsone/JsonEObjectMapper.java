@@ -5,10 +5,10 @@ import com.github.argon.sos.interactions.game.json.element.JsonObject;
 import com.github.argon.sos.interactions.util.ClassUtil;
 import snake2d.util.file.JsonE;
 
-public class JsonEObjectMapper extends JsonEMapper<JsonObject> {
+public class JsonEObjectMapper implements JsonEMapper<JsonObject> {
 
     @Override
-    public JsonE map(JsonE json, String key, JsonObject jsonElement) {
+    public JsonE mapJsonE(JsonE json, String key, JsonObject jsonElement) {
         json.add(key, JsonMapper.mapJsonE(jsonElement));
 
         return json;

@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 import static com.github.argon.sos.interactions.util.ClassUtil.sameAs;
 
-public class BooleanMapper extends Mapper<JsonBoolean> {
+public class BooleanMapper implements Mapper<JsonBoolean> {
     @Override
     public boolean supports(Class<?> clazz) {
         return Arrays.asList(Boolean.class, boolean.class)
