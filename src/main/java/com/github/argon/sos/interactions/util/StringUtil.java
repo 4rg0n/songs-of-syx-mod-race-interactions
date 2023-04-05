@@ -19,7 +19,7 @@ public class StringUtil {
 
     public static String toScreamingSnakeCase(String text) {
         if (text == null || text.isEmpty()) {
-            return "";
+            return text;
         }
 
         return text.replaceAll("\\B([A-Z])", "_$1").toUpperCase();
@@ -96,7 +96,7 @@ public class StringUtil {
         if (!cutTail && string.length() > maxLength) {
             return string.substring(string.length() - maxLength);
         } else if (cutTail && string.length() > maxLength) {
-            return string.substring(0,  maxLength);
+            return string.substring(0, maxLength);
         }
 
         int spaceLength = maxLength - string.length();
@@ -105,10 +105,10 @@ public class StringUtil {
     }
 
     public static String repeat(char character, int length) {
-        char[] spaces = new char[length];
-        Arrays.fill(spaces, character);
+        char[] chars = new char[length];
+        Arrays.fill(chars, character);
 
-        return new String(spaces);
+        return new String(chars);
     }
 
     public static List<String> quote(List<String> strings) {

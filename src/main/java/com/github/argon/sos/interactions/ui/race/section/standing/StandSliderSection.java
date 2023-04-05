@@ -12,7 +12,6 @@ import snake2d.util.gui.GuiSection;
 import util.data.INT;
 import util.gui.misc.GButt;
 import util.gui.misc.GText;
-import util.gui.slider.GSliderInt;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +24,7 @@ public class StandSliderSection extends GuiSection {
     private final Map<RaceStandingCategory, Slider> sliders;
     private final Map<RaceStandingCategory, INT.INTE> sliderValues;
 
-    private final GSliderInt raceLookRangeSlider;
+    private final Slider raceLookRangeSlider;
 
     private final GButt.ButtPanel enableAllRaceBoostingsButton;
     private final GButt.ButtPanel disableAllRaceBoostingsButton;
@@ -76,7 +75,7 @@ public class StandSliderSection extends GuiSection {
 
         // Race look range slider
         this.raceLookRangeValue = new SimpleInt(raceLookRange,0 , DEFAULT_RACE_LOOK_MAX_RANGE);
-        this.raceLookRangeSlider = new GSliderInt(raceLookRangeValue, 200, true);
+        this.raceLookRangeSlider = new Slider(raceLookRangeValue, 200, true, Slider.ValueDisplay.ABSOLUTE);
 
         // Race look range slider label
         GuiSection rangeAndButtonSection = new GuiSection();
@@ -125,7 +124,7 @@ public class StandSliderSection extends GuiSection {
 
         orderedMap.forEach((category, weight) -> {
             INT.INTE value = new SimpleInt(fromWeightToSlider(weight), toSliderRange(DEFAULT_MIN_WEIGHT), toSliderRange(DEFAULT_MAX_WEIGHT));
-            Slider weightSlider = new Slider(value, toSliderWidth(DEFAULT_MIN_WEIGHT, DEFAULT_MAX_WEIGHT), true, true);
+            Slider weightSlider = new Slider(value, toSliderWidth(DEFAULT_MIN_WEIGHT, DEFAULT_MAX_WEIGHT), true, Slider.ValueDisplay.PERCENTAGE);
 
             sliders.put(category, weightSlider);
             sliderValues.put(category, value);

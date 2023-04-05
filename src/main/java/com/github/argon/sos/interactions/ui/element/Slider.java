@@ -44,11 +44,15 @@ public class Slider extends GuiSection {
         D.ts(GSliderInt.class);
     }
 
-    public Slider(INT.INTE in, int width, boolean input, boolean showValue){
-        this(in, width, 24, input, showValue);
+    public Slider(INT.INTE in, int width, boolean input){
+        this(in, width, 24, input, ValueDisplay.NONE);
     }
 
-    public Slider(INT.INTE in, int width, int height, boolean input, boolean showValue){
+    public Slider(INT.INTE in, int width, boolean input, ValueDisplay valueDisplay){
+        this(in, width, 24, input, valueDisplay);
+    }
+
+    public Slider(INT.INTE in, int width, int height, boolean input, ValueDisplay valueDisplay){
         this.in = in;
 
         if (input) {
@@ -127,13 +131,25 @@ public class Slider extends GuiSection {
 
         }
 
-        if (showValue) {
-            GStat value = new GStat() {
-                @Override
-                public void update(GText text) {
-                    GFORMAT.perc(text, in.get() / 100d);
-                }
-            };
+        if (valueDisplay != ValueDisplay.NONE) {
+            GStat value;
+
+            if (valueDisplay == ValueDisplay.PERCENTAGE) {
+                value = new GStat() {
+                    @Override
+                    public void update(GText text) {
+                        GFORMAT.perc(text, in.get() / 100d);
+                    }
+                };
+            } else {
+                value = new GStat() {
+                    @Override
+                    public void update(GText text) {
+                        GFORMAT.iBig(text, in.get());
+                    }
+                };
+            }
+
 
             GuiSection section = new GuiSection();
             int max = Math.max(Math.abs(in.min()), Math.abs(in.max()));
@@ -262,7 +278,7 @@ public class Slider extends GuiSection {
 
             int slideCursorPos;
 
-            if (in.min() > 0) {
+            if (in.min() >= 0) {
                 slideCursorPos = (int) (body.x1()+ barFullWidth * in.getD());
                 renderWithPositiveValues(r);
             } else {
@@ -334,5 +350,11 @@ public class Slider extends GuiSection {
             }
             return false;
         }
+    }
+
+    public enum ValueDisplay {
+        NONE,
+        ABSOLUTE,
+        PERCENTAGE
     }
 }
