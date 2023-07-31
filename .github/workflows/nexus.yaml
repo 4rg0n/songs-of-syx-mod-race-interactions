@@ -13,25 +13,14 @@ jobs:
           file: 'Race.Interactions.zip'
           target: 'Race.Interactions.zip'
 
-      - name: Setup .NET 3.1
-        uses: actions/setup-dotnet@master
+      - name: Publish
+        uses: hmlendea/nexusmods-update@v1.0.1
         with:
-          dotnet-version: 3.1.x
-
-      - name: Install NexusUploader
-        run: dotnet tool install -g NexusUploader;
-        shell: pwsh
-
-      - run: |
-          unex upload 11 "Race.Interactions.zip" -v "${{ steps.fetch-release.outputs.version }}" ;
-          unex changelog "${{ steps.fetch-release.outputs.version }}" "${{ steps.fetch-release.outputs.body }}"
-        env:
-          UNEX_GAME: songsofsyx
-          UNEX_MODID: 11
-          UNEX_FILENAME: 'Race Interactions'
-          UNEX_FILEDESCRIPTION: ${{ steps.fetch-release.outputs.body }}
-          UNEX_PREVIOUSFILE: auto
-          UNEX_APIKEY: ${{ secrets.NEXUS_TOKEN }}
-          UNEX_COOKIES: ${{ secrets.NEXUS_COOKIES }}
-          UNEX_DEBUG: true
-        shell: pwsh
+          account_email_address: ${{secrets.NEXUS_UPLOADER_EMAIL_ADDRESS}}
+          account_password: ${{secrets.NEXUS_UPLOADER_PASSWORD}}
+          nexus_game_id: "songsofsyx"
+          nexus_mod_id: "11"
+          mod_file_name: 'Race.Interactions.zip'
+          mod_version: ${{ steps.fetch-release.outputs.version }}
+          file_description: ${{ steps.fetch-release.outputs.body }}
+          file_path: 'Race.Interactions.zip'

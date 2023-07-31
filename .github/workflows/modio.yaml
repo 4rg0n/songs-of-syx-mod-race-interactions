@@ -13,7 +13,8 @@ jobs:
           file: 'Race.Interactions.zip'
           target: 'Race.Interactions.zip'
 
-      - uses: nickelc/upload-to-modio@v2.0.0
+      - name: Publish
+        uses: nickelc/upload-to-modio@v2.0.0
         with:
           token: ${{ secrets.MODIO_TOKEN }}
           game: 1199
