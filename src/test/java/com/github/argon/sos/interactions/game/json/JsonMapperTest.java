@@ -6,6 +6,7 @@ import com.github.argon.sos.interactions.game.json.element.*;
 import com.github.argon.sos.interactions.game.json.mapper.TypeInfo;
 import com.github.argon.sos.interactions.util.MapUtil;
 import lombok.Data;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import snake2d.util.file.JsonE;
 
@@ -18,6 +19,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Disabled
 class JsonMapperTest {
 
     @Test

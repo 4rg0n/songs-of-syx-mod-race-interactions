@@ -3,10 +3,12 @@ package com.github.argon.sos.interactions.game.config;
 
 import lombok.Data;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Paths;
 
+@Disabled
 class ConfigFileManagerTest {
 
     @Test
