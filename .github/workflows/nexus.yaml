@@ -22,5 +22,5 @@ jobs:
           nexus_mod_id: "11"
           mod_file_name: 'Race.Interactions.zip'
           mod_version: ${{ steps.fetch-release.outputs.version }}
-          file_description: ${{ steps.fetch-release.outputs.body }}
+          file_description: "Changelog: https://github.com/4rg0n/songs-of-syx-mod-race-interactions/releases/tag/${{steps.fetch-release.outputs.version}}"
           file_path: 'Race.Interactions.zip'
