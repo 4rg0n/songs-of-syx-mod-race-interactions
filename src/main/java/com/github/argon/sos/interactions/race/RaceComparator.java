@@ -85,8 +85,8 @@ public class RaceComparator {
 
     private Map<String, Double> religionPrefDiff(Race race, Race otherRace) {
         return diff(STATS.RELIGION().ALL, religionStat -> {
-            double religion = race.stats().religion(religionStat);
-            double otherReligion = otherRace.stats().religion(religionStat);
+            double religion = race.stats().religion(religionStat.religion);
+            double otherReligion = otherRace.stats().religion(religionStat.religion);
 
             return Math.abs(religion - otherReligion);
         }, religionStat -> religionStat.info.name.toString());

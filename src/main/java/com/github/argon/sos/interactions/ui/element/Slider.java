@@ -1,8 +1,8 @@
 package com.github.argon.sos.interactions.ui.element;
 
 import init.D;
-import init.sprite.ICON;
 import init.sprite.SPRITES;
+import init.sprite.UI.Icon;
 import init.sprite.UI.UI;
 import lombok.Getter;
 import lombok.Setter;
@@ -56,7 +56,7 @@ public class Slider extends GuiSection {
         this.in = in;
 
         if (input) {
-            width -= (ICON.SMALL.SIZE+2)*3;
+            width -= (Icon.S+2)*3;
         }
 
         width -= 4;

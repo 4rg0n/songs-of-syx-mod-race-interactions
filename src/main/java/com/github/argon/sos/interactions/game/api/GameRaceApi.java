@@ -12,7 +12,7 @@ import settlement.entity.humanoid.HCLASS;
 import settlement.stats.STATS;
 import settlement.stats.standing.STANDINGS;
 import settlement.stats.standing.StandingCitizen;
-import world.World;
+import world.WORLD;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -143,7 +143,7 @@ public class GameRaceApi {
 
     public int citizenCount(Race race) {
         HCLASS cl = HCLASS.CITIZEN;
-        return STATS.POP().POP.data(cl).get(race, 0) + World.ARMIES().cityDivs().total(race);
+        return STATS.POP().POP.data(cl).get(race, 0) + WORLD.ARMIES().cityDivs().total(race);
     }
 
     /**

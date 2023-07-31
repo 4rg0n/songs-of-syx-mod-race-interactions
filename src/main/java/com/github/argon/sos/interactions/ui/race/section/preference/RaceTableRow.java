@@ -8,8 +8,8 @@ import com.github.argon.sos.interactions.ui.element.table.TableRow;
 import com.github.argon.sos.interactions.ui.element.table.TableStore;
 import init.race.RACES;
 import init.race.Race;
-import init.sprite.ICON;
 import init.sprite.SPRITES;
+import init.sprite.UI.Icon;
 import lombok.Getter;
 import snake2d.SPRITE_RENDERER;
 import snake2d.util.color.COLOR;
@@ -48,7 +48,7 @@ public class RaceTableRow extends TableRow<RaceInfo> {
 
         // race icon
         container.addRightC(0, new Spacer(8, 0));
-        container.addRightC(0 ,new RENDEROBJ.Sprite(ICON.MEDIUM.SIZE) {
+        container.addRightC(0 ,new RENDEROBJ.Sprite(Icon.M) {
             @Override
             public void render(SPRITE_RENDERER r, float ds) {
                 getEntry().ifPresent(raceInfo -> {
