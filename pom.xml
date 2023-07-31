@@ -14,7 +14,7 @@
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <!-- These settings will go into the mods _info.txt file -->
+        <!-- These settings will go into the mods _Info.txt file -->
         <mod.version>${project.version}</mod.version>
         <mod.name>Race Interactions</mod.name>
         <mod.description>
@@ -23,8 +23,8 @@
         </mod.description>
         <mod.author>4rg0n</mod.author>
         <mod.info>One day I know what to write here...</mod.info>
-        <game.version.major>63</game.version.major>
-        <game.version.minor>45</game.version.minor>
+        <game.version.major>64</game.version.major>
+        <game.version.minor>40</game.version.minor>
 
         <!-- Build settings -->
         <game.version.directory>V${game.version.major}</game.version.directory>
@@ -62,7 +62,7 @@
         <dependency>
             <groupId>com.songsofsyx</groupId>
             <artifactId>songs-of-syx</artifactId>
-            <version>0.63.45</version>
+            <version>0.64.40</version>
         </dependency>
 
         <!-- Lazy Developer -->
@@ -188,14 +188,14 @@
                                     <excludes>
                                         <!-- Everything beginning with a dot -->
                                         <exclude>**/.*</exclude>
-                                        <exclude>_info.txt</exclude>
+                                        <exclude>_Info.txt</exclude>
                                     </excludes>
                                 </resource>
                             </resources>
                         </configuration>
                     </execution>
 
-                    <!-- Copy mod _info.txt file and replace tokens -->
+                    <!-- Copy mod _Info.txt file and replace tokens -->
                     <execution>
                         <id>copy-mod-info</id>
                         <phase>package</phase>
@@ -209,7 +209,7 @@
                                 <resource>
                                     <directory>${mod.files.directory}</directory>
                                     <includes>
-                                        <include>_info.txt</include>
+                                        <include>_Info.txt</include>
                                     </includes>
                                     <filtering>true</filtering>
                                 </resource>
@@ -385,6 +385,32 @@
                     <family>Linux</family>
                 </os>
             </activation>
+        </profile>
+        <profile>
+            <id>debug-properties</id>
+            <build>
+                <plugins>
+                    <!-- Output maven properties with: mvn validate -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <executions>
+                            <execution>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <tasks>
+                                        <echoproperties />
+                                    </tasks>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
         <profile>
             <id>mods-uploader</id>

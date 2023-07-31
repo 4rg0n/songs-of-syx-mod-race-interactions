@@ -99,7 +99,7 @@ public final class RaceInteractionsModScript implements SCRIPT<RaceInteractionsC
 	}
 
 	@Override
-	public SCRIPT_INSTANCE initAfterGameCreated() {
+	public SCRIPT_INSTANCE createInstance() {
 		configStore = ConfigStore.getInstance();
 		RaceInteractionsConfig config = configStore.loadJsonOrDefault();
 		configStore.setCurrentConfig(config);

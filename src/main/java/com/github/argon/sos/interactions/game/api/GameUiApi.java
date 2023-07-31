@@ -63,8 +63,8 @@ public class GameUiApi {
     /**
      * @throws GameUiNotAvailableException when ui isn't initialized yet
      */
-    public VIEW.ViewSub currentView() {
-        VIEW.ViewSub currentView = VIEW.current();
+    public VIEW.ViewSubSimple currentView() {
+        VIEW.ViewSubSimple currentView = VIEW.current();
 
         if (currentView == null) {
             throw new GameUiNotAvailableException("Games current view isn't initialized yet.");
