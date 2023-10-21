@@ -18,8 +18,10 @@ public class RaceTableSection extends GuiSection {
 
     private final TableSection<RaceTableRow, RaceInfo> tableSection;
 
+    // FIXME: when scrolling; the checkboxes don't stay in their row...
+    //        https://discord.com/channels/509357720617615369/664478122347069441/1165286695529361480
     public RaceTableSection(List<RaceInfo> raceInfo, int width) {
-        this.tableSection = TableBuilder.build(raceInfo, RaceTableRow::new, width, 7);
+        this.tableSection = TableBuilder.build(raceInfo, RaceTableRow::new, width, 8);
         body().setWidth(width);
 
         addRelBody(5, DIR.S, tableSection.getSection());
