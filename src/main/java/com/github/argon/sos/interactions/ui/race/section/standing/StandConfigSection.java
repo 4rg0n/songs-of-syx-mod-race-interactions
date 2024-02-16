@@ -5,7 +5,6 @@ import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
 import com.github.argon.sos.interactions.config.RaceStandingCategory;
 import com.github.argon.sos.interactions.log.Logger;
 import com.github.argon.sos.interactions.log.Loggers;
-import com.github.argon.sos.interactions.ui.element.HorizontalLine;
 import com.github.argon.sos.interactions.ui.element.VerticalLine;
 import lombok.Getter;
 import snake2d.util.gui.GuiSection;
@@ -31,15 +30,15 @@ public class StandConfigSection extends GuiSection {
         this.config = config;
         this.standSliderSection = StandSliderSection.build(config);
         this.standOverviewSection = new StandOverviewSection();
+        body().setWidth(width);
 
         GuiSection container = new GuiSection();
         container.addRight(0, standSliderSection);
         container.addRight(10, new VerticalLine(5, standSliderSection.body().height(), 1));
         container.addRight(5, standOverviewSection);
 
-        addDownC(0, new GHeader("Boost standings when liked races are nearby"));
-        addDownC(0, new HorizontalLine(width, 20, 1, true));
-        addDownC(5, container);
+        addDownC(10, new GHeader("Boost standings when liked races are nearby"));
+        addDownC(20, container);
     }
 
     /**

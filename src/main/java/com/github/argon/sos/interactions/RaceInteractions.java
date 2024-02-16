@@ -162,7 +162,7 @@ public class RaceInteractions {
             List<RaceInfo> allRaceInfo
         ) {
             log.debug("Setting up ui elements");
-            int width = allRaceInfo.size() * 110;
+            int width = allRaceInfo.size() * 120;
 
             PrefConfigSection prefConfigSection = new PrefConfigSection(config);
             RaceTableSection overviewSection = new RaceTableSection(allRaceInfo, width);

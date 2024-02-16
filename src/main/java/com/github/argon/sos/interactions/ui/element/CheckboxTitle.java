@@ -1,0 +1,27 @@
+package com.github.argon.sos.interactions.ui.element;
+
+import snake2d.SPRITE_RENDERER;
+import snake2d.util.sprite.SPRITE;
+import util.gui.misc.GButt;
+
+/**
+ * Adds some basic toggle functionality to {@link GButt.Checkbox}
+ */
+public class CheckboxTitle extends GButt.Checkbox {
+    public CheckboxTitle(SPRITE label) {
+        super(label);
+    }
+
+    public CheckboxTitle(CharSequence text) {
+        super(text);
+    }
+
+    protected void clickA() {
+        selectedToggle();
+    }
+    @Override
+    protected void render(SPRITE_RENDERER r, float ds, boolean isActive, boolean isSelected, boolean isHovered) {
+        selectedSet(isSelected);
+        super.render(r, ds, isActive, isSelected, isHovered);
+    }
+}

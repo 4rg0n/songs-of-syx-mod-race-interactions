@@ -21,8 +21,11 @@ import com.github.argon.sos.interactions.ui.race.section.preference.RaceTableSec
 import com.github.argon.sos.interactions.ui.race.section.standing.StandConfigSection;
 import lombok.Getter;
 import snake2d.util.gui.GuiSection;
+import snake2d.util.gui.renderable.RENDEROBJ;
+import util.gui.table.GScrollRows;
 import view.interrupter.ISidePanel;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -185,17 +188,28 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
             );
         });
 
+
         GuiSection container = new GuiSection();
         container.addRight(0, prefConfigSection);
         container.addRight(5, new VerticalLine( 11, prefConfigSection.body().height(), 1));
         container.addRight(5, buttonSection);
 
-        section().addDownC(10, container);
-        section().addDownC(10, new HorizontalLine(width, 20, 1, true));
-        section().addDownC(0, raceTableSection);
-        section().addDownC(0, new HorizontalLine(width, 20, 1, true));
+        GuiSection center = new GuiSection();
+        center.body().setWidth(width);
+        center.addDownC(0, container);
 
-        section().addDownC(0, standConfigSection);
+        GuiSection containerTable = new GuiSection();
+        containerTable.addDownC(10, new HorizontalLine(width, 20, 1, true));
+        containerTable.addDownC(0, raceTableSection);
+        containerTable.addDownC(0, new HorizontalLine(width, 20, 1, true));
+
+        List<? extends RENDEROBJ> guiSections = Arrays.asList(
+            center,
+            containerTable,
+            standConfigSection);
+
+        GScrollRows gScrollRows = new GScrollRows(guiSections, HEIGHT);
+        section().add(gScrollRows.view());
     }
 
     public RaceInteractionsConfig getConfig() {

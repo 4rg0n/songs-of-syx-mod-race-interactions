@@ -42,6 +42,7 @@ public final class RaceInteractionsModScript implements SCRIPT<RaceInteractionsC
 	private RaceInteractionsConfigPanel configPanel;
 
 	private ConfigStore configStore;
+	private UIGameConfig uiGameConfig;
 
 	@Override
 	public CharSequence name() {
@@ -95,7 +96,6 @@ public final class RaceInteractionsModScript implements SCRIPT<RaceInteractionsC
 		);
 
 		// inject mod ui into game ui
-		UIGameConfig uiGameConfig = new UIGameConfig(configPanel);
 		uiGameConfig.init();
 	}
 
@@ -122,6 +122,8 @@ public final class RaceInteractionsModScript implements SCRIPT<RaceInteractionsC
 		// adjust likings when game created
 		raceInteractions.manipulateRaceLikings(config);
 		configPanel.applyConfig(config);
+		uiGameConfig = new UIGameConfig(configPanel);
+		uiGameConfig.initDebug();
 
 		return new Instance(this, configStore);
 	}

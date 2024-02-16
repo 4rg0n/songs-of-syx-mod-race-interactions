@@ -24,22 +24,24 @@ public class UIGameConfig {
         this.panel = panel;
     }
 
-    public void init() {
-        log.debug("Injecting UI elements into game");
-        // todo has to be injected earlier
+    public void initDebug() {
         IDebugPanel.add(MOD_INFO.name + ":config", () -> {
             gameUiApi.showPanel(panel, false);
         });
+    }
+
+    public void init() {
+        log.debug("Injecting UI elements into game");
 
         gameUiApi.getUIBuildPanelSection().ifPresent(
             guiSection -> {
-                CLICKABLE bppButton = new GButt.ButtPanel(SPRITES.icons().m.citizen) {
+                CLICKABLE button = new GButt.ButtPanel(SPRITES.icons().m.citizen) {
                     @Override
                     protected void clickA() {
                         gameUiApi.showPanel(panel, false);
                     }
                 }.hoverInfoSet(MOD_INFO.name);
-                guiSection.addRightC(10, bppButton);
+                guiSection.addRightC(10, button);
             });
     }
 }
