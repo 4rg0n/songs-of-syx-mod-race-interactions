@@ -15,7 +15,7 @@ import java.util.Collection;
 public class RacePreferenceSimilarityCalculator {
     private final static Logger log = Loggers.getLogger(RacePreferenceSimilarityCalculator.class);
 
-    private final int allFoodCount = STATS.FOOD().all.size();
+    private final int allFoodCount = STATS.FOOD().all().size();
 
     @Getter(lazy = true)
     private final static RacePreferenceSimilarityCalculator instance = new RacePreferenceSimilarityCalculator();

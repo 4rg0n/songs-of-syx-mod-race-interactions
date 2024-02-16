@@ -46,7 +46,7 @@ public class GameRaceApi {
     }
 
     public void increaseLoyalty(Race race, double inc) {
-        increaseStanding(STANDINGS.CITIZEN().main, race, inc);
+        increaseStanding(STANDINGS.CITIZEN().loyalty, race, inc);
     }
 
     private void increaseStanding(StandingCitizen.CitizenThing standing, Race race, double inc) {
@@ -108,7 +108,7 @@ public class GameRaceApi {
     }
 
     public double getLiking(Race race, Race otherRace) {
-        return race.pref().other(otherRace);
+        return race.pref().race(otherRace);
     }
 
     /**
@@ -179,7 +179,7 @@ public class GameRaceApi {
 
     public double getLoyalty(Race race) {
         StandingCitizen standings = STANDINGS.CITIZEN();
-        return standings.main.getD(race);
+        return standings.loyalty.getD(race);
     }
 
     public boolean isCitizen(Race race) {

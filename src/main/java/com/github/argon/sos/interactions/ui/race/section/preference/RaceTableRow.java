@@ -85,14 +85,14 @@ public class RaceTableRow extends TableRow<RaceInfo> {
                 @Override
                 double getValue() {
                     return getEntry().map(raceInfo ->
-                            Math.abs(raceInfo.getRace().pref().other(otherRace)))
+                            Math.abs(raceInfo.getRace().pref().race(otherRace)))
                         .orElse(0d);
                 }
 
                 @Override
                 SPRITE get(double value) {
                     return getEntry()
-                        .filter(raceInfo -> (!(raceInfo.getRace().pref().other(otherRace) < 0)))
+                        .filter(raceInfo -> (!(raceInfo.getRace().pref().race(otherRace) < 0)))
                         .map(raceInfo -> SPRITES.icons().s.arrowUp)
                         .orElse(SPRITES.icons().s.arrowDown);
                 }
@@ -101,7 +101,7 @@ public class RaceTableRow extends TableRow<RaceInfo> {
                 COLOR color(double value) {
                     return getEntry()
                         .filter(raceInfo -> !(raceInfo.getRace().pref()
-                        .other(otherRace) < 0))
+                        .race(otherRace) < 0))
                         .map(raceInfo -> GCOLOR.UI().GOOD.normal)
                         .orElse(GCOLOR.UI().BAD.normal);
                 }
@@ -113,7 +113,7 @@ public class RaceTableRow extends TableRow<RaceInfo> {
                         b.title(otherRace.info.names);
                         b.text("Liking to " + raceInfo.getRace().info.names);
                         b.NL(8);
-                        b.add(GFORMAT.f1(b.text(), raceInfo.getRace().pref().other(otherRace)));
+                        b.add(GFORMAT.f1(b.text(), raceInfo.getRace().pref().race(otherRace)));
                     });
                 }
             };

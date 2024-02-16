@@ -114,7 +114,7 @@ public class GameHumanoidApi {
             Boolean doAdd = filter.apply(humanoid, nearbyHumanoid);
 
             if (doAdd) {
-                double liking = race.pref().other(otherRace);
+                double liking = race.pref().race(otherRace);
                 likeScore += liking;
             }
         }

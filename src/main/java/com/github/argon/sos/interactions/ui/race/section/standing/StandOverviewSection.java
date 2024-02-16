@@ -58,7 +58,7 @@ public class StandOverviewSection extends GuiSection {
         GuiSection headerSection = new GuiSection();
         GuiSection meterSection = new GuiSection();
 
-        headerSection.addRight(0, new GHeader(STANDINGS.CITIZEN().main.info().name));
+        headerSection.addRight(0, new GHeader(STANDINGS.CITIZEN().loyalty.info().name));
         headerSection.addRightC(5, new GStat() {
             @Override
             public void update(GText text) {

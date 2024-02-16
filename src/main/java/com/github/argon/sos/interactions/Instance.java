@@ -56,7 +56,7 @@ final class Instance implements SCRIPT.SCRIPT_INSTANCE {
 		}
 
 		if (!initGamePresent && !VIEW.inters().load.isActivated()) {
-			log.debug("initGameLoaded");
+			log.debug("initGamePresent");
 			script.initGamePresent();
 			initGamePresent = true;
 		}

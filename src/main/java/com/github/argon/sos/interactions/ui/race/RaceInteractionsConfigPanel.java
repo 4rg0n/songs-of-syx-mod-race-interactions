@@ -181,8 +181,7 @@ public class RaceInteractionsConfigPanel extends ISidePanel {
             gameUiApi.showPopup(
                 importOtherModSection,
                 // position popup right next to button
-                importOtherModsButton.body().x2() + importOtherModsButton.body().width() / 2,
-                importOtherModsButton.body().y1() - importOtherModsButton.body().height() * 2
+                importOtherModsButton
             );
         });
 

@@ -26,6 +26,7 @@ public class UIGameConfig {
 
     public void init() {
         log.debug("Injecting UI elements into game");
+        // todo has to be injected earlier
         IDebugPanel.add(MOD_INFO.name + ":config", () -> {
             gameUiApi.showPanel(panel, false);
         });

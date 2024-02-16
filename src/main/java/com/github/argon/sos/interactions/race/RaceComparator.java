@@ -5,13 +5,13 @@ import com.github.argon.sos.interactions.log.Loggers;
 import init.biomes.BUILDING_PREFS;
 import init.biomes.CLIMATES;
 import init.race.Race;
-import init.resources.Edible;
+import init.resources.ResG;
 import lombok.*;
 import settlement.room.infra.elderly.ROOM_RESTHOME;
 import settlement.room.main.ROOMS;
-import settlement.room.main.RoomEmploymentSimple;
+import settlement.room.main.employment.RoomEmploymentSimple;
 import settlement.stats.STATS;
-import settlement.stats.StatsReligion;
+import settlement.stats.colls.StatsReligion;
 import snake2d.util.sets.LIST;
 
 import java.util.ArrayList;
@@ -85,10 +85,12 @@ public class RaceComparator {
 
     private Map<String, Double> religionPrefDiff(Race race, Race otherRace) {
         return diff(STATS.RELIGION().ALL, religionStat -> {
-            double religion = race.stats().religion(religionStat.religion);
-            double otherReligion = otherRace.stats().religion(religionStat.religion);
-
-            return Math.abs(religion - otherReligion);
+//            // todo religions are now boosters o.o
+//            double religion = race.stats().religion(religionStat.religion);
+//            double otherReligion = otherRace.stats().religion(religionStat.religion);
+//
+//            return Math.abs(religion - otherReligion);
+            return 0.0;
         }, religionStat -> religionStat.info.name.toString());
     }
 
@@ -139,17 +141,17 @@ public class RaceComparator {
 
     private int foodMatches(Race race, Race otherRace) {
         int matches = 0;
-        LIST<Edible> food = race.pref().food;
-        LIST<Edible> otherFood = otherRace.pref().food;
+        LIST<ResG> food = race.pref().food;
+        LIST<ResG> otherFood = otherRace.pref().food;
 
         if (food.size() > otherFood.size()) {
-            for (Edible edible : food) {
+            for (ResG edible : food) {
                 if (otherFood.contains(edible)) {
                     matches++;
                 }
             }
         } else {
-            for (Edible edible : otherFood) {
+            for (ResG edible : otherFood) {
                 if (food.contains(edible)) {
                     matches++;
                 }

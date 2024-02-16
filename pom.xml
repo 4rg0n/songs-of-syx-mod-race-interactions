@@ -10,8 +10,8 @@
 
     <properties>
         <!-- Songs of Syx uses Java 1.8 -->
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- These settings will go into the mods _Info.txt file -->
@@ -23,8 +23,8 @@
         </mod.description>
         <mod.author>4rg0n</mod.author>
         <mod.info>One day I know what to write here...</mod.info>
-        <game.version.major>64</game.version.major>
-        <game.version.minor>40</game.version.minor>
+        <game.version.major>65</game.version.major>
+        <game.version.minor>65</game.version.minor>
 
         <!-- Build settings -->
         <game.version.directory>V${game.version.major}</game.version.directory>
@@ -62,7 +62,7 @@
         <dependency>
             <groupId>com.songsofsyx</groupId>
             <artifactId>songs-of-syx</artifactId>
-            <version>0.64.40</version>
+            <version>${game.version.major}.${game.version.minor}</version>
         </dependency>
 
         <!-- Lazy Developer -->
@@ -298,22 +298,22 @@
     </build>
 
     <profiles>
-        <profile>
-            <id>github</id>
-            <repositories>
-                <repository>
-                    <id>central</id>
-                    <url>https://repo1.maven.org/maven2</url>
-                </repository>
-                <repository>
-                    <id>github</id>
-                    <url>https://maven.pkg.github.com/4rg0n/songs-of-syx-packages</url>
-                    <snapshots>
-                        <enabled>true</enabled>
-                    </snapshots>
-                </repository>
-            </repositories>
-        </profile>
+<!--        <profile>-->
+<!--            <id>github</id>-->
+<!--            <repositories>-->
+<!--                <repository>-->
+<!--                    <id>central</id>-->
+<!--                    <url>https://repo1.maven.org/maven2</url>-->
+<!--                </repository>-->
+<!--                <repository>-->
+<!--                    <id>github</id>-->
+<!--                    <url>https://maven.pkg.github.com/4rg0n/songs-of-syx-packages</url>-->
+<!--                    <snapshots>-->
+<!--                        <enabled>true</enabled>-->
+<!--                    </snapshots>-->
+<!--                </repository>-->
+<!--            </repositories>-->
+<!--        </profile>-->
         <profile>
             <id>install-local-game</id>
             <build>
@@ -333,7 +333,7 @@
                                 <configuration>
                                     <groupId>com.songsofsyx</groupId>
                                     <artifactId>songs-of-syx</artifactId>
-                                    <version>0.${game.version.major}.${game.version.minor}</version>
+                                    <version>${game.version.major}.${game.version.minor}</version>
                                     <packaging>jar</packaging>
                                     <file>${game.install.directory}/${game.jar.name}</file>
                                     <generatePom>true</generatePom>

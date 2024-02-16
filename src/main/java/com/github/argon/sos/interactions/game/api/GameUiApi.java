@@ -94,12 +94,6 @@ public class GameUiApi {
         interrupters().popup.show(popup, button);
     }
 
-    public void showPopup(RENDEROBJ popup, int x, int y) {
-        interrupters().popup.section().clear();
-        interrupters().popup.section().add(popup);
-        interrupters().popup.show(x, y);
-    }
-
     /**
      * @return bottom build section of the game ui
      */

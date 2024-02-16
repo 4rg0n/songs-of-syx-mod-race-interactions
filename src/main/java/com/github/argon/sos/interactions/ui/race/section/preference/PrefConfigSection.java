@@ -3,7 +3,6 @@ package com.github.argon.sos.interactions.ui.race.section.preference;
 import com.github.argon.sos.interactions.Mapper;
 import com.github.argon.sos.interactions.config.RaceInteractionsConfig;
 import com.github.argon.sos.interactions.config.RacePrefCategory;
-import com.github.argon.sos.interactions.ui.element.CheckboxTitle;
 import lombok.Getter;
 import snake2d.util.gui.GuiSection;
 import util.data.INT;
@@ -18,16 +17,16 @@ import java.util.Map;
  */
 @Getter
 public class PrefConfigSection extends GuiSection {
-    private final GButt.CheckboxTitle onlyCustomRaces;
-    private final GButt.CheckboxTitle honorCustomRaces;
+    private final GButt.Checkbox onlyCustomRaces;
+    private final GButt.Checkbox honorCustomRaces;
     private final PrefSliderSection prefSliderSection;
 
     public PrefConfigSection(RaceInteractionsConfig config) {
-        this.onlyCustomRaces = new CheckboxTitle("Only custom races");
+        this.onlyCustomRaces = new GButt.Checkbox("Only custom races");
         onlyCustomRaces.hoverInfoSet("Will not manipulate any vanilla game races when checked");
         onlyCustomRaces.selectedSet(config.isCustomRaceOnly());
 
-        this.honorCustomRaces = new CheckboxTitle("Honor custom races likings");
+        this.honorCustomRaces = new GButt.Checkbox("Honor custom races likings");
         honorCustomRaces.hoverInfoSet("Will not manipulate custom mod races likings to vanilla races when checked");
         honorCustomRaces.selectedSet(config.isHonorCustomRaceLikings());
 
